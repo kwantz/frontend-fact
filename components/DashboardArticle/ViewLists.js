@@ -1,0 +1,149 @@
+import AdminLayoutHoc from '../Layout/AdminLayoutHoc';
+import SearchInput from '../SearchInput';
+import Table from '../Table';
+import Modal from '../Modal';
+import Alert from '../Alert';
+import Link from 'next/link';
+import Router from 'next/router'
+import { withRouter } from 'next/router';
+
+class Index extends React.Component {
+  constructor (props) {
+    super(props);
+    this.state = {
+      data: [],
+      search: '',
+      total: 0,
+      table: {
+        pages: 0,
+        loading: false,
+        header: [
+          {title: "#", size: "50px"},
+          {title: "Title", size: "auto"},
+          {title: "Author", size: "auto"},
+          {title: "Published on", size: "auto"},
+          {title: "Published by", size: "auto"},
+          {title: "Action", size: "200px"}
+        ],
+      },
+      delete: {
+        id: -1,
+        title: ""
+      },
+      alert: {
+        delete_danger: '',
+        delete_success: ''
+      },
+    };
+
+    this.onRefresh = this.onRefresh.bind(this);
+    this.queryTitle = this.queryTitle.bind(this);
+    this.deleteArticle = this.deleteArticle.bind(this);
+  }
+
+  async onRefresh () {
+    const table = this.state.table
+    table.loading = true
+    await this.setState({ table })
+
+    let {page, title} = this.props.router.query
+    if (typeof page === "undefined") page = 1
+    if (typeof title === "undefined") title = ""
+
+    const response = await fetch(`http://127.0.0.1:8000/fact/article?page=${page}&title=${title}`)
+    const json = await response.json()
+
+    const data = json.results.articles
+    const total = json.results.total
+    table.pages = json.results.pages
+    table.loading = false
+
+    this.setState({ data, table, total })
+  }
+
+  componentDidMount() {
+    this.onRefresh()
+  }
+
+  async queryTitle () {
+    await Router.push({
+      pathname: '/dashboard/admin/newsfeed/articles',
+      query: {
+        page: 1,
+        title: this.state.search
+      }
+    })
+    this.onRefresh()
+  }
+
+  deleteArticle (article) {
+    const data = this.state.delete
+    data.id = article.id
+    data.title = article.title
+
+    this.setState({ delete: data })
+  }
+
+  render() {
+    const tbody = []
+    for (let i = 0, l = this.state.data.length; i < l; i++) {
+      const article = this.state.data[i];
+      const date = new Date(article.published_on)
+
+      tbody.push(
+        <tr key={article.id}>
+          <td>{i + 1}</td>
+          <td>{article.title}</td>
+          <td>{article.author}</td>
+          <td>{date.dateformat()}</td>
+          <td>{article.published_by}</td>
+          <td>
+            <Link href={`/dashboard/admin/newsfeed/articles?status=view&id=${article.id}`}>
+              <a className="btn btn-link">View</a>
+            </Link>
+            <button className="btn btn-link text-danger ml-3" data-toggle="modal" data-target="#delete" onClick={() =>  this.deleteArticle(article)}>Delete</button>
+          </td>
+        </tr>
+      )
+    }
+
+    return (
+      <AdminLayoutHoc contentTitle={`Articles (${this.state.total})`} contentBreadcrumb={["Home", "Newsfeed", "Articles"]}>
+        <Alert type="danger" component={this} attribute="delete_danger"/>
+        <Alert type="success" component={this} attribute="delete_success"/>
+        <div className="card">
+          <div className="card-body">
+            <form className="form-inline">
+              <SearchInput placeholder="Search by title" onClick={this.queryTitle} value={this.state.search} onChange={(event) => this.setState({search: event.target.value})}/>
+              <Link href="/dashboard/admin/newsfeed/articles?status=add">
+                <a className="btn btn-info ml-auto">
+                  <i className="fa fa-plus" /> Add Article
+                </a>
+              </Link>
+            </form>
+          </div>
+        </div>
+
+        <Table table={this.state.table}>
+          {tbody}
+        </Table>
+
+        <Modal id="delete" title="Delete Article">
+          <div className="modal-body">
+            <span>Are you sure you want to delete {this.state.delete.title}?</span>
+          </div>
+          <div className="modal-footer">
+            <div className="col-md-6">
+              <button type="button" className="btn btn-light btn-block" data-dismiss="modal">No</button>
+            </div>
+            <div className="col-md-6">
+              <button type="button" className="btn btn-danger btn-block">Yes</button>
+            </div>
+          </div>
+        </Modal>
+      </AdminLayoutHoc>
+    )
+  }
+}
+
+export default withRouter(Index)
