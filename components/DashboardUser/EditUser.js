@@ -2,6 +2,55 @@ import AdminLayoutHoc from '../Layout/AdminLayoutHoc';
 import Link from 'next/link';
 
 export default class Index extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      data: {
+        email: "",
+        password: "",
+        re_password: "",
+      },
+      alert: {
+        edit_danger: '',
+        edit_success: '',
+      }
+    }
+
+    this.onRefresh = this.onRefresh.bind(this)
+  }
+
+  async onRefresh() {
+    const response = await fetch(`http://127.0.0.1:8000/fact/user/` + this.props.router.query.id)
+    const json = await response.json()
+    const data = {
+      email: json.results.email,
+      password: "",
+      re_password: "",
+    }
+
+    this.setState({ data })
+  }
+
+  async onSubmit() {
+    const alert = this.state.alert
+    const body = this.state.data
+    const response = await fetch(`http://127.0.0.1:8000/fact/user/` + this.props.router.query.id, {method: "PUT", body})
+    const json = await response.json()
+
+    if (typeof json.message === 'undefined' || json.message !== 'Success') {
+      alert.edit_danger = "500 — Internal Server Error"
+      await this.setState({alert})
+    }
+    else {
+      alert.edit_success = "Edit User, " + this.state.data.email + " — Success"
+      await this.setState({alert})
+    }
+  }
+
+  componentDidMount () {
+    this.onRefresh()
+  }
+
   render() {
     console.log(this.props)
 
