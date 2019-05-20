@@ -2103,7 +2103,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var _jsxFileName = "D:\\Project\\Web\\fact_client\\pages\\_document.js";
+var _jsxFileName = "C:\\frontend-fact\\pages\\_document.js";
 
 
 

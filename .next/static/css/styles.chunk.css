@@ -10294,5 +10294,8 @@ table tbody tr td .btn-link {
   border-color: #f5c6cb !important;
   margin-bottom: 0px; }
 
+img {
+  max-width: 100%; }
+
 
 /*# sourceMappingURL=styles.chunk.css.map*/
