@@ -1,124 +1,142 @@
 import AdminLayoutHoc from '../../../../components/Layout/AdminLayoutHoc';
 import Link from 'next/link';
+import Table from '../../../../components/Table';
+import Modal from '../../../../components/Modal';
+import Alert from '../../../../components/Alert';
+import { withRouter } from 'next/router';
 
-export default class Index extends React.Component {
+class Index extends React.Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      data: [],
+      block: {
+        id: 0,
+        name: '',
+        reason_block: 'none',
+      },
+      total: 0,
+      table: {
+        pages: 0,
+        loading: false,
+        header: [
+          {title: "#", size: "75px"},
+          {title: "Profile", size: "150px"},
+          {title: "Name", size: "auto"},
+          {title: "Reason", size: "auto"},
+          {title: "Action", size: "200px"}
+        ]
+      },
+      alert: {
+        block_danger: '',
+        block_success: '',
+      }
+    }
+
+    this.onBlock = this.onBlock.bind(this)
+    this.onRefresh = this.onRefresh.bind(this)
+    this.submitBlock = this.submitBlock.bind(this)
+  }
+
+  onBlock (user) {
+    const {block} = this.state
+    block.id = user.id
+    block.name = user.name
+
+    this.setState({block})
+  }
+
+  async onRefresh () {
+    const table = this.state.table
+    table.loading = true
+    this.setState({ table })
+
+    let {page} = this.props.router.query
+    if (typeof page === "undefined") page = 1
+
+    const response = await fetch(`http://127.0.0.1:8000/fact/user?status=blocked&page=${page}`)
+    const json = await response.json()
+
+    const data = json.results.users
+    const total = json.results.total
+    table.pages = json.results.pages
+    table.loading = false
+
+    this.setState({ data, table, total })
+  }
+
+  async submitBlock () {
+    const alert = this.state.alert
+    const body = JSON.stringify(this.state.block)
+    const response = await fetch(`http://127.0.0.1:8000/fact/user/` + this.state.block.id, {method: 'DELETE', body})
+    const json = await response.json()
+
+    if (typeof json.message === 'undefined' || json.message !== 'Success') {
+      alert.block_danger = "500 — Internal Server Error"
+      await this.setState({alert})
+    }
+    else {
+      alert.block_success = "Block User, " + this.state.block.name + " — Success"
+      const block = {
+        id: 0,
+        name: '',
+        reason_block: 'none',
+      }
+
+      await this.setState({alert, block})
+      await this.onRefresh()
+    }
+  }
+
+  componentDidMount () {
+    this.onRefresh()
+  }
+
   render() {
-    console.log(this.props)
+    const tbody = []
+    for (let i = 0, l = this.state.data.length; i < l; i++) {
+      const user = this.state.data[i];
+      tbody.push(
+        <tr key={user.id}>
+          <td>{i + 1}</td>
+          <td>
+            <i className="fa fa-user-circle" style={{fontSize: "50px"}}/>
+          </td>
+          <td>{user.name}</td>
+          <td>{user.reason_block}</td>
+          <td>
+            <button className="btn btn-link text-danger" data-toggle="modal" data-target="#unblock" onClick={() =>  this.onBlock(user)}>Unblock</button>
+          </td>
+        </tr>
+      )
+    }
 
     return (
-      <AdminLayoutHoc contentTitle={'Blocked Users (10)'} contentBreadcrumb={["Home", "Users", "Blocked Users"]}>
+      <AdminLayoutHoc contentTitle={`Blocked Users (${this.state.total})`} contentBreadcrumb={["Home", "Users", "Blocked Users"]}>
+        <Alert type="danger" component={this} attribute="block_danger"/>
+        <Alert type="success" component={this} attribute="block_success"/>
 
-        <div className="card">
-          {/* <div className="overlay">
-            <i className="fa fa-sync-alt fa-spin"></i>
-          </div> */}
-          <div className="card-body p-0">
-            <table className="table">
-              <tbody>
-                <tr>
-                  <th style={{width: "50px"}}>#</th>
-                  <th style={{width: "150px"}}>Profile</th>
-                  <th>Name</th>
-                  <th>Reason</th>
-                  <th style={{width: "100px"}}>Action</th>
-                </tr>
-                <tr>
-                  <td>1</td>
-                  <td>
-                    <i className="fa fa-user-circle" style={{fontSize: "50px"}}/>
-                  </td>
-                  <td>Giacomo Guilizzoni</td>
-                  <td>Inactive 2 months</td>
-                  <td>
-                    <a href="#" className="text-danger">Unblock</a>
-                  </td>
-                </tr>
-                <tr>
-                  <td>2</td>
-                  <td>
-                    <i className="fa fa-user-circle" style={{fontSize: "50px"}}/>
-                  </td>
-                  <td>Marco Botton</td>
-                  <td>-</td>
-                  <td>
-                    <a href="#" className="text-danger">Unblock</a>
-                  </td>
-                </tr>
-                <tr>
-                  <td>3</td>
-                  <td>
-                    <i className="fa fa-user-circle" style={{fontSize: "50px"}}/>
-                  </td>
-                  <td>Mariah Maclachlan</td>
-                  <td>-</td>
-                  <td>
-                    <a href="#" className="text-danger">Unblock</a>
-                  </td>
-                </tr>
-                <tr>
-                  <td>4</td>
-                  <td>
-                    <i className="fa fa-user-circle" style={{fontSize: "50px"}}/>
-                  </td>
-                  <td>Valerie Liberty</td>
-                  <td>-</td>
-                  <td>
-                    <a href="#" className="text-danger">Unblock</a>
-                  </td>
-                </tr>
-                <tr>
-                  <td>5</td>
-                  <td>
-                    <i className="fa fa-user-circle" style={{fontSize: "50px"}}/>
-                  </td>
-                  <td>User 10</td>
-                  <td>-</td>
-                  <td>
-                    <button className="btn btn-link text-danger" data-toggle="modal" data-target="#testing">
-                      Unblock
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <div className="card-footer">
-            <ul className="pagination justify-content-end mb-0">
-              <li className="page-item disabled">
-                <a className="page-link" href="#" tabindex="-1">Previous</a>
-              </li>
-              <li className="page-item active"><a className="page-link" href="#">1</a></li>
-              <li className="page-item">
-                <a className="page-link" href="#">Next</a>
-              </li>
-            </ul>
-          </div>
-        </div>
+        <Table table={this.state.table}>
+          {tbody}
+        </Table>
 
-        <div className="modal animate fade" id="testing">
-          <div className="modal-dialog a-zoom modal-dialog-centered">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title">Unblock User</h5>
-                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div className="modal-body">
-                <p>Are you sure you want to unblock Marco Botton?</p>
-              </div>
-              <div className="modal-footer">
-                <div className="col-md-6">
-                  <button type="button" className="btn btn-danger btn-block" data-dismiss="modal">Yes</button>
-                </div>
-                <div className="col-md-6">
-                  <button type="button" className="btn btn-light btn-block" data-dismiss="modal">No</button>
-                </div>
-              </div>
+        <Modal id="unblock" title="Unblock User">
+          <div className="modal-body">
+            <p>Are you sure you want to unblock {this.state.block.name}?</p>
+          </div>
+          <div className="modal-footer">
+            <div className="col-md-6">
+              <button type="button" className="btn btn-danger btn-block" data-dismiss="modal" data-toggle="modal" onClick={this.submitBlock}>Yes</button>
+            </div>
+            <div className="col-md-6">
+              <button type="button" className="btn btn-light btn-block" data-dismiss="modal">No</button>
             </div>
           </div>
-        </div>
+        </Modal>
+
       </AdminLayoutHoc>
     )
   }
 }
+
+export default withRouter(Index)

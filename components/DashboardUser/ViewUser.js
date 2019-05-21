@@ -3,8 +3,59 @@ import Card from '../Card';
 import Chart from 'chart.js'
 import { Doughnut } from 'react-chartjs-2';
 import Link from 'next/link';
+import { withRouter } from 'next/router';
 
-export default class Index extends React.Component {
+class Index extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      data: {
+        name: "",
+        email: "",
+        activity: "",
+        category: "",
+        old: 0,
+        weight: 0,
+        height: 0,
+        fat: 0,
+        protein: 0,
+        carbohydrate: 0,
+        max_fat: 0,
+        max_protein: 0,
+        max_carbohydrate: 0,
+      }
+    }
+
+    this.onRefresh = this.onRefresh.bind(this)
+  }
+
+  async onRefresh() {
+    const response = await fetch(`http://127.0.0.1:8000/fact/user/` + this.props.router.query.id)
+    const json = await response.json()
+
+    const data = {
+      name: json.results.name,
+      email: json.results.email,
+      activity: json.results.activity,
+      category: json.results.category,
+      old: json.results.old,
+      weight: json.results.weight,
+      height: json.results.height,
+      fat: json.results.fat,
+      protein: json.results.protein,
+      carbohydrate: json.results.carbohydrate,
+      max_fat: json.results.max_fat,
+      max_protein: json.results.max_protein,
+      max_carbohydrate: json.results.max_carbohydrate,
+    }
+
+    this.setState({ data })
+  }
+
+  componentDidMount () {
+    this.onRefresh()
+  }
+
   render() {
     Chart.pluginService.register({
       beforeDraw: function (chart) {
@@ -26,11 +77,6 @@ export default class Index extends React.Component {
           var stringWidth = ctx.measureText(txt).width;
           var elementWidth = (chart.innerRadius * 2) - sidePaddingCalculated;
 
-          // Find out how much the font can grow in width.
-          var widthRatio = elementWidth / stringWidth;
-          var newFontSize = Math.floor(30 * widthRatio);
-          var elementHeight = (chart.innerRadius * 2);
-
           // Pick a new font size so it will not be larger than the height of label.
           var fontSizeToUse = 20;
 
@@ -50,7 +96,7 @@ export default class Index extends React.Component {
 
     const profileTools = (
       <div className="card-tools">
-        <Link href="/dashboard/admin/users/active?status=edit">
+        <Link href={"/dashboard/admin/users/active?status=edit&id=" + this.props.router.query.id}>
           <a>
             <i className="fa fa-pen"/>
           </a>
@@ -58,50 +104,47 @@ export default class Index extends React.Component {
       </div>
     )
 
-    const chartCarbohydrate = {
-      datasets: [{
-        data: [230, 70],
-        backgroundColor: ['#ffc107'],
-      }]
-    }
-
-    const chartProtein = {
-      datasets: [{
-        data: [62, 38],
-        backgroundColor: ['#17a2b8'],
-      }]
-    }
-
-    const chartFat = {
-      datasets: [{
-        data: [70, 120],
-        backgroundColor: ['#dc3545'],
-      }]
-    }
-
-    const chartOptionCarbohydrate = {
-      elements: {
-        center: {
-          text: '230g',
-          color: '#ffc107'
+    const chart = {
+      fat: {
+        datasets: [{
+          data: [this.state.data.fat, this.state.data.max_fat],
+          backgroundColor: ['#dc3545'],
+        }],
+        options: {
+          elements: {
+            center: {
+              text: this.state.data.fat + 'g',
+              color: '#dc3545'
+            }
+          }
         }
-      }
-    }
-
-    const chartOptionProtein = {
-      elements: {
-        center: {
-          text: '62g',
-          color: '#17a2b8'
+      },
+      protein: {
+        datasets: [{
+          data: [this.state.data.protein, this.state.data.max_protein],
+          backgroundColor: ['#17a2b8'],
+        }],
+        options: {
+          elements: {
+            center: {
+              text: this.state.data.protein + 'g',
+              color: '#17a2b8'
+            }
+          }
         }
-      }
-    }
-
-    const chartOptionFat = {
-      elements: {
-        center: {
-          text: '70g',
-          color: '#dc3545'
+      },
+      carbohydrate: {
+        datasets: [{
+          data: [this.state.data.carbohydrate, this.state.data.max_carbohydrate],
+          backgroundColor: ['#ffc107'],
+        }],
+        options: {
+          elements: {
+            center: {
+              text: this.state.data.carbohydrate + 'g',
+              color: '#ffc107'
+            }
+          }
         }
       }
     }
@@ -114,8 +157,8 @@ export default class Index extends React.Component {
               <div className="col-md-3">
                 <div className="content-center">
                   <p className="text-center"><i className="fa fa-user-circle" style={{fontSize: "50px"}}/></p>
-                  <h5 className="text-center mb-0">Giacomo Guilizzoni</h5>
-                  <p className="text-center">20 y.o.</p>
+                  <h5 className="text-center mb-0">{this.state.data.name}</h5>
+                  <p className="text-center">{this.state.data.old} y.o.</p>
                 </div>
               </div>
 
@@ -124,13 +167,13 @@ export default class Index extends React.Component {
                   <div className="form-group row">
                     <label className="col-sm-3 col-form-label">Email Address</label>
                     <div className="col-sm-9">
-                      <input type="text" readonly className="form-control-plaintext" value="email@example.com"/>
+                      <input type="text" readonly className="form-control-plaintext" value={this.state.data.email}/>
                     </div>
                   </div>
                   <div className="form-group row">
                     <label className="col-sm-3 col-form-label">Password</label>
                     <div className="col-sm-9">
-                      <input type="password" readonly className="form-control-plaintext" value="passwordyangkeren"/>
+                      <input type="password" readonly className="form-control-plaintext" value="............"/>
                     </div>
                   </div>
                 </form>
@@ -142,7 +185,7 @@ export default class Index extends React.Component {
                 <div className="info-box">
                   <div className="info-box-content">
                     <h3 style={{textAlign: "center"}}>Weight</h3>
-                    <p className="mb-0" style={{textAlign: "center"}}>70 kg</p>
+                    <p className="mb-0" style={{textAlign: "center"}}>{this.state.data.weight} kg</p>
                   </div>
                 </div>
               </div>
@@ -150,7 +193,7 @@ export default class Index extends React.Component {
                 <div className="info-box">
                   <div className="info-box-content">
                     <h3 style={{textAlign: "center"}}>Height</h3>
-                    <p className="mb-0" style={{textAlign: "center"}}>170 cm</p>
+                    <p className="mb-0" style={{textAlign: "center"}}>{this.state.data.height} cm</p>
                   </div>
                 </div>
               </div>
@@ -158,7 +201,7 @@ export default class Index extends React.Component {
                 <div className="info-box">
                   <div className="info-box-content">
                     <h3 style={{textAlign: "center"}}>Category</h3>
-                    <p className="mb-0" style={{textAlign: "center"}}>Normal</p>
+                    <p className="mb-0" style={{textAlign: "center"}}>{this.state.data.category}</p>
                   </div>
                 </div>
               </div>
@@ -166,7 +209,7 @@ export default class Index extends React.Component {
                 <div className="info-box">
                   <div className="info-box-content">
                     <h3 style={{textAlign: "center"}}>Activity</h3>
-                    <p className="mb-0" style={{textAlign: "center"}}>Low Activity</p>
+                    <p className="mb-0" style={{textAlign: "center"}}>{this.state.data.activity}</p>
                   </div>
                 </div>
               </div>
@@ -175,15 +218,15 @@ export default class Index extends React.Component {
             <h3 className="mt-3 mb-3">Nutritions</h3>
             <div className="row">
               <div className="col-md-4">
-                <Doughnut data={chartCarbohydrate} options={chartOptionCarbohydrate}/>
+                <Doughnut data={chart.carbohydrate} options={chart.carbohydrate.options}/>
                 <h6 className="text-center mt-3">Carbohydrate</h6>
               </div>
               <div className="col-md-4">
-                <Doughnut data={chartProtein} options={chartOptionProtein}/>
+                <Doughnut data={chart.protein} options={chart.protein.options}/>
                 <h6 className="text-center mt-3">Protein</h6>
               </div>
               <div className="col-md-4">
-                <Doughnut data={chartFat} options={chartOptionFat}/>
+                <Doughnut data={chart.fat} options={chart.fat.options}/>
                 <h6 className="text-center mt-3">Fat</h6>
               </div>
             </div>
@@ -193,3 +236,5 @@ export default class Index extends React.Component {
     )
   }
 }
+
+export default withRouter(Index)
