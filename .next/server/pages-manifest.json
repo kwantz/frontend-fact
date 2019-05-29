@@ -1,5 +1,1 @@
-<<<<<<< HEAD
-{"/_app":"static/development/pages/_app.js","/_document":"static/development/pages/_document.js","/_error":"static/development/pages/_error.js","/fill-profile-analysis":"static/development/pages/fill-profile-analysis.js","/fill-profile":"static/development/pages/fill-profile.js"}
-=======
-{"/_app":"static/development/pages/_app.js","/_document":"static/development/pages/_document.js","/_error":"static/development/pages/_error.js","/dashboard/admin/users/active":"static/development/pages/dashboard/admin/users/active.js","/dashboard/admin/users/blocked":"static/development/pages/dashboard/admin/users/blocked.js","/next/dist/pages/_error":"static/development/pages/next/dist/pages/_error.js"}
->>>>>>> 5f3bbb858ac5a7d03e15a6642e839fb81d0e7cf6
+{"/_app":"static/development/pages/_app.js","/_document":"static/development/pages/_document.js","/_error":"static/development/pages/_error.js","/dashboard/admin/newsfeed/articles":"static/development/pages/dashboard/admin/newsfeed/articles.js","/fill-profile":"static/development/pages/fill-profile.js"}

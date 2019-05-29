@@ -9958,7 +9958,7 @@ function (_React$Component) {
         },
         __self: this
       }, react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("div", {
-        class: "card-body col-md-12",
+        class: "card-body col-md-12 row",
         __source: {
           fileName: _jsxFileName,
           lineNumber: 13
@@ -9993,8 +9993,7 @@ function (_React$Component) {
         __self: this
       }, react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("input", {
         type: "text",
-        class: "form-control",
-        placeholder: "Enter birth year",
+        class: "form-control col-4",
         __source: {
           fileName: _jsxFileName,
           lineNumber: 18
@@ -10008,13 +10007,20 @@ function (_React$Component) {
         },
         __self: this
       }, react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("span", {
-        class: "fas fa-user-lock input-group-text",
+        class: "input-group-text",
         __source: {
           fileName: _jsxFileName,
           lineNumber: 20
         },
         __self: this
-      })))), react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("div", {
+      }, react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("i", {
+        class: "fa fa-calendar",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 20
+        },
+        __self: this
+      }))))), react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("div", {
         class: "form-group",
         __source: {
           fileName: _jsxFileName,
@@ -10034,38 +10040,353 @@ function (_React$Component) {
           lineNumber: 26
         },
         __self: this
-      }, react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("input", {
-        type: "text",
-        class: "form-control",
-        placeholder: "Enter birth year",
+      }, react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("div", {
+        class: "form-check",
         __source: {
           fileName: _jsxFileName,
           lineNumber: 27
+        },
+        __self: this
+      }, react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("span", {
+        class: "fa fa-male",
+        style: {
+          display: 'block',
+          textAlign: 'center',
+          fontSize: '2rem'
+        },
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 28
+        },
+        __self: this
+      }), react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("input", {
+        class: "form-check-input",
+        type: "radio",
+        name: "gender",
+        id: "male",
+        value: "male",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 29
+        },
+        __self: this
+      }), react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("label", {
+        class: "form-check-label",
+        for: "male",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 30
+        },
+        __self: this
+      }, "Male")), react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("div", {
+        class: "form-check",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 34
+        },
+        __self: this
+      }, react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("span", {
+        class: "fa fa-female",
+        style: {
+          display: 'block',
+          textAlign: 'center',
+          fontSize: '2rem'
+        },
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 35
+        },
+        __self: this
+      }), react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("input", {
+        class: "form-check-input",
+        type: "radio",
+        name: "gender",
+        id: "female",
+        value: "female",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 36
+        },
+        __self: this
+      }), react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("label", {
+        class: "form-check-label",
+        for: "female",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 37
+        },
+        __self: this
+      }, "Female")))), react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("div", {
+        class: "form-group",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 43
+        },
+        __self: this
+      }, react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("label", {
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 44
+        },
+        __self: this
+      }, "Weight"), react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("div", {
+        class: "input-group mb-3",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 45
+        },
+        __self: this
+      }, react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("input", {
+        type: "text",
+        class: "form-control col-4",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 46
         },
         __self: this
       }), react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("div", {
         class: "input-group-append",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 28
+          lineNumber: 47
         },
         __self: this
       }, react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("span", {
-        class: "fas fa-user-lock input-group-text",
+        class: "input-group-text",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 29
+          lineNumber: 48
         },
         __self: this
-      })))))))), react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("footer", {
+      }, "kg")))), react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("div", {
+        class: "form-group",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 52
+        },
+        __self: this
+      }, react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("label", {
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 53
+        },
+        __self: this
+      }, "Height"), react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("div", {
+        class: "input-group mb-3",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 54
+        },
+        __self: this
+      }, react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("input", {
+        type: "text",
+        class: "form-control col-4",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 55
+        },
+        __self: this
+      }), react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("div", {
+        class: "input-group-append",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 56
+        },
+        __self: this
+      }, react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("span", {
+        class: "input-group-text",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 57
+        },
+        __self: this
+      }, "cm"))))), react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("div", {
+        class: "col-md-6",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 62
+        },
+        __self: this
+      }, react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("div", {
+        class: "form-group",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 63
+        },
+        __self: this
+      }, react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("label", {
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 64
+        },
+        __self: this
+      }, "What activity level are you in ?"), react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("div", {
+        class: "input-group",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 65
+        },
+        __self: this
+      }, react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("div", {
+        class: "form-check mb-3",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 66
+        },
+        __self: this
+      }, react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("input", {
+        class: "form-check-input",
+        type: "radio",
+        name: "activity",
+        id: "low",
+        value: "low",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 67
+        },
+        __self: this
+      }), react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("label", {
+        class: "form-check-label",
+        for: "low",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 68
+        },
+        __self: this
+      }, "Low Activity Level (Sedentary)"), react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("div", {
+        class: "row",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 69
+        },
+        __self: this
+      }, react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("div", {
+        class: "bg-info col-md-3",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 70
+        },
+        __self: this
+      }), react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("p", {
+        class: "col-md-9",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 71
+        },
+        __self: this
+      }, "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam consequat orci in dolor faucibus volutpat. Duis tempus lobortis erat, at consectetur sapien dignissim vitae."))), react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("div", {
+        class: "form-check mb-3",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 74
+        },
+        __self: this
+      }, react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("input", {
+        class: "form-check-input",
+        type: "radio",
+        name: "activity",
+        id: "med",
+        value: "medium",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 75
+        },
+        __self: this
+      }), react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("label", {
+        class: "form-check-label",
+        for: "med",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 76
+        },
+        __self: this
+      }, "Medium Activity Level"), react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("div", {
+        class: "row",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 77
+        },
+        __self: this
+      }, react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("div", {
+        class: "bg-info col-md-3",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 78
+        },
+        __self: this
+      }), react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("p", {
+        class: "col-md-9",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 79
+        },
+        __self: this
+      }, "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam consequat orci in dolor faucibus volutpat. Duis tempus lobortis erat, at consectetur sapien dignissim vitae."))), react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("div", {
+        class: "form-check mb-3",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 82
+        },
+        __self: this
+      }, react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("input", {
+        class: "form-check-input",
+        type: "radio",
+        name: "activity",
+        id: "high",
+        value: "high",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 83
+        },
+        __self: this
+      }), react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("label", {
+        class: "form-check-label",
+        for: "high",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 84
+        },
+        __self: this
+      }, "High Activity Level"), react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("div", {
+        class: "row",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 85
+        },
+        __self: this
+      }, react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("div", {
+        class: "bg-info col-md-3",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 86
+        },
+        __self: this
+      }), react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("p", {
+        class: "col-md-9",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 87
+        },
+        __self: this
+      }, "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam consequat orci in dolor faucibus volutpat. Duis tempus lobortis erat, at consectetur sapien dignissim vitae.")))))))), react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("button", {
+        className: "btn btn-flat bg-info btn-block col-md-2",
+        style: {
+          margin: '0 auto'
+        },
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 95
+        },
+        __self: this
+      }, "DONE")), react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("footer", {
         class: "d-flex justify-content-center",
         style: {
-          marginTop: '12%',
+          marginTop: '2%',
           paddingBottom: '1%'
         },
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 37
+          lineNumber: 97
         },
         __self: this
       }, "Copyright by Zro2iro"));
@@ -10079,7 +10400,7 @@ function (_React$Component) {
 
 /***/ }),
 
-/***/ 2:
+/***/ 0:
 /*!***************************************************************************************************************************!*\
   !*** multi next-client-pages-loader?page=%2Ffill-profile&absolutePagePath=C%3A%5Cfrontend-fact%5Cpages%5Cfill-profile.js ***!
   \***************************************************************************************************************************/
@@ -10102,5 +10423,5 @@ module.exports = dll_6dc2816e14fab51b8269;
 
 /***/ })
 
-},[[2,"static/runtime/webpack.js","styles"]]]);
+},[[0,"static/runtime/webpack.js","styles"]]]);
 //# sourceMappingURL=fill-profile.js.map
