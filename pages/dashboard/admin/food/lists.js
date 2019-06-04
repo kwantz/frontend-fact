@@ -4,6 +4,12 @@ import ViewFood from '../../../../components/DashboardFood/ViewFood';
 import ViewLists from '../../../../components/DashboardFood/ViewLists';
 
 export default class Index extends React.Component {
+
+  componentDidMount () {
+    if (window.localStorage.getItem("role") !== 1)
+      return window.location.href = "/"
+  }
+
   render() {
     console.log(this.props)
 

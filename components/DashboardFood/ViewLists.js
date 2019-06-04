@@ -60,6 +60,7 @@ class Index extends React.Component {
         name: '',
       }
       await this.setState({delete: data, alert})
+      this.onRefresh()
     }
   }
 
@@ -122,11 +123,12 @@ class Index extends React.Component {
 
   render () {
     const tbody = []
+    const page = ((parseInt(this.props.router.query.page) || 1) - 1) * 30
     for (let i = 0, l = this.state.data.length; i < l; i++) {
       const food = this.state.data[i];
       tbody.push(
         <tr key={food.id}>
-          <td>{i + 1}</td>
+          <td>{page + i + 1}</td>
           <td>{food.name}</td>
           <td>{food.category}</td>
           <td>{food.calorie}</td>
@@ -169,7 +171,7 @@ class Index extends React.Component {
           </div>
         </div>
 
-        <Table table={this.state.table}>
+        <Table table={this.state.table} refresh={this.onRefresh}>
           {tbody}
         </Table>
 

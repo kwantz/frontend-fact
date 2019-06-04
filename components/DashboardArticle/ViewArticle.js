@@ -1,59 +1,83 @@
 import AdminLayoutHoc from '../Layout/AdminLayoutHoc';
+import Router, { withRouter } from 'next/router';
 
-export default class Index extends React.Component {
+class Index extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      data: {
+        title: '',
+        image: '',
+        author: '',
+        content: ''
+      }
+    }
+
+    this.onRefresh = this.onRefresh.bind(this)
+  }
+
+  async onRefresh () {
+    const response = await fetch(`http://127.0.0.1:8000/fact/article/${this.props.router.query.id}`)
+    const json = await response.json()
+
+    const {data} = this.state
+    data.title = json.results.title
+    data.image = json.results.image,
+    data.author = json.results.author,
+    data.content = json.results.content
+    this.setState({ data })
+  }
+
+  componentDidMount() {
+    this.onRefresh()
+  }
+
   render() {
-    console.log(this.props)
-
     return (
-      <AdminLayoutHoc contentTitle={'Add Article'} contentBreadcrumb={["Home", "Newsfeed", "Articles", "Add"]}>
+      <AdminLayoutHoc contentTitle={'View Article'} contentBreadcrumb={["Home", "Newsfeed", "Articles", "View"]}>
         <div className="card">
-          {/* <div className="overlay">
-            <i className="fa fa-sync-alt fa-spin"></i>
-          </div> */}
           <div className="card-body">
-            <form>
-              <div className="form-group row">
-                <label className="col-sm-3 col-form-label">Title</label>
-                <div className="col-sm-9">
-                  <input type="text" className="form-control" placeholder="Enter Food Name"/>
-                </div>
+            <div className="form-group row">
+              <label className="col-sm-3 col-form-label">Title</label>
+              <div className="col-sm-9">
+                <input type="text" className="form-control" value={this.state.data.title}/>
               </div>
-              <div className="form-group row">
-                <label className="col-sm-3 col-form-label">Author</label>
-                <div className="col-sm-9">
-                  <select className="form-control">
-                    <option>All Category</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                  </select>
-                </div>
+            </div>
+            <div className="form-group row">
+              <label className="col-sm-3 col-form-label">Author</label>
+              <div className="col-sm-9">
+                <input type="text" className="form-control" value={this.state.data.author}/>
               </div>
-              <div className="form-group row">
-                <label className="col-sm-3 col-form-label">Image</label>
-                <div className="col-sm-9">
-                  <img src="http://127.0.0.1:8000/fact/images/6c9149e1-f4c2-4cc5-965d-b373ff632c3b.jpeg"/>
+            </div>
+            <div className="form-group row">
+              <label className="col-sm-3 col-form-label">Image</label>
+              <div className="col-sm-9">
+                <div className="custom-file">
+                  <input type="file" onChange={this.onChangeFile} className="custom-file-input" id="customFile" accept="image/*"/>
+                  <label className="custom-file-label" for="customFile">{(this.state.data.image === '') ? 'Choose file' : this.state.data.image}</label>
                 </div>
+                <img className="mt-3" src={`http://127.0.0.1:8000/fact/image/${this.state.data.image}`}/>
               </div>
-              <div className="form-group row">
-                <label className="col-sm-3 col-form-label">Content</label>
-                <div className="col-sm-9">
-                  <textarea className="form-control" id="exampleFormControlTextarea1" rows="5"/>
-                </div>
+            </div>
+            <div className="form-group row">
+              <label className="col-sm-3 col-form-label">Content</label>
+              <div className="col-sm-9">
+                <textarea className="form-control" id="exampleFormControlTextarea1" rows="5" value={this.state.data.content}/>
               </div>
-              <div className="row mt-5">
-                <div className="col-md-5">
-                  <button type="button" className="btn btn-info btn-block">Save</button>
-                </div>
-                <div className="col-md-5 offset-md-2">
-                  <button type="button" className="btn btn-light btn-block">Cancel</button>
-                </div>
+            </div>
+            <div className="row mt-5">
+              <div className="col-md-5">
+                <button type="button" className="btn btn-info btn-block">Save</button>
               </div>
-            </form>
+              <div className="col-md-5 offset-md-2">
+                <button type="button" className="btn btn-light btn-block" onClick={() => Router.back()}>Cancel</button>
+              </div>
+            </div>
           </div>
         </div>
       </AdminLayoutHoc>
     )
   }
 }
+
+export default withRouter(Index)

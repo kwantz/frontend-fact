@@ -1,9 +1,34 @@
 import "../styles/styles.scss"
 import Link from 'next/link';
-import { withRouter } from 'next/router';
+import Router, { withRouter } from 'next/router';
 import PropTypes from 'prop-types';
 
 class Pagination extends React.Component {
+  constructor(props) {
+    super(props)
+
+    this.createUrl = this.createUrl.bind(this)
+  }
+
+  async createUrl (page) {
+    const router = this.props.router
+    const keys = Object.keys(router.query)
+    let query = {
+      page: page
+    }
+
+    for (let i = 0, l = keys.length; i < l; i++) {
+      if (keys[i] === "page") continue;
+      query[keys[i]] = router.query[keys[i]]
+    }
+
+    await Router.push({
+      pathname: router.pathname,
+      query
+    })
+    this.props.refresh()
+  }
+
   render() {
     const router = this.props.router
     const last = parseInt(this.props.pages)
@@ -15,18 +40,6 @@ class Pagination extends React.Component {
     const start = Math.max(1, page-2)
     const end = Math.min(last, page+2)
 
-    const createUrl = (page) => {
-      const keys = Object.keys(router.query)
-      let query = "?page=" + page
-
-      for (let i = 0, l = keys.length; i < l; i++) {
-        if (keys[i] === "page") continue;
-        query += "&" + keys[i] + "=" + router.query[keys[i]];
-      }
-
-      return router.pathname + query;
-    }
-
     const createLink = (link) => {
       const active = (link === page) ? "active" : ""
       if (link === -1) return (
@@ -36,9 +49,7 @@ class Pagination extends React.Component {
       )
       return (
         <li className={["page-item", active].join(" ")} key={link}>
-          <Link href={createUrl(link)}>
-            <a className="page-link">{link}</a>
-          </Link>
+          <button type="button" className="page-link" onClick={() => this.createUrl(link)}>{link}</button>
         </li>
       )
     }
@@ -56,15 +67,11 @@ class Pagination extends React.Component {
       <div className="card-footer">
         <ul className="pagination justify-content-end mb-0">
           <li className={["page-item", disabledPrevious].join(" ")}>
-            <Link href={createUrl(page - 1)}>
-              <a className="page-link">Previous</a>
-            </Link>
+            <button type="button" className="page-link" onClick={() => this.createUrl(link)}>Previous</button>
           </li>
           { pages }
           <li className={["page-item", disabledNext].join(" ")}>
-            <Link href={createUrl(page + 1)}>
-              <a className="page-link">Next</a>
-            </Link>
+            <button type="button" className="page-link" onClick={() => this.createUrl(link)}>Next</button>
           </li>
         </ul>
       </div>

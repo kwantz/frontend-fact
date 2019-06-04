@@ -29,7 +29,8 @@ export default class Index extends React.Component {
     }
     else {
       window.localStorage.setItem("token", json.results.token)
-      if (json.results.role === 'Admin')
+      window.localStorage.setItem("role", json.results.role)
+      if (json.results.role === 1)
         window.location.href = "/dashboard/admin"
       else
         window.location.href = "/dashboard/user"

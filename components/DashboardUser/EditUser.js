@@ -1,7 +1,7 @@
 import AdminLayoutHoc from '../Layout/AdminLayoutHoc';
 import Link from 'next/link';
 import Alert from '../Alert';
-import { withRouter } from 'next/router';
+import Router, { withRouter } from 'next/router';
 
 class Index extends React.Component {
   constructor(props) {
@@ -85,7 +85,7 @@ class Index extends React.Component {
                 <button type="button" className="btn btn-info btn-block" onClick={this.onSubmit}>Save</button>
               </div>
               <div className="col-md-5 offset-md-2">
-                <button type="button" className="btn btn-light btn-block">Cancel</button>
+                <button type="button" className="btn btn-light btn-block"onClick={() => Router.back()}>Cancel</button>
               </div>
             </div>
           </div>

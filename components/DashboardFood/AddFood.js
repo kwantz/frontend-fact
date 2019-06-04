@@ -60,7 +60,7 @@ export default class Index extends React.Component {
   }
 
   async onRefresh () {
-    const response = await fetch(`http://127.0.0.1:8000/fact/food-category/all`)
+    const response = await fetch(`http://127.0.0.1:8000/fact/food-category?name=all`)
     const json = await response.json()
 
     const categories = json.results.categories
@@ -129,9 +129,7 @@ export default class Index extends React.Component {
                 <button type="button" className="btn btn-info btn-block" onClick={this.onSubmit}>Save</button>
               </div>
               <div className="col-md-5 offset-md-2">
-                <Link href="/dashboard/admin/food/lists">
-                  <a className="btn btn-light btn-block">Cancel</a>
-                </Link>
+                <button type="button" className="btn btn-light btn-block" onClick={() => Router.back()}>Cancel</button>
               </div>
             </div>
           </div>

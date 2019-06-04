@@ -2,12 +2,15 @@ import AdminLayoutHoc from '../../../components/Layout/AdminLayoutHoc';
 import Table from '../../../components/Table';
 import Modal from '../../../components/Modal';
 import Alert from '../../../components/Alert';
+import SearchInput from "../../../components/SearchInput";
+import Router, { withRouter } from 'next/router';
 
-export default class Index extends React.Component {
+class Index extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       data: [],
+      search: '',
       add: {
         name: '',
         met: '',
@@ -35,6 +38,10 @@ export default class Index extends React.Component {
       alert: {
         add_danger: '',
         add_success: '',
+        edit_danger: '',
+        edit_success: '',
+        delete_danger: '',
+        delete_success: '',
       }
     }
 
@@ -43,10 +50,23 @@ export default class Index extends React.Component {
     this.onSubmitEdit = this.onSubmitEdit.bind(this)
 
     this.onDelete = this.onDelete.bind(this)
+    this.onSubmitDelete = this.onSubmitDelete.bind(this)
 
+    this.queryName = this.queryName.bind(this)
     this.onRefresh = this.onRefresh.bind(this)
     this.onChangeAdd = this.onChangeAdd.bind(this)
     this.onSubmitAdd = this.onSubmitAdd.bind(this)
+  }
+
+  async queryName() {
+    await Router.push({
+      pathname: '/dashboard/admin/activities',
+      query: {
+        page: 1,
+        name: this.state.search
+      }
+    })
+    this.onRefresh()
   }
 
   onEdit (activity) {
@@ -64,9 +84,7 @@ export default class Index extends React.Component {
   }
 
   async onSubmitEdit () {
-    const alert = this.state.alert
-    const edit = this.state.edit
-    console.log(this.state.edit)
+    const {alert, edit} = this.state
     const body = JSON.stringify(this.state.edit)
     const response = await fetch('http://127.0.0.1:8000/fact/activity/' + edit.id, {method: 'PUT', body})
     const json = await response.json()
@@ -83,10 +101,25 @@ export default class Index extends React.Component {
   }
 
   onDelete (activity) {
-    this.data = this.state.delete
+    const data = this.state.delete
     data.id = activity.id
     data.name = activity.name
     this.setState({delete: data})
+  }
+
+  async onSubmitDelete () {
+    const response = await fetch('http://127.0.0.1:8000/fact/activity/' + this.state.delete.id, {method: 'DELETE'})
+    const json = await response.json()
+
+    if (typeof json.message === 'undefined' || json.message !== 'Success') {
+      alert.delete_danger = "500 — Internal Server Error"
+      await this.setState({alert})
+    }
+    else {
+      alert.delete_success = "Delete Activity, " + this.state.delete.name + " — Success"
+      await this.setState({alert})
+      this.onRefresh()
+    }
   }
 
   async onSubmitAdd () {
@@ -117,7 +150,11 @@ export default class Index extends React.Component {
   }
 
   async onRefresh () {
-    const response = await fetch('http://127.0.0.1:8000/fact/activity')
+    let {page, name} = this.props.router.query
+    if (typeof page === "undefined") page = 1
+    if (typeof name === "undefined") name = ""
+
+    const response = await fetch(`http://127.0.0.1:8000/fact/activity?page=${page}&name=${name}`)
     const json = await response.json()
 
     const data = json.results.activities
@@ -130,6 +167,9 @@ export default class Index extends React.Component {
   }
 
   componentDidMount () {
+    if (window.localStorage.getItem("role") !== 1)
+      return window.location.href = "/"
+
     const table = this.state.table
     table.loading = true
 
@@ -156,20 +196,12 @@ export default class Index extends React.Component {
 
     return (
       <AdminLayoutHoc contentTitle={`Activities (${this.state.total})`} contentBreadcrumb={["Home", "Activities"]}>
+        <Alert type="danger"component={this} attribute="delete_danger"/>
+        <Alert type="success"component={this} attribute="delete_success"/>
         <div className="card">
           <div className="card-body">
             <form className="form-inline">
-              <div className="input-group">
-                <div className="input-group-prepend">
-                  <span className="input-group-text">
-                    <i className="fa fa-search"/>
-                  </span>
-                </div>
-                <input type="text" className="form-control bl-0" placeholder="Search by name"/>
-                <div className="input-group-append">
-                  <button type="submit" className="btn btn-info">Submit</button>
-                </div>
-              </div>
+              <SearchInput placeholder="Search by name" onClick={this.queryName} value={this.state.search} onChange={(event) => this.setState({search: event.target.value})}/>
               <button type="button" className="btn btn-info ml-auto" data-toggle="modal" data-target="#add">
                 <i className="fa fa-plus" /> Add Activity
               </button>
@@ -205,6 +237,8 @@ export default class Index extends React.Component {
         </Modal>
 
         <Modal id="edit" title="Edit Activity">
+          <Alert type="danger"component={this} attribute="edit_danger"/>
+          <Alert type="success"component={this} attribute="edit_success"/>
           <div className="modal-body">
             <div className="form-group">
               <label>Activity Name</label>
@@ -225,34 +259,24 @@ export default class Index extends React.Component {
           </div>
         </Modal>
 
-        <div className="modal animate fade" id="testing3">
-          <div className="modal-dialog a-zoom modal-dialog-centered">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title">Delete Activity</h5>
-                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div className="modal-body">
-                <form>
-                  <span>
-                    Are you sure you want to delete Activity A?
-                  </span>
-                </form>
-              </div>
-              <div className="modal-footer">
-                <div className="col-md-6">
-                  <button type="button" className="btn btn-light btn-block" data-dismiss="modal">No</button>
-                </div>
-                <div className="col-md-6">
-                  <button type="button" className="btn btn-danger btn-block" >Yes</button>
-                </div>
-              </div>
+        <Modal id="delete" title="Delete Activity">
+          <div className="modal-body">
+            <span>
+              Are you sure you want to delete <b>{this.state.delete.name}</b>?
+            </span>
+          </div>
+          <div className="modal-footer">
+            <div className="col-md-6">
+              <button type="button" className="btn btn-light btn-block" data-dismiss="modal">No</button>
+            </div>
+            <div className="col-md-6">
+              <button type="button" className="btn btn-danger btn-block" onClick={this.onSubmitDelete} data-dismiss="modal">Yes</button>
             </div>
           </div>
-        </div>
+        </Modal>
       </AdminLayoutHoc>
     )
   }
 }
+
+export default withRouter(Index)

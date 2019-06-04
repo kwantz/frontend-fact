@@ -3,15 +3,16 @@ import Table from "../../../../components/Table";
 import Modal from "../../../../components/Modal";
 import SearchInput from "../../../../components/SearchInput";
 import Alert from "../../../../components/Alert";
-import Link from 'next/link';
+import Router, { withRouter } from 'next/router';
 
-export default class Index extends React.Component {
+class Index extends React.Component {
   constructor (props) {
     super(props)
 
     this.state = {
       data: [],
       total: 0,
+      search: '',
       add: '',
       edit: {
         id: -1,
@@ -41,6 +42,7 @@ export default class Index extends React.Component {
       }
     }
 
+    this.queryName = this.queryName.bind(this)
     this.onRefresh = this.onRefresh.bind(this)
     this.onSubmitAdd = this.onSubmitAdd.bind(this)
     this.onChangeAdd = this.onChangeAdd.bind(this)
@@ -51,8 +53,23 @@ export default class Index extends React.Component {
     this.deleteCategory = this.deleteCategory.bind(this)
   }
 
+  async queryName() {
+    await Router.push({
+      pathname: '/dashboard/admin/food/categories',
+      query: {
+        page: 1,
+        name: this.state.search
+      }
+    })
+    this.onRefresh()
+  }
+
   async onRefresh() {
-    const response = await fetch('http://127.0.0.1:8000/fact/food-category')
+    let {page, name} = this.props.router.query
+    if (typeof page === "undefined") page = 1
+    if (typeof name === "undefined") name = ""
+
+    const response = await fetch(`http://127.0.0.1:8000/fact/food-category?page=${page}&name=${name}`)
     const json = await response.json()
 
     const data = json.results.categories
@@ -98,7 +115,7 @@ export default class Index extends React.Component {
     let {edit, alert} = this.state
     const body = JSON.stringify(edit)
 
-    const response = await fetch('http://127.0.0.1:8000/fact/food-category', {method: 'PUT', body})
+    const response = await fetch('http://127.0.0.1:8000/fact/food-category/' + edit.id, {method: 'PUT', body})
     const json = await response.json()
 
     if (typeof json.message === 'undefined' || json.message !== 'Success') {
@@ -123,7 +140,7 @@ export default class Index extends React.Component {
     let {alert} = this.state
     const body = JSON.stringify(this.state.delete)
 
-    const response = await fetch('http://127.0.0.1:8000/fact/food-category', {method: 'DELETE', body})
+    const response = await fetch('http://127.0.0.1:8000/fact/food-category/' + this.state.delete.id, {method: 'DELETE', body})
     const json = await response.json()
 
     if (typeof json.message === 'undefined' || json.message !== 'Success') {
@@ -147,6 +164,9 @@ export default class Index extends React.Component {
   }
 
   componentDidMount () {
+    if (window.localStorage.getItem("role") !== 1)
+      return window.location.href = "/"
+
     const table = this.state.table
     table.loading = true
 
@@ -178,7 +198,7 @@ export default class Index extends React.Component {
         <div className="card">
           <div className="card-body">
             <form className="form-inline">
-              <SearchInput placeholder="Search by name" />
+              <SearchInput placeholder="Search by name" onClick={this.queryName} value={this.state.search} onChange={(event) => this.setState({search: event.target.value})}/>
               <button type="button" className="btn btn-info ml-auto" data-toggle="modal" data-target="#add">
                 <i className="fa fa-plus" /> Add Category
               </button>
@@ -245,3 +265,5 @@ export default class Index extends React.Component {
     )
   }
 }
+
+export default withRouter(Index)

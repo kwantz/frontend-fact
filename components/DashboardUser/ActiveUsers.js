@@ -4,7 +4,7 @@ import Table from '../Table';
 import Modal from '../Modal';
 import Alert from '../Alert';
 import SearchInput from '../SearchInput';
-import { withRouter } from 'next/router';
+import Router, { withRouter } from 'next/router';
 
 class Index extends React.Component {
   constructor (props) {
@@ -76,15 +76,22 @@ class Index extends React.Component {
     if (typeof page === "undefined") page = 1
     if (typeof name === "undefined") name = ""
 
-    const response = await fetch(`http://127.0.0.1:8000/fact/user?page=${page}&name=${name}`)
-    const json = await response.json()
+    try {
+      const response = await fetch(`http://127.0.0.1:8000/fact/user?page=${page}&name=${name}`)
+      const json = await response.json()
+      // console.log(response.json())
 
-    const data = json.results.users
-    const total = json.results.total
-    table.pages = json.results.pages
-    table.loading = false
+      const data = json.results.users
+      const total = json.results.total
+      table.pages = json.results.pages
+      table.loading = false
 
-    this.setState({ data, table, total })
+      this.setState({ data, table, total })
+    }
+    catch (e) {
+      console.log(e)
+    }
+
   }
 
   async submitBlock () {
@@ -153,7 +160,7 @@ class Index extends React.Component {
 
         <Modal id="block" title="Block User">
           <div className="modal-body">
-            <p>Are you sure you want to block {this.state.block.name}?</p>
+            <p>Are you sure you want to block <b>{this.state.block.name}</b>?</p>
           </div>
           <div className="modal-footer">
             <div className="col-md-6">

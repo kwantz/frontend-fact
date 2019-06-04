@@ -4,6 +4,7 @@ import Pagination from './Pagination';
 class Table extends React.Component {
   render() {
     const {loading, header, pages} = this.props.table
+    const refresh = this.props.refresh
 
     const hide = (loading) ? "" : "hide";
     const thead = [];
@@ -30,7 +31,7 @@ class Table extends React.Component {
             </tbody>
           </table>
         </div>
-        <Pagination pages={pages} />
+        <Pagination pages={pages} refresh={refresh}/>
       </div>
     )
   }

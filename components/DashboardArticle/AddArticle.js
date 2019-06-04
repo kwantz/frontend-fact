@@ -59,7 +59,7 @@ export default class Index extends React.Component {
     var body = new FormData()
     body.append('uploads', input.files[0])
 
-    const response = await fetch(`http://127.0.0.1:8000/fact/upload`, {method: 'POST', body})
+    const response = await fetch(`http://127.0.0.1:8000/fact/image/upload`, {method: 'POST', body})
     const json = await response.json()
 
     const data = this.state.data
@@ -93,9 +93,10 @@ export default class Index extends React.Component {
               <label className="col-sm-3 col-form-label">Image</label>
               <div className="col-sm-9">
                 <div className="custom-file">
-                  <input type="file" onChange={this.onChangeFile} className="custom-file-input" id="customFile"/>
+                  <input type="file" onChange={this.onChangeFile} className="custom-file-input" id="customFile" accept="image/*"/>
                   <label className="custom-file-label" for="customFile">{(this.state.data.image === '') ? 'Choose file' : this.state.data.image}</label>
                 </div>
+                <img className="mt-3" src={(this.state.data.image !== '') ? `http://127.0.0.1:8000/fact/image/${this.state.data.image}` : ''}/>
               </div>
             </div>
             <div className="form-group row">

@@ -1,6 +1,6 @@
 export default [
   {
-    path: '/dashboard',
+    path: '/dashboard/admin',
     name: 'Dashboard',
     icon: 'fa fa-tachometer-alt'
   }, {
@@ -49,5 +49,9 @@ export default [
         icon: 'far fa-circle'
       }
     ]
+  }, {
+    path: '/dashboard/admin/comparison',
+    name: 'Comparison',
+    icon: 'fas fa-chart-bar'
   }
 ]

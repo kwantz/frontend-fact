@@ -80,7 +80,7 @@ class Index extends React.Component {
       const block = {
         id: 0,
         name: '',
-        reason_block: 'none',
+        reason_block: 'unblock',
       }
 
       await this.setState({alert, block})
@@ -89,6 +89,9 @@ class Index extends React.Component {
   }
 
   componentDidMount () {
+    if (window.localStorage.getItem("role") !== 1)
+      return window.location.href = "/"
+
     this.onRefresh()
   }
 
@@ -122,7 +125,7 @@ class Index extends React.Component {
 
         <Modal id="unblock" title="Unblock User">
           <div className="modal-body">
-            <p>Are you sure you want to unblock {this.state.block.name}?</p>
+            <p>Are you sure you want to unblock <b>{this.state.block.name}</b>?</p>
           </div>
           <div className="modal-footer">
             <div className="col-md-6">

@@ -42,7 +42,7 @@ class Index extends React.Component {
     }
     else {
       alert.edit_success = "Edit Food, " + this.state.data.name + " — Success"
-      await this.setState({data, alert})
+      await this.setState({alert})
     }
   }
 
@@ -53,7 +53,7 @@ class Index extends React.Component {
   }
 
   async onRefresh () {
-    let response = await fetch(`http://127.0.0.1:8000/fact/food-category/all`)
+    let response = await fetch(`http://127.0.0.1:8000/fact/food-category?name=all`)
     let json = await response.json()
 
     const categories = json.results.categories

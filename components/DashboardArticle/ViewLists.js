@@ -39,6 +39,7 @@ class Index extends React.Component {
     this.onRefresh = this.onRefresh.bind(this);
     this.queryTitle = this.queryTitle.bind(this);
     this.deleteArticle = this.deleteArticle.bind(this);
+    this.onSubmitDelete = this.onSubmitDelete.bind(this);
   }
 
   async onRefresh () {
@@ -82,6 +83,22 @@ class Index extends React.Component {
     data.title = article.title
 
     this.setState({ delete: data })
+  }
+
+  async onSubmitDelete () {
+    const {alert} = this.state
+    const response = await fetch('http://127.0.0.1:8000/fact/article/' + this.state.delete.id, {method: 'DELETE'})
+    const json = await response.json()
+
+    if (typeof json.message === 'undefined' || json.message !== 'Success') {
+      alert.delete_danger = "500 — Internal Server Error"
+      await this.setState({alert})
+    }
+    else {
+      alert.delete_success = "Delete Article, " + this.state.delete.title + " — Success"
+      await this.setState({alert})
+      this.onRefresh()
+    }
   }
 
   render() {
@@ -130,14 +147,14 @@ class Index extends React.Component {
 
         <Modal id="delete" title="Delete Article">
           <div className="modal-body">
-            <span>Are you sure you want to delete {this.state.delete.title}?</span>
+            <span>Are you sure you want to delete <b>{this.state.delete.title}</b>?</span>
           </div>
           <div className="modal-footer">
             <div className="col-md-6">
               <button type="button" className="btn btn-light btn-block" data-dismiss="modal">No</button>
             </div>
             <div className="col-md-6">
-              <button type="button" className="btn btn-danger btn-block">Yes</button>
+              <button type="button" className="btn btn-danger btn-block" data-dismiss="modal" onClick={this.onSubmitDelete}>Yes</button>
             </div>
           </div>
         </Modal>
