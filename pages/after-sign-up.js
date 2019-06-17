@@ -1,6 +1,7 @@
 import GuessLayoutHoc from '../components/GuessLayout/GuessLayoutHoc'
 import AfterSignUpLeft from '../components/GuessLayout/AfterSignUpLeft'
 import AfterSignUpRight from '../components/GuessLayout/AfterSignUpRight'
+import Link from 'next/link';
 
 export default class Index extends React.Component {
   render() {
@@ -19,7 +20,9 @@ export default class Index extends React.Component {
 
             <div class="row">
               <div class="col-md-4 offset-md-4">
-                <button class="btn btn-info btn-block">DONE</button>
+                <Link href="/dashboard/user/diary">
+                  <a class="btn btn-info btn-block">DONE</a>
+                </Link>
               </div>
             </div>
           </div>

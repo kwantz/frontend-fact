@@ -1,4 +1,5 @@
 import GuessLayoutHoc from '../components/GuessLayout/GuessLayoutHoc'
+import Link from 'next/link';
 
 export default class Index extends React.Component {
   constructor (props) {
@@ -64,11 +65,15 @@ export default class Index extends React.Component {
           <input type="password" class="form-control" placeholder="Confirm your password" />
         </div>
 
-        <div class="row">
+        {/* <div class="row">
           <div class="col-12">
             <button type="submit" class="btn btn-info btn-block">SIGN UP</button>
           </div>
-        </div>
+        </div> */}
+
+        <Link href="/after-sign-up">
+          <a class="btn btn-info btn-block">SIGN UP</a>
+        </Link>
       </GuessLayoutHoc>
     )
   }

@@ -44,7 +44,7 @@ export default class Index extends React.Component {
 
     await fetch(`http://127.0.0.1:8000/fact/comparison/upload`, {method: 'POST', body})
 
-    const {filename} = this.state
+    let {filename} = this.state
     filename = 'data_test.csv'
 
     this.setState({ filename })
@@ -87,7 +87,7 @@ export default class Index extends React.Component {
   }
 
   componentDidMount () {
-    if (window.localStorage.getItem("role") !== 1)
+    if (window.localStorage.getItem("role") !== "1")
       return window.location.href = "/"
 
     this.onRefresh()

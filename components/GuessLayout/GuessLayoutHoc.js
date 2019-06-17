@@ -18,15 +18,26 @@ class GuessLayoutHoc extends React.Component {
       )
     }
 
+    const styles = (typeof this.props.fixed === 'undefined') ? { } : {
+      position: "fixed",
+      width: "100%",
+      zIndex: "999",
+    }
+
     return (
       <div class="register-page pb-3" style={{minHeight: '100vh'}}>
-        <nav className="navbar navbar-expand bg-info navbar-light border-bottom">
-          <ul className="navbar-nav">
+        <nav className="navbar navbar-expand bg-info navbar-light border-bottom row mr-0 ml-0" style={styles}>
+          <ul className="navbar-nav col-md-3">
             <li className="nav-item d-sm-inline-block">
               <a className="nav-link font-weight-bold" style={{fontSize:'1.5rem'}}>FACT</a>
             </li>
             <span className="d-flex align-items-center" style={{fontSize:'0.7rem',marginTop:'0.6rem'}}>Food and Activity Calorie Tracker</span>
           </ul>
+
+          <div className="col-md-6">
+            <h3 class="my-auto text-center">{this.props.navbarTitle}</h3>
+          </div>
+
         </nav>
         {childComponent()}
         <footer class="d-flex justify-content-center mt-3">Copyright by Zro2iro</footer>

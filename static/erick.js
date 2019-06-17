@@ -1,4 +1,4 @@
-Date.prototype.dateformat = function() {
+Date.prototype.dateformat = function(option = "") {
   const months = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Des"];
 
   const year = this.getFullYear()
@@ -8,5 +8,6 @@ Date.prototype.dateformat = function() {
   const minute = (this.getMinutes() < 10) ? '0' + this.getMinutes() : this.getMinutes()
   // const second = (this.getSeconds() < 10) ? '0' + this.getSeconds() : this.getSeconds()
 
+  if (option === "date") return `${date} ${month} ${year}`
   return `${date} ${month} ${year} ${hour}:${minute}`
 }

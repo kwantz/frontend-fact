@@ -84,12 +84,28 @@ body, .modal {
   border-left: 1px solid rgba(0, 0, 0, 0.125) !important;
 }
 
+.bb-1 {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.125) !important;
+}
+
+.bt-1 {
+  border-top: 1px solid rgba(0, 0, 0, 0.125) !important;
+}
+
+.bb-2 {
+  border-bottom: 2px solid rgba(0, 0, 0, 0.125) !important;
+}
+
 .br-0 {
   border-right: 0 !important;
 }
 
 table tbody tr td .btn-link {
   padding: 0;
+}
+
+.text-block {
+  display: block;
 }
 
 .modal .modal-content .alert.alert-success {
@@ -108,4 +124,90 @@ table tbody tr td .btn-link {
 
 img {
   max-width: 100%;
+}
+
+.dashboard-user {
+  .title-label {
+    font-size: 1.5rem;
+  }
+
+  .title-info {
+    font-size: 0.7rem;
+    margin-top: 0.6rem;
+  }
+
+  .navbar-text {
+    font-size: 1.25rem;
+    color: #fff !important;
+  }
+
+  nav.navbar {
+    width: 100%;
+    z-index: 999;
+    margin-right: 0px;
+    margin-left: 0px;
+    position: fixed;
+
+    .nav-link {
+      color: #fff !important;
+      background-color: #17a2b8 !important;
+
+      &.active {
+        color: #17a2b8 !important;
+        background-color: #fff !important;
+      }
+    }
+  }
+
+  .main-sidebar {
+    z-index: 999;
+    margin-top: 68px;
+    min-height: 846px;
+    width: calc(1rem + 57.59px);
+
+    .nav-link {
+      color: #fff !important;
+      background-color: #17a2b8 !important;
+      margin-top: 1.5rem;
+
+      &.active {
+        color: #17a2b8 !important;
+        background-color: #fff !important;
+      }
+    }
+  }
+
+  .content-wrapper {
+    margin-top: 68px;
+    margin-left: calc(1rem + 57.59px);
+  }
+
+  .nutrients-chart {
+    canvas {
+      width: 110px !important;
+      height: 85px !important;
+    }
+  }
+}
+
+.block {
+  text-align: center;
+  vertical-align: middle;
+}
+.circle {
+  background: red;
+  border-radius: 100px;
+  color: white;
+  height: 100px;
+  width: 100px;
+}
+.circle p {
+  font-weight: bold;
+  vertical-align: middle;
+}
+
+p.article-content {
+  height: 150px;
+  margin-bottom: 0;
+  overflow: hidden;
 }
