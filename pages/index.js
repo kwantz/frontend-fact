@@ -23,19 +23,14 @@ export default class Index extends React.Component {
     const response = await fetch(`http://127.0.0.1:8000/fact/login`, {method: 'POST', body})
     const json = await response.json()
 
-    if (typeof json.results === 'undefined') {
-      // Danger Alert
-    }
-    else {
+    if (typeof json.results !== 'undefined') {
       window.localStorage.setItem("token", json.results.token)
       window.localStorage.setItem("role", parseInt(json.results.role))
-      if (json.results.role === 1)
-        window.location.href = "/dashboard/admin"
-      else
-        window.location.href = "/dashboard/user"
+
+      window.location.href = (json.results.role === 1)
+        ? "/dashboard/admin"
+        : "/dashboard/user/diary"
     }
-    console.log("JSON:", json)
-    // window.location.href = "/dashboard/user/diary"
   }
 
   onChange (event) {

@@ -20,20 +20,17 @@ export default class Index extends React.Component {
 
   async onSubmit () {
     const body = JSON.stringify(this.state.data)
-    const response = await fetch(`http://127.0.0.1:8000/fact/register`, {method: 'POST', body})
-    const json = await response.json()
+    let response = await fetch(`http://127.0.0.1:8000/fact/register`, {method: 'POST', body})
+    let json = await response.json()
 
-    if (typeof json.results === 'undefined') {
-      // Danger Alert
-    }
-    else {
+    if (json.message === 'Success') {
+      response = await fetch(`http://127.0.0.1:8000/fact/login`, {method: 'POST', body})
+      json = await response.json()
+
       window.localStorage.setItem("token", json.results.token)
-      if (json.results.role === 'Admin')
-        window.location.href = "/"
-      else
-        window.location.href = "/"
+      window.localStorage.setItem("role", parseInt(json.results.role))
+      window.location.href = "/after-sign-up"
     }
-    console.log("JSON:", json)
   }
 
   onChange (event) {
@@ -47,33 +44,25 @@ export default class Index extends React.Component {
       <GuessLayoutHoc registerbox="true" title="SIGN UP">
         <div class="form-group">
           <label>Name</label>
-          <input type="text" class="form-control" placeholder="Enter your name" />
+          <input type="text" class="form-control" placeholder="Enter your name" name="name" value={this.state.name} onChange={this.onChange}/>
         </div>
 
         <div class="form-group">
           <label>Email Address</label>
-          <input type="email" class="form-control" placeholder="Enter your email address" />
+          <input type="email" class="form-control" placeholder="Enter your email address" name="email" value={this.state.email} onChange={this.onChange}/>
         </div>
 
         <div class="form-group">
           <label>Password</label>
-          <input type="password" class="form-control" placeholder="Enter your password" />
+          <input type="password" class="form-control" placeholder="Enter your password" name="password" value={this.state.password} onChange={this.onChange}/>
         </div>
 
         <div class="form-group">
           <label>Confirm Password</label>
-          <input type="password" class="form-control" placeholder="Confirm your password" />
+          <input type="password" class="form-control" placeholder="Confirm your password" name="re_password" value={this.state.re_password} onChange={this.onChange}/>
         </div>
 
-        {/* <div class="row">
-          <div class="col-12">
-            <button type="submit" class="btn btn-info btn-block">SIGN UP</button>
-          </div>
-        </div> */}
-
-        <Link href="/after-sign-up">
-          <a class="btn btn-info btn-block">SIGN UP</a>
-        </Link>
+        <button type="button" class="btn btn-info btn-block" onClick={this.onSubmit}>SIGN UP</button>
       </GuessLayoutHoc>
     )
   }

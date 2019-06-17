@@ -7,6 +7,83 @@ import { Doughnut } from 'react-chartjs-2';
 import Link from 'next/link';
 
 export default class Index extends React.Component {
+  constructor (props) {
+    super(props)
+
+    this.state = {
+      add: {
+        name: '',
+        fat: 0,
+        calorie: 0,
+        protein: 0,
+        carbohydrate: 0,
+        category: -1
+      },
+      categories: [],
+      alert: {
+        add_danger: '',
+        add_success: '',
+        edit_danger: '',
+        edit_success: '',
+        delete_danger: '',
+        delete_success: '',
+      }
+    }
+
+    this.onRefresh = this.onRefresh.bind(this)
+    this.onAddSubmit = this.onAddSubmit.bind(this)
+    this.onAddChange = this.onAddChange.bind(this)
+  }
+
+  async onRefresh () {
+    const response = await fetch(`http://127.0.0.1:8000/fact/food-category?name=all`)
+    const json = await response.json()
+
+    const categories = json.results.categories
+
+    const data = this.state.add
+    data.category = categories[0].id
+    this.setState({ categories, add: data })
+  }
+
+  async onAddSubmit () {
+    let {alert} = this.state
+    const body = JSON.stringify(this.state.add)
+    const headers = {"Authorization": 'Bearer ' + window.localStorage.getItem("token")}
+    let response = await fetch(`http://127.0.0.1:8000/fact/member/food`, {method: 'POST', body, headers})
+    let json = await response.json()
+
+    if (typeof json.message === 'undefined' || json.message !== 'Success') {
+      alert.add_danger = "500 — Internal Server Error"
+      await this.setState({alert})
+    }
+    else {
+      alert.add_success = "Add Category, " + this.state.add.name + " — Success"
+      const add = {
+        name: '',
+        fat: 0,
+        calorie: 0,
+        protein: 0,
+        carbohydrate: 0,
+        category: this.state.categories[0].id
+      }
+
+      await this.setState({add, alert})
+      this.onRefresh()
+    }
+    console.log(this.state.add)
+  }
+
+  onAddChange (event) {
+    const data = this.state.add
+    data[event.target.name] = event.target.value
+    this.setState({ add: data })
+  }
+
+  componentDidMount () {
+    this.onRefresh()
+  }
+
   render() {
     Chart.pluginService.register({
       beforeDraw: function (chart) {
@@ -134,6 +211,12 @@ export default class Index extends React.Component {
       </div>
     )
 
+    const options = []
+    for (let i = 0, l = this.state.categories.length; i < l; i++) {
+      const category = this.state.categories[i];
+      options.push(<option value={category.id}>{category.name}</option>)
+    }
+
     return (
       <UserLayoutHoc navbarInfo={navbarInfo}>
         <div className="row pt-5">
@@ -171,10 +254,8 @@ export default class Index extends React.Component {
                     <label class="col-form-label col-sm-2">Food Category:</label>
                     <div class="col-sm-4">
                       <select class="form-control">
-                        <option>Beef</option>
-                        <option>Bread & Bakery</option>
-                        <option>Dairy & Eggs</option>
-                        <option>Drinks</option>
+                        <option value="0">All Category</option>
+                        {options}
                       </select>
                     </div>
                   </div>
@@ -262,21 +343,30 @@ export default class Index extends React.Component {
 
 
           <Modal id="add" title="Add Custom Food">
-            {/* <Alert type="danger" component={this} attribute="add_danger"/>
-            <Alert type="success" component={this} attribute="add_success"/> */}
+            <Alert type="danger" component={this} attribute="add_danger"/>
+            <Alert type="success" component={this} attribute="add_success"/>
             <div className="modal-body">
               <div class="form-group row">
                 <label class="col-sm-3 col-form-label">Food Name</label>
                 <div class="col-sm-9">
-                  <input type="text" class="form-control" placeholder="Enter food name" required/>
+                  <input type="text" class="form-control" placeholder="Enter food" required name="name" value={this.state.add.name} onChange={this.onAddChange}/>
                   <small class="form-text text-muted text-right">*required</small>
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Category</label>
+                <div class="col-sm-9">
+                  <select class="form-control" name="category" value={this.state.add.category} onChange={this.onAddChange}>
+                    {options}
+                  </select>
                 </div>
               </div>
 
               <div class="form-group row">
                 <label class="col-sm-3 col-form-label">Calories</label>
                 <div class="col-sm-5">
-                  <input type="number" class="form-control" placeholder="Enter calories"/>
+                  <input type="number" class="form-control" placeholder="Enter calories" min="0" name="calorie" value={this.state.add.calorie} onChange={this.onAddChange}/>
                   <small class="form-text text-muted text-right">*required</small>
                 </div>
                 <span class="col-sm-4 col-form-label">
@@ -287,7 +377,7 @@ export default class Index extends React.Component {
               <div class="form-group row">
                 <label class="col-sm-3 col-form-label">Carbohydrate</label>
                 <div class="col-sm-5">
-                  <input type="number" class="form-control" placeholder="Enter carbohydrate"/>
+                  <input type="number" class="form-control" placeholder="Enter carbohydrate" min="0" name="carbohydrate" value={this.state.add.carbohydrate} onChange={this.onAddChange}/>
                 </div>
                 <span class="col-sm-4 col-form-label">
                   (g per serving)
@@ -297,7 +387,7 @@ export default class Index extends React.Component {
               <div class="form-group row">
                 <label class="col-sm-3 col-form-label">Protein</label>
                 <div class="col-sm-5">
-                  <input type="number" class="form-control" placeholder="Enter protein"/>
+                  <input type="number" class="form-control" placeholder="Enter protein" min="0" name="protein" value={this.state.add.protein} onChange={this.onAddChange}/>
                 </div>
                 <span class="col-sm-4 col-form-label">
                   (g per serving)
@@ -307,11 +397,15 @@ export default class Index extends React.Component {
               <div class="form-group row">
                 <label class="col-sm-3 col-form-label">Fat</label>
                 <div class="col-sm-5">
-                  <input type="number" class="form-control" placeholder="Enter fat"/>
+                  <input type="number" class="form-control" placeholder="Enter fat" min="0" name="fat" value={this.state.add.fat} onChange={this.onAddChange}/>
                 </div>
                 <span class="col-sm-4 col-form-label">
                   (g per serving)
                 </span>
+              </div>
+
+              <div class="offset-md-6 col-md-6">
+                <button type="button" class="btn btn-info" onClick={this.onAddSubmit}>SAVE</button>
               </div>
             </div>
           </Modal>
