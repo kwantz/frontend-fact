@@ -20,11 +20,11 @@ export default class Index extends React.Component {
 
   async onSubmit () {
     const body = JSON.stringify(this.state.data)
-    let response = await fetch(`http://127.0.0.1:8000/fact/register`, {method: 'POST', body})
+    let response = await fetch(`http://103.252.100.230:8000/fact/register`, {method: 'POST', body})
     let json = await response.json()
 
     if (json.message === 'Success') {
-      response = await fetch(`http://127.0.0.1:8000/fact/login`, {method: 'POST', body})
+      response = await fetch(`http://103.252.100.230:8000/fact/login`, {method: 'POST', body})
       json = await response.json()
 
       window.localStorage.setItem("token", json.results.token)

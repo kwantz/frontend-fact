@@ -67,7 +67,7 @@ export default class Index extends React.Component {
   async onSearch () {
     if (this.state.data.name !== '') {
       const headers = {"Authorization": 'Bearer ' + window.localStorage.getItem("token")}
-      const response = await fetch(`http://127.0.0.1:8000/fact/member/food?name=${this.state.data.name}`, {headers})
+      const response = await fetch(`http://103.252.100.230:8000/fact/member/food?name=${this.state.data.name}`, {headers})
       const json = await response.json()
 
       let {show, foods} = this.state
@@ -100,7 +100,7 @@ export default class Index extends React.Component {
       food: this.state.meal_foods
     })
     const headers = {"Authorization": 'Bearer ' + window.localStorage.getItem("token")}
-    let response = await fetch(`http://127.0.0.1:8000/fact/member/meal`, {method: 'POST', body, headers})
+    let response = await fetch(`http://103.252.100.230:8000/fact/member/meal`, {method: 'POST', body, headers})
     let json = await response.json()
 
     if (typeof json.message === 'undefined' || json.message !== 'Success') {

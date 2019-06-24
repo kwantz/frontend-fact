@@ -20,7 +20,7 @@ class Index extends React.Component {
   }
 
   async onRefresh () {
-    const response = await fetch(`http://127.0.0.1:8000/fact/member/article/${this.props.router.query.id}`)
+    const response = await fetch(`http://103.252.100.230:8000/fact/member/article/${this.props.router.query.id}`)
     const json = await response.json()
 
     const {article} = this.state
@@ -51,7 +51,7 @@ class Index extends React.Component {
                       <i class="far fa-clock"/> {this.state.article.published_on}
                     </p>
                   </div>
-                  <img src={`http://127.0.0.1:8000/fact/image/${this.state.article.image}`}/>
+                  <img src={`http://103.252.100.230:8000/fact/image/${this.state.article.image}`}/>
                   <p style={{whiteSpace: 'pre-line'}}>{this.state.article.content}</p>
                   <p>
                     <i class="fas fa-users"></i> 14 views

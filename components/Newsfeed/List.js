@@ -15,7 +15,7 @@ export default class Index extends React.Component {
   }
 
   async onRefresh () {
-    const response = await fetch(`http://127.0.0.1:8000/fact/member/newsfeed?page=${this.state.page}`)
+    const response = await fetch(`http://103.252.100.230:8000/fact/member/newsfeed?page=${this.state.page}`)
     const json = await response.json()
 
     let page = this.state.page
@@ -48,7 +48,7 @@ export default class Index extends React.Component {
                     <i class="far fa-clock" /> {(new Date(this.state.articles[i].published_on)).dateformat('date')}
                   </p>
                 </div>
-                <img src={`http://127.0.0.1:8000/fact/image/${this.state.articles[i].image}`}/>
+                <img src={`http://103.252.100.230:8000/fact/image/${this.state.articles[i].image}`}/>
                 <p class="article-content mb-0">
                   {this.state.articles[i].content}
                 </p>

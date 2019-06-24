@@ -46,7 +46,7 @@ class Index extends React.Component {
 
   async onDelete () {
     const alert = this.state.alert
-    const response = await fetch(`http://127.0.0.1:8000/fact/food/` + this.state.delete.id, {method: 'DELETE'})
+    const response = await fetch(`http://103.252.100.230:8000/fact/food/` + this.state.delete.id, {method: 'DELETE'})
     const json = await response.json()
 
     if (typeof json.message === 'undefined' || json.message !== 'Success') {
@@ -78,7 +78,7 @@ class Index extends React.Component {
     if (typeof name === "undefined") name = ""
     if (typeof category === "undefined") category = 0
 
-    const response = await fetch(`http://127.0.0.1:8000/fact/food?page=${page}&name=${name}&category=${category}`)
+    const response = await fetch(`http://103.252.100.230:8000/fact/food?page=${page}&name=${name}&category=${category}`)
     const json = await response.json()
 
     const data = json.results.foods

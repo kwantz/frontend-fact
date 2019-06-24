@@ -42,7 +42,7 @@ export default class Index extends React.Component {
     var body = new FormData()
     body.append('uploads', input.files[0])
 
-    await fetch(`http://127.0.0.1:8000/fact/comparison/upload`, {method: 'POST', body})
+    await fetch(`http://103.252.100.230:8000/fact/comparison/upload`, {method: 'POST', body})
 
     let {filename} = this.state
     filename = 'data_test.csv'
@@ -56,7 +56,7 @@ export default class Index extends React.Component {
       label: this.state.activity,
       algorithm: algo
     })
-    const response = await fetch('http://127.0.0.1:8000/fact/comparison', {method: 'POST', body, headers})
+    const response = await fetch('http://103.252.100.230:8000/fact/comparison', {method: 'POST', body, headers})
     const json = await response.json()
 
     const {algorithm} = this.state
@@ -72,7 +72,7 @@ export default class Index extends React.Component {
   }
 
   async onRefresh () {
-    const response = await fetch('http://127.0.0.1:8000/fact/activity?name=all')
+    const response = await fetch('http://103.252.100.230:8000/fact/activity?name=all')
     const json = await response.json()
 
     let {activities, activity} = this.state

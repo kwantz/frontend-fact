@@ -61,7 +61,7 @@ export default class Index extends React.Component {
   async onSubmitIntake (back = false) {
     const body = JSON.stringify(this.state.data)
     const headers = {"Authorization": 'Bearer ' + window.localStorage.getItem("token")}
-    const response = await fetch('http://127.0.0.1:8000/fact/member/intake/food', {method: 'POST', body, headers})
+    const response = await fetch('http://103.252.100.230:8000/fact/member/intake/food', {method: 'POST', body, headers})
     const json = await response.json()
 
     if (json.message === "Success") {
@@ -85,7 +85,7 @@ export default class Index extends React.Component {
   async onSearch () {
     if (this.state.data.name !== '') {
       const headers = {"Authorization": 'Bearer ' + window.localStorage.getItem("token")}
-      const response = await fetch(`http://127.0.0.1:8000/fact/member/food?name=${this.state.data.name}&category=${this.state.data.category}`, {headers})
+      const response = await fetch(`http://103.252.100.230:8000/fact/member/food?name=${this.state.data.name}&category=${this.state.data.category}`, {headers})
       const json = await response.json()
 
       let {show, foods} = this.state
@@ -112,7 +112,7 @@ export default class Index extends React.Component {
   }
 
   async onRefresh () {
-    const response = await fetch(`http://127.0.0.1:8000/fact/food-category?name=all`)
+    const response = await fetch(`http://103.252.100.230:8000/fact/food-category?name=all`)
     const json = await response.json()
 
     const categories = json.results.categories
@@ -126,7 +126,7 @@ export default class Index extends React.Component {
     let {alert} = this.state
     const body = JSON.stringify(this.state.add)
     const headers = {"Authorization": 'Bearer ' + window.localStorage.getItem("token")}
-    let response = await fetch(`http://127.0.0.1:8000/fact/member/food`, {method: 'POST', body, headers})
+    let response = await fetch(`http://103.252.100.230:8000/fact/member/food`, {method: 'POST', body, headers})
     let json = await response.json()
 
     if (typeof json.message === 'undefined' || json.message !== 'Success') {

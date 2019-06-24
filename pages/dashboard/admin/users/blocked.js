@@ -54,7 +54,7 @@ class Index extends React.Component {
     let {page} = this.props.router.query
     if (typeof page === "undefined") page = 1
 
-    const response = await fetch(`http://127.0.0.1:8000/fact/user?status=blocked&page=${page}`)
+    const response = await fetch(`http://103.252.100.230:8000/fact/user?status=blocked&page=${page}`)
     const json = await response.json()
 
     const data = json.results.users
@@ -68,7 +68,7 @@ class Index extends React.Component {
   async submitBlock () {
     const alert = this.state.alert
     const body = JSON.stringify(this.state.block)
-    const response = await fetch(`http://127.0.0.1:8000/fact/user/` + this.state.block.id, {method: 'DELETE', body})
+    const response = await fetch(`http://103.252.100.230:8000/fact/user/` + this.state.block.id, {method: 'DELETE', body})
     const json = await response.json()
 
     if (typeof json.message === 'undefined' || json.message !== 'Success') {

@@ -14,7 +14,7 @@ export default class Index extends React.Component {
   }
 
   async onRefresh () {
-    const response = await fetch(`http://127.0.0.1:8000/fact/dashboard/new-users`)
+    const response = await fetch(`http://103.252.100.230:8000/fact/dashboard/new-users`)
     const json = await response.json()
     const new_users = json.results.new_users
 

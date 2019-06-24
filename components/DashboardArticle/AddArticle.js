@@ -27,7 +27,7 @@ export default class Index extends React.Component {
     const alert = this.state.alert
     const body = JSON.stringify(this.state.data)
     const headers = {"Authorization": 'Bearer ' + window.localStorage.getItem("token")}
-    const response = await fetch('http://127.0.0.1:8000/fact/article', {method: 'POST', body, headers})
+    const response = await fetch('http://103.252.100.230:8000/fact/article', {method: 'POST', body, headers})
     const json = await response.json()
 
     if (typeof json.message === 'undefined' || json.message !== 'Success') {
@@ -59,7 +59,7 @@ export default class Index extends React.Component {
     var body = new FormData()
     body.append('uploads', input.files[0])
 
-    const response = await fetch(`http://127.0.0.1:8000/fact/image/upload`, {method: 'POST', body})
+    const response = await fetch(`http://103.252.100.230:8000/fact/image/upload`, {method: 'POST', body})
     const json = await response.json()
 
     const data = this.state.data
@@ -96,7 +96,7 @@ export default class Index extends React.Component {
                   <input type="file" onChange={this.onChangeFile} className="custom-file-input" id="customFile" accept="image/*"/>
                   <label className="custom-file-label" for="customFile">{(this.state.data.image === '') ? 'Choose file' : this.state.data.image}</label>
                 </div>
-                <img className="mt-3" src={(this.state.data.image !== '') ? `http://127.0.0.1:8000/fact/image/${this.state.data.image}` : ''}/>
+                <img className="mt-3" src={(this.state.data.image !== '') ? `http://103.252.100.230:8000/fact/image/${this.state.data.image}` : ''}/>
               </div>
             </div>
             <div className="form-group row">

@@ -29,7 +29,7 @@ class Index extends React.Component {
 
   async onRefresh() {
     const headers = {"Authorization": 'Bearer ' + window.localStorage.getItem("token")}
-    const response = await fetch(`http://127.0.0.1:8000/fact/member/user`, {headers})
+    const response = await fetch(`http://103.252.100.230:8000/fact/member/user`, {headers})
     const json = await response.json()
 
     const data = {
