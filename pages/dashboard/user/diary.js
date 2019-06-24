@@ -4,6 +4,107 @@ import Chart from 'chart.js'
 import { Doughnut } from 'react-chartjs-2';
 
 export default class Index extends React.Component {
+  constructor (props) {
+    super(props)
+
+    this.state = {
+      date: '',
+      calorie: {
+        intake: 0,
+        total_intake: 0,
+        burnt: 0,
+        total_burnt: 0,
+      },
+      nutrient: {
+        fat: 0,
+        protein: 0,
+        carbohydrate: 0
+      },
+      intake: {
+        breakfast: [],
+        lunch: [],
+        dinner: [],
+        snack: [],
+      },
+      recommendation_calorie: {
+        breakfast: 0,
+        lunch: 0,
+        dinner: 0,
+        snack: 0,
+      },
+      delete_status: '',
+      data_delete: []
+    }
+
+    this.onDelete = this.onDelete.bind(this)
+    this.onRefresh = this.onRefresh.bind(this)
+    this.onChangeDate = this.onChangeDate.bind(this)
+    this.onDeleteStatus = this.onDeleteStatus.bind(this)
+  }
+
+  async onDelete(eat_time) {
+    const body = JSON.stringify({
+      eat_time,
+      data: this.state.data_delete
+    })
+    const headers = {"Authorization": 'Bearer ' + window.localStorage.getItem("token")}
+    const response = await fetch(`http://127.0.0.1:8000/fact/member/intake`, {method: "DELETE", body, headers})
+    const json = await response.json()
+
+    if (json.message === 'Success') {
+      this.onRefresh()
+    }
+  }
+
+  onDeleteStatus(delete_status) {
+    const data_delete = []
+    this.setState({delete_status, data_delete})
+  }
+
+  checkedAll(idx) {
+    const data_delete = this.state.intake[idx].map((data) => data.id)
+    this.setState({ data_delete })
+  }
+
+  toggleChecked(val) {
+    let {data_delete} = this.state
+    const idx = data_delete.indexOf(val)
+
+    if (idx > -1) data_delete.splice(idx, 1)
+    else data_delete.push(val)
+
+    this.setState({data_delete})
+    console.log(data_delete)
+  }
+
+  async onRefresh () {
+    const headers = {"Authorization": 'Bearer ' + window.localStorage.getItem("token")}
+    const response = await fetch(`http://127.0.0.1:8000/fact/member/diary?year=${this.state.date.getFullYear()}&month=${this.state.date.getMonth() + 1}&day=${this.state.date.getDate()}`, {headers})
+    const json = await response.json()
+
+    const calorie = json.results.calorie
+    const intake = json.results.intake
+    const nutrient = json.results.nutrient
+    const recommendation_calorie = json.results.recommendation_calorie
+    const delete_status = ''
+    this.setState({ calorie, intake, nutrient, recommendation_calorie, delete_status })
+  }
+
+  async onChangeDate (status) {
+    let {date} = this.state
+    if (status === "prev") date.setDate(date.getDate() - 1)
+    if (status === "next") date.setDate(date.getDate() + 1)
+
+    await this.setState({date})
+    await this.onRefresh()
+  }
+
+  async componentDidMount() {
+    let date = new Date()
+    await this.setState({date})
+    await this.onRefresh()
+  }
+
   render() {
     Chart.pluginService.register({
       beforeDraw: function (chart) {
@@ -41,14 +142,14 @@ export default class Index extends React.Component {
     const chart = {
       intake: {
         datasets: [{
-          data: [525, 1600-525],
+          data: [this.state.calorie.intake, this.state.calorie.total_intake - this.state.calorie.intake],
           backgroundColor: ['#ffc107'],
         }],
         options: {
           cutoutPercentage: 90,
           elements: {
             calorie: {
-              text: 525,
+              text: this.state.calorie.total_intake - this.state.calorie.intake,
               color: '#ffc107'
             }
           }
@@ -56,85 +157,78 @@ export default class Index extends React.Component {
       },
       burnt: {
         datasets: [{
-          data: [1200, 1600-1200],
+          data: [this.state.calorie.burnt, this.state.calorie.total_burnt - this.state.calorie.burnt],
           backgroundColor: ['#dc3545'],
         }],
         options: {
           cutoutPercentage: 90,
           elements: {
             calorie: {
-              text: 1200,
+              text: this.state.calorie.total_burnt - this.state.calorie.burnt,
               color: '#dc3545'
-            }
-          }
-        }
-      },
-
-      fat: {
-        datasets: [{
-          data: [60, 40],
-          backgroundColor: ['#dc3545'],
-        }],
-        options: {
-          cutoutPercentage: 75,
-          responsive:true,
-          maintainAspectRatio: false,
-          elements: {
-            nutrient: {
-              text: 60 + '%',
-              color: '#dc3545'
-            }
-          }
-        }
-      },
-      protein: {
-        datasets: [{
-          data: [10, 90],
-          backgroundColor: ['#17a2b8'],
-        }],
-        options: {
-          cutoutPercentage: 75,
-          responsive:true,
-          maintainAspectRatio: false,
-          elements: {
-            nutrient: {
-              text: 10 + '%',
-              color: '#17a2b8'
-            }
-          }
-        }
-      },
-      carbohydrate: {
-        datasets: [{
-          data: [80, 20],
-          backgroundColor: ['#ffc107'],
-        }],
-        options: {
-          cutoutPercentage: 75,
-          responsive:true,
-          maintainAspectRatio: false,
-          elements: {
-            nutrient: {
-              text: 80 + '%',
-              color: '#ffc107'
             }
           }
         }
       }
     }
 
-
     const navbarInfo = (
       <div className="text-center navbar-text col-md-12">
         <button class="btn btn btn-link text-light">
-          <i className="nav-icon fas fa-chevron-circle-left"/>
+          <i className="nav-icon fas fa-chevron-circle-left" onClick={() => this.onChangeDate("prev")}/>
         </button>
-        <span className="ml-5 mr-5">Today</span>
+        <span className="ml-5 mr-5">{(typeof this.state.date === "object") ? this.state.date.dateformat("date") : ''}</span>
         <button class="btn btn btn-link text-light">
-          <i className="nav-icon fas fa-chevron-circle-right"/>
+          <i className="nav-icon fas fa-chevron-circle-right" onClick={() => this.onChangeDate("next")}/>
         </button>
       </div>
     )
+
+    const calorieIntake = (idx) => {
+      let {intake} = this.state
+      let results = []
+      for (let i = 0, l = intake[idx].length; i < l; i++) {
+        results.push(
+          <div className="row mt-3">
+            <div className="col-md-1 my-auto">
+              <div class={`custom-control custom-checkbox ${this.state.delete_status === idx ? '' : 'hide'}`}>
+                <input type="checkbox" class="custom-control-input" id={`intake_${intake[idx][i].id}`} checked={this.state.data_delete.indexOf(intake[idx][i].id) > -1} onChange={() => this.toggleChecked(intake[idx][i].id)}/>
+                <label class="custom-control-label" for={`intake_${intake[idx][i].id}`}/>
+              </div>
+            </div>
+            <div className="col-md-9">
+              <b>{intake[idx][i].name}</b> <br/>
+              <span>{intake[idx][i].qty} serving</span>
+            </div>
+            <div className="col-md-2 my-auto text-right">{ parseFloat(intake[idx][i].calorie) * parseFloat(intake[idx][i].qty) }</div>
+          </div>
+        )
+      }
+
+      return results
+    }
+
+    const totalCalorieIntake = (idx) => {
+      let {intake} = this.state
+      let total = 0
+      for (let i = 0, l = intake[idx].length; i < l; i++) {
+        total += parseFloat(intake[idx][i].calorie) * parseFloat(intake[idx][i].qty)
+      }
+
+      return (total === 0) ? <div /> : (
+        <div className={`card-footer bg-info ${this.state.delete_status !== idx ? '' : 'hide'}`}>
+          <div className="row">
+            <div className="col-md-10">
+              <b>Total &nbsp;</b>
+              <sub>(in KCAL)</sub>
+            </div>
+            <div className="col-md-2 my-auto text-right">
+              <b>{total}</b>
+            </div>
+          </div>
+        </div>
+      )
+    }
 
     return (
       <UserLayoutHoc navbarInfo={navbarInfo}>
@@ -156,8 +250,8 @@ export default class Index extends React.Component {
                 <div className="col-md-6 bl-1">
                   <Doughnut data={chart.burnt} options={chart.burnt.options}/>
                 </div>
-                <h4 className="col-md-6 text-info mt-3">1600 KCAL</h4>
-                <h4 className="col-md-6 text-info mt-3">1600 KCAL</h4>
+                <h4 className="col-md-6 text-info mt-3">{this.state.calorie.total_intake} KCAL</h4>
+                <h4 className="col-md-6 text-info mt-3">{this.state.calorie.total_burnt} KCAL</h4>
                 <h6 className="col-md-6">GOAL</h6>
                 <h6 className="col-md-6">GOAL</h6>
               </div>
@@ -167,19 +261,17 @@ export default class Index extends React.Component {
           <Card size="col-md-4 mt-5" title="Nutrients">
             <div className="row nutrients-chart">
               <div className="col-md-5">
-                <Doughnut data={chart.carbohydrate} options={chart.carbohydrate.options}/>
+                <div class="circle-nutrion bg-info">{parseFloat(this.state.nutrient.carbohydrate).toFixed(1)}g</div>
               </div>
               <h6 className="col-md-7 my-auto">Carbohydrate</h6>
-
-              <div className="col-md-5">
-                <Doughnut data={chart.protein} options={chart.protein.options}/>
+              <div className="col-md-5 mt-3">
+                <div class="circle-nutrion bg-info">{parseFloat(this.state.nutrient.protein).toFixed(1)}g</div>
               </div>
-              <h6 className="col-md-7 my-auto">Protein</h6>
-
-              <div className="col-md-5">
-                <Doughnut data={chart.fat} options={chart.fat.options}/>
+              <h6 className="col-md-7 pt-3 my-auto">Protein</h6>
+              <div className="col-md-5 mt-3">
+                <div class="circle-nutrion bg-info">{parseFloat(this.state.nutrient.fat).toFixed(1)}g</div>
               </div>
-              <h6 className="col-md-7 my-auto">Fat</h6>
+              <h6 className="col-md-7 pt-3 my-auto">Fat</h6>
             </div>
           </Card>
 
@@ -188,35 +280,29 @@ export default class Index extends React.Component {
               <div className="card-header">
                 <h3 className="card-title">BREAKFAST</h3>
                 <div className="card-tools">
-                  <button className="btn btn-tool">
+                  <button className={`btn btn-tool ${(this.state.intake.breakfast.length !== 0 && this.state.delete_status !== 'breakfast') ? '' : 'hide'}`} onClick={() => this.onDeleteStatus('breakfast')}>
                     <i className="fas fa-trash-alt"/>
                   </button>
-                </div>
-              </div>
-              <div className="card-body row">
-                <div className="col-md-10">
-                  <b>Fried Rice</b> <br/>
-                  <span>1 serving</span>
-                </div>
-                <div className="col-md-2 my-auto text-right">
-                  120
-                </div>
-                <div className="col-md-10 mt-3">
-                  <b>Sweet Tea</b> <br/>
-                  <span>1 cup</span>
-                </div>
-                <div className="col-md-2 mt-3 my-auto text-right">
-                  30
-                </div>
-              </div>
-              <div className="card-footer bg-info">
-                <div className="row">
-                  <div className="col-md-10">
-                    <b>Total &nbsp;</b>
-                    <sub>(in KCAL)</sub>
+                  <div class={`custom-control custom-checkbox ${this.state.delete_status === 'breakfast' ? '' : 'hide'}`}>
+                    <input type="checkbox" class="custom-control-input" id="intake_breakfast" checked={this.state.data_delete.length === this.state.intake.breakfast.length} onChange={() => this.checkedAll('breakfast')}/>
+                    <label class="custom-control-label mt-1" for="intake_breakfast"/>
                   </div>
-                  <div className="col-md-2 my-auto text-right">
-                    <b>150</b>
+                </div>
+              </div>
+              <div className="card-body pt-0">
+                <h5 className={(this.state.intake.breakfast.length === 0) ? 'mt-3' : 'hide'}>
+                  Recommended {parseInt(this.state.recommendation_calorie.breakfast) - 50} - {parseInt(this.state.recommendation_calorie.breakfast) + 50}
+                </h5>
+                {calorieIntake("breakfast")}
+              </div>
+              {totalCalorieIntake("breakfast")}
+              <div className={`card-footer bg-info ${this.state.delete_status === 'breakfast' ? '' : 'hide'}`}>
+                <div className="row">
+                  <div className="col-md-6">
+                    <button className="btn btn-light btn-block" type="button" onClick={() => this.onDeleteStatus('')}>CANCEL</button>
+                  </div>
+                  <div className="col-md-6">
+                    <button className="btn btn-danger btn-block" type="button" onClick={() => this.onDelete(1)}>DELETE</button>
                   </div>
                 </div>
               </div>
@@ -227,9 +313,32 @@ export default class Index extends React.Component {
             <div className="card card-info">
               <div className="card-header">
                 <h3 className="card-title">LUNCH</h3>
+                <div className="card-tools">
+                  <button className={`btn btn-tool ${(this.state.intake.lunch.length !== 0 && this.state.delete_status !== 'lunch') ? '' : 'hide'}`} onClick={() => this.onDeleteStatus('lunch')}>
+                    <i className="fas fa-trash-alt"/>
+                  </button>
+                  <div class={`custom-control custom-checkbox ${this.state.delete_status === 'lunch' ? '' : 'hide'}`}>
+                    <input type="checkbox" class="custom-control-input" id="intake_lunch" checked={this.state.data_delete.length === this.state.intake.lunch.length} onChange={() => this.checkedAll('lunch')}/>
+                    <label class="custom-control-label mt-1" for="intake_lunch"/>
+                  </div>
+                </div>
               </div>
-              <div className="card-body">
-                RECOMMENDED 100 - 500 KCAL
+              <div className="card-body pt-0">
+                <h5 className={(this.state.intake.lunch.length === 0) ? 'mt-3' : 'hide'}>
+                  Recommended {parseInt(this.state.recommendation_calorie.lunch) - 50} - {parseInt(this.state.recommendation_calorie.lunch) + 50}
+                </h5>
+                {calorieIntake("lunch")}
+              </div>
+              {totalCalorieIntake("lunch")}
+              <div className={`card-footer bg-info ${this.state.delete_status === 'lunch' ? '' : 'hide'}`}>
+                <div className="row">
+                  <div className="col-md-6">
+                    <button className="btn btn-light btn-block" type="button" onClick={() => this.onDeleteStatus('')}>CANCEL</button>
+                  </div>
+                  <div className="col-md-6">
+                    <button className="btn btn-danger btn-block" type="button" onClick={() => this.onDelete(2)}>DELETE</button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -238,9 +347,32 @@ export default class Index extends React.Component {
             <div className="card card-info">
               <div className="card-header">
                 <h3 className="card-title">DINNER</h3>
+                <div className="card-tools">
+                  <button className={`btn btn-tool ${(this.state.intake.dinner.length !== 0 && this.state.delete_status !== 'dinner') ? '' : 'hide'}`} onClick={() => this.onDeleteStatus('dinner')}>
+                    <i className="fas fa-trash-alt"/>
+                  </button>
+                  <div class={`custom-control custom-checkbox ${this.state.delete_status === 'dinner' ? '' : 'hide'}`}>
+                    <input type="checkbox" class="custom-control-input" id="intake_dinner" checked={this.state.data_delete.length === this.state.intake.dinner.length} onChange={() => this.checkedAll('dinner')}/>
+                    <label class="custom-control-label mt-1" for="intake_dinner"/>
+                  </div>
+                </div>
               </div>
-              <div className="card-body">
-                RECOMMENDED 100 - 500 KCAL
+              <div className="card-body pt-0">
+                <h5 className={(this.state.intake.dinner.length === 0) ? 'mt-3' : 'hide'}>
+                  Recommended {parseInt(this.state.recommendation_calorie.dinner) - 50} - {parseInt(this.state.recommendation_calorie.dinner) + 50}
+                </h5>
+                {calorieIntake("dinner")}
+              </div>
+              {totalCalorieIntake("dinner")}
+              <div className={`card-footer bg-info ${this.state.delete_status === 'dinner' ? '' : 'hide'}`}>
+                <div className="row">
+                  <div className="col-md-6">
+                    <button className="btn btn-light btn-block" type="button" onClick={() => this.onDeleteStatus('')}>CANCEL</button>
+                  </div>
+                  <div className="col-md-6">
+                    <button className="btn btn-danger btn-block" type="button" onClick={() => this.onDelete(3)}>DELETE</button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -249,9 +381,32 @@ export default class Index extends React.Component {
             <div className="card card-info">
               <div className="card-header">
                 <h3 className="card-title">SNACK</h3>
+                <div className="card-tools">
+                  <button className={`btn btn-tool ${(this.state.intake.snack.length !== 0 && this.state.delete_status !== 'snack') ? '' : 'hide'}`} onClick={() => this.onDeleteStatus('snack')}>
+                    <i className="fas fa-trash-alt"/>
+                  </button>
+                  <div class={`custom-control custom-checkbox ${this.state.delete_status === 'snack' ? '' : 'hide'}`}>
+                    <input type="checkbox" class="custom-control-input" id="intake_snack" checked={this.state.data_delete.length === this.state.intake.snack.length} onChange={() => this.checkedAll('snack')}/>
+                    <label class="custom-control-label mt-1" for="intake_snack"/>
+                  </div>
+                </div>
               </div>
-              <div className="card-body">
-                RECOMMENDED 100 - 500 KCAL
+              <div className="card-body pt-0">
+                <h5 className={(this.state.intake.snack.length === 0) ? 'mt-3' : 'hide'}>
+                  Recommended {parseInt(this.state.recommendation_calorie.snack) - 50} - {parseInt(this.state.recommendation_calorie.snack) + 50}
+                </h5>
+                {calorieIntake("snack")}
+              </div>
+              {totalCalorieIntake("snack")}
+              <div className={`card-footer bg-info ${this.state.delete_status === 'snack' ? '' : 'hide'}`}>
+                <div className="row">
+                  <div className="col-md-6">
+                    <button className="btn btn-light btn-block" type="button" onClick={() => this.onDeleteStatus('')}>CANCEL</button>
+                  </div>
+                  <div className="col-md-6">
+                    <button className="btn btn-danger btn-block" type="button" onClick={() => this.onDelete(4)}>DELETE</button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

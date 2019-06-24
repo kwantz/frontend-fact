@@ -10,19 +10,17 @@ class Index extends React.Component {
     super(props)
     this.state = {
       data: {
-        name: "",
-        email: "",
-        activity: "",
-        category: "",
-        old: 0,
-        weight: 0,
-        height: 0,
-        fat: 0,
-        protein: 0,
-        carbohydrate: 0,
-        max_fat: 0,
-        max_protein: 0,
-        max_carbohydrate: 0,
+        name: '',
+        email: '',
+        birth_year: '',
+        status: '',
+        weight: '',
+        height: '',
+        bmi: '',
+        carbohydrate: '',
+        protein: '',
+        fat: '',
+        activity_level: '',
       }
     }
 
@@ -30,23 +28,22 @@ class Index extends React.Component {
   }
 
   async onRefresh() {
-    const response = await fetch(`http://127.0.0.1:8000/fact/user/` + this.props.router.query.id)
+    const headers = {"Authorization": 'Bearer ' + window.localStorage.getItem("token")}
+    const response = await fetch(`http://127.0.0.1:8000/fact/member/user`, {headers})
     const json = await response.json()
 
     const data = {
       name: json.results.name,
       email: json.results.email,
-      activity: json.results.activity,
-      category: json.results.category,
-      old: json.results.old,
+      birth_year: json.results.birth_year,
+      status: json.results.status,
       weight: json.results.weight,
       height: json.results.height,
-      fat: json.results.fat,
-      protein: json.results.protein,
+      bmi: json.results.bmi,
       carbohydrate: json.results.carbohydrate,
-      max_fat: json.results.max_fat,
-      max_protein: json.results.max_protein,
-      max_carbohydrate: json.results.max_carbohydrate,
+      protein: json.results.protein,
+      fat: json.results.fat,
+      activity_level: json.results.activity_level
     }
 
     this.setState({ data })
@@ -57,107 +54,6 @@ class Index extends React.Component {
   }
 
   render() {
-    Chart.pluginService.register({
-      beforeDraw: function (chart) {
-        if (chart.config.options.elements.center) {
-          //Get ctx from string
-          var ctx = chart.chart.ctx;
-
-          //Get options from the center object in options
-          var centerConfig = chart.config.options.elements.center;
-          var fontStyle = centerConfig.fontStyle || 'Arial';
-          var txt = centerConfig.text;
-          var color = centerConfig.color || '#000';
-          var sidePadding = centerConfig.sidePadding || 20;
-          var sidePaddingCalculated = (sidePadding/100) * (chart.innerRadius * 2)
-          //Start with a base font of 30px
-          ctx.font = "30px " + fontStyle;
-
-          //Get the width of the string and also the width of the element minus 10 to give it 5px side padding
-          var stringWidth = ctx.measureText(txt).width;
-          var elementWidth = (chart.innerRadius * 2) - sidePaddingCalculated;
-
-          // Pick a new font size so it will not be larger than the height of label.
-          var fontSizeToUse = 20;
-
-          //Set font settings to draw it correctly.
-          ctx.textAlign = 'center';
-          ctx.textBaseline = 'middle';
-          var centerX = ((chart.chartArea.left + chart.chartArea.right) / 2);
-          var centerY = ((chart.chartArea.top + chart.chartArea.bottom) / 2);
-          ctx.font = fontSizeToUse+"px " + fontStyle;
-          ctx.fillStyle = color;
-
-          //Draw text in center
-          ctx.fillText(txt, centerX, centerY);
-        }
-      }
-    });
-
-    const profileTools = (
-      <div className="card-tools">
-        <Link href={"/dashboard/admin/users/active?status=edit&id=" + this.props.router.query.id}>
-          <a>
-            <i className="fa fa-pen"/>
-          </a>
-        </Link>
-      </div>
-    )
-
-    const chart = {
-      fat: {
-        datasets: [{
-          data: [26, 300 - 26],
-          backgroundColor: ['#dc3545'],
-        }],
-        options: {
-          cutoutPercentage: 75,
-          responsive:true,
-          // maintainAspectRatio: false,
-          elements: {
-            center: {
-              text: 26 + 'g',
-              color: '#dc3545'
-            }
-          }
-        }
-      },
-      protein: {
-        datasets: [{
-          data: [96, 300 - 96],
-          backgroundColor: ['#17a2b8'],
-        }],
-        options: {
-          cutoutPercentage: 75,
-          responsive:true,
-          // maintainAspectRatio: false,
-          elements: {
-            center: {
-              text: 96 + 'g',
-              color: '#17a2b8'
-            }
-          }
-        }
-      },
-      carbohydrate: {
-        datasets: [{
-          data: [230, 300 - 230],
-          backgroundColor: ['#ffc107'],
-        }],
-        options: {
-          cutoutPercentage: 75,
-          responsive:true,
-          // maintainAspectRatio: false,
-          elements: {
-            center: {
-              text: 230 + 'g',
-              color: '#ffc107'
-            }
-          }
-        }
-      }
-    }
-
     const navbarInfo = (
       <h3 class="my-auto text-center">Profile</h3>
     )
@@ -169,17 +65,15 @@ class Index extends React.Component {
           <div className="card-body">
             <div class="float-right text-right">
             <Link href="/dashboard/user/profile?status=edit">
-              <a class="btn btn-info">
+              <a class="btn btn-info mb-3">
                 <i className="fa fa-pen"/> EDIT
               </a>
               </Link>
               <br/>
-              <br/>
               <Link href="/dashboard/user/profile?status=change-password">
-
-              <a class="btn btn-info">
-                <i class="fas fa-lock"/> CHANGE PASSWORD
-              </a>
+                <a class="btn btn-info">
+                  <i class="fas fa-lock"/> CHANGE PASSWORD
+                </a>
               </Link>
             </div>
 
@@ -187,22 +81,22 @@ class Index extends React.Component {
               <div className="col-md-3">
                 <div className="content-center">
                   <p className="text-center"><i className="fa fa-user-circle" style={{fontSize: "150px"}}/></p>
-                  <h5 className="text-center mb-0">Erick Kwantan</h5>
+                  <h5 className="text-center mb-0">{this.state.data.name}</h5>
                 </div>
               </div>
 
-              <div size="col-md-9">
+              <div class="col-md-9">
                 <div className="form-group">
                   <label>Email Address:</label>
-                  <input type="text" readonly className="form-control-plaintext" value="testing@gmail.com"/>
+                  <input type="text" readonly className="form-control-plaintext" value={this.state.data.email}/>
                 </div>
                 <div className="form-group">
                   <label>Birth Year:</label>
-                  <input type="text" readonly className="form-control-plaintext" value="1997"/>
+                  <input type="text" readonly className="form-control-plaintext" value={this.state.data.birth_year}/>
                 </div>
                 <div className="form-group">
                   <label>Status:</label>
-                  <input type="text" readonly className="form-control-plaintext" value="underweight"/>
+                  <input type="text" readonly className="form-control-plaintext" value={this.state.data.status}/>
                 </div>
               </div>
             </div>
@@ -214,21 +108,21 @@ class Index extends React.Component {
                   <label class="col-sm-3 col-form-label">Weight</label>
                   <label class="col-form-label">:</label>
                   <div class="col-sm-8">
-                    <input type="text" readonly class="form-control-plaintext" value="48 kg"/>
+                    <input type="text" readonly class="form-control-plaintext" value={`${this.state.data.weight} kg`}/>
                   </div>
                 </div>
                 <div class="form-group row mb-0">
                   <label class="col-sm-3 col-form-label">Height</label>
                   <label class="col-form-label">:</label>
                   <div class="col-sm-8">
-                    <input type="text" readonly class="form-control-plaintext" value="162 cm"/>
+                    <input type="text" readonly class="form-control-plaintext" value={`${this.state.data.height} cm`}/>
                   </div>
                 </div>
                 <div class="form-group row mb-0">
                   <label class="col-sm-3 col-form-label">BMI</label>
                   <label class="col-form-label">:</label>
                   <div class="col-sm-8">
-                    <input type="text" readonly class="form-control-plaintext" value="18,2"/>
+                    <input type="text" readonly class="form-control-plaintext" value={parseFloat(this.state.data.bmi).toFixed(1)}/>
                   </div>
                 </div>
               </div>
@@ -237,19 +131,19 @@ class Index extends React.Component {
                 <h3 class="col-md-12">Nutritions</h3>
                 <div class="col-md-4 block">
                   <div class="circle bg-info pt-4 mx-auto">
-                    <h3>230g</h3>
+                    <h3>{this.state.data.carbohydrate}g</h3>
                   </div>
                   <p className="text-center mt-3">Carbohydrate</p>
                 </div>
                 <div class="col-md-4 block">
                   <div class="circle bg-info pt-4 mx-auto">
-                    <h3>96g</h3>
+                    <h3>{this.state.data.protein}g</h3>
                   </div>
                   <p className="text-center mt-3">Protein</p>
                 </div>
                 <div class="col-md-4 block">
                   <div class="circle bg-info pt-4 mx-auto">
-                    <h3>26g</h3>
+                    <h3>{this.state.data.fat}g</h3>
                   </div>
                   <p className="text-center mt-3">Fat</p>
                 </div>
@@ -259,7 +153,7 @@ class Index extends React.Component {
             <div className="row mt-3">
               <div class="col-md-12">
                 <h3><u>ACTIVITY LEVEL</u></h3>
-                <span>High Activity</span>
+                <span>{this.state.data.activity_level.toUpperCase()} Activity</span>
                 <div className="clearfix">
                   <div className="float-left mr-3">
                     <img width="100" height="100" src="https://www.ikea.cn/cn/en/images/products/ribba-frame-black__0638328_PE698852_S4.JPG" />

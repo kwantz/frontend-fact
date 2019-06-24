@@ -7,133 +7,106 @@ import { Doughnut } from 'react-chartjs-2';
 import Link from 'next/link';
 
 export default class Index extends React.Component {
-  render() {
-    Chart.pluginService.register({
-      beforeDraw: function (chart) {
-        //Get ctx from string
-        var ctx = chart.chart.ctx;
+  constructor (props) {
+    super(props)
 
-        //Set font settings to draw it correctly.
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        var centerX = ((chart.chartArea.left + chart.chartArea.right) / 2);
-        var centerY = ((chart.chartArea.top + chart.chartArea.bottom) / 2);
-
-        if (chart.config.options.elements.calorie) {
-          ctx.fillStyle = chart.config.options.elements.calorie.color;
-
-          //Draw text in center
-          ctx.font = "30px " + "Arial";
-          ctx.fillText(chart.config.options.elements.calorie.text, centerX, centerY - 10);
-
-          ctx.font = "15px " + "Arial";
-          ctx.fillText('KCAL LEFT', centerX, centerY + 20);
-        }
-
-        if (chart.config.options.elements.nutrient) {
-          // ctx.height = "500px";
-          ctx.fillStyle = chart.config.options.elements.nutrient.color;
-
-          //Draw text in center
-          ctx.font = "15px " + "Arial";
-          ctx.fillText(chart.config.options.elements.nutrient.text, centerX, centerY);
-        }
-      }
-    });
-
-    const chart = {
-      intake: {
-        datasets: [{
-          data: [525, 1600-525],
-          backgroundColor: ['#ffc107'],
-        }],
-        options: {
-          cutoutPercentage: 90,
-          elements: {
-            calorie: {
-              text: 525,
-              color: '#ffc107'
-            }
-          }
-        }
-      },
-      burnt: {
-        datasets: [{
-          data: [1200, 1600-1200],
-          backgroundColor: ['#dc3545'],
-        }],
-        options: {
-          cutoutPercentage: 90,
-          elements: {
-            calorie: {
-              text: 1200,
-              color: '#dc3545'
-            }
-          }
-        }
-      },
-
-      fat: {
-        datasets: [{
-          data: [60, 40],
-          backgroundColor: ['#dc3545'],
-        }],
-        options: {
-          cutoutPercentage: 75,
-          elements: {
-            nutrient: {
-              text: 60 + '%',
-              color: '#dc3545'
-            }
-          }
-        }
-      },
-      protein: {
-        datasets: [{
-          data: [10, 90],
-          backgroundColor: ['#17a2b8'],
-        }],
-        options: {
-          cutoutPercentage: 75,
-          elements: {
-            nutrient: {
-              text: 10 + '%',
-              color: '#17a2b8'
-            }
-          }
-        }
-      },
-      carbohydrate: {
-        datasets: [{
-          data: [80, 20],
-          backgroundColor: ['#ffc107'],
-        }],
-        options: {
-          cutoutPercentage: 75,
-          elements: {
-            nutrient: {
-              text: 80 + '%',
-              color: '#ffc107'
-            }
-          }
-        }
-      }
+    this.state = {
+      show: '',
+      id: '',
+      name: '',
+      foods: [],
+      meals: [],
+      category_intake: 1
     }
 
+    this.onSearch = this.onSearch.bind(this)
+    this.onSelected = this.onSelected.bind(this)
+    this.onIntakeMeal = this.onIntakeMeal.bind(this)
+  }
 
+  async onSearch () {
+    if (this.state.name !== '') {
+      const headers = {"Authorization": 'Bearer ' + window.localStorage.getItem("token")}
+      const response = await fetch(`http://127.0.0.1:8000/fact/member/meal?name=${this.state.name}`, {headers})
+      const json = await response.json()
+
+      let {show, meals} = this.state
+      show = (json.results.meals.length) ? 'show' : ''
+      meals = json.results.meals
+
+      this.setState({ show, meals })
+    }
+  }
+
+  onSelected (idx) {
+    let {id, name, foods, meals, show} = this.state
+
+    id = meals[idx].id
+    name = meals[idx].name
+    foods = meals[idx].meal_detail
+    show = ''
+
+    this.setState({id, name, foods, show})
+  }
+
+  async onIntakeMeal (back = false) {
+    const body = JSON.stringify({
+      id: this.state.id,
+      category_intake: this.state.category_intake
+    })
+    const headers = {"Authorization": 'Bearer ' + window.localStorage.getItem("token")}
+    let response = await fetch(`http://127.0.0.1:8000/fact/member/intake/meal`, {method: 'POST', body, headers})
+    let json = await response.json()
+
+    if (json.message === "Success") {
+      if (back === true) return window.location.href = "/dashboard/user/diary"
+      let id = ''
+      let name = ''
+      let foods = []
+      let meals = []
+      let category_intake = 1
+      this.setState({id, name, foods, meals, category_intake})
+    }
+  }
+
+  render() {
     const navbarInfo = (
       <div class="form-group row my-auto">
         <label class="offset-sm-3 col-sm-2 col-form-label">Category:</label>
         <div class="col-sm-4">
-          <select class="form-control">
-            <option>Breakfast</option>
-            <option>Lunch</option>
-            <option>Dinner</option>
-            <option>Snack</option>
+          <select class="form-control" name="category_intake" onChange={(event) => this.setState({category_intake: event.target.value})} value={this.state.category_intake}>
+            <option value="1">Breakfast</option>
+            <option value="2">Lunch</option>
+            <option value="3">Dinner</option>
+            <option value="4">Snack</option>
           </select>
         </div>
       </div>
     )
+
+    let foodContent = []
+    let totalCalorie = 0
+    let totalCarbohydrate = 0
+    let totalProtein = 0
+    let totalFat = 0
+    for (let i = 0, l = this.state.foods.length; i < l; i++) {
+      foodContent.push(
+        <p class="mb-0">- {this.state.foods[i].name} ({this.state.foods[i].qty} serving)</p>
+      )
+      totalCalorie += parseFloat(this.state.foods[i].qty) * parseFloat(this.state.foods[i].calorie)
+      totalCarbohydrate += parseFloat(this.state.foods[i].qty) * parseFloat(this.state.foods[i].carbohydrate)
+      totalProtein += parseFloat(this.state.foods[i].qty) * parseFloat(this.state.foods[i].protein)
+      totalFat += parseFloat(this.state.foods[i].qty) * parseFloat(this.state.foods[i].fat)
+    }
+
+    const dropdownFoods = []
+    for (let i = 0, l = this.state.meals.length; i < l; i++) {
+      dropdownFoods.push(
+        <span class="dropdown-item" onClick={() => this.onSelected(i)}>
+          {this.state.meals[i].name}
+        </span>
+      )
+    }
 
     return (
       <UserLayoutHoc navbarInfo={navbarInfo}>
@@ -165,7 +138,6 @@ export default class Index extends React.Component {
           <div className="offset-md-1 col-md-10">
             <div className="card">
               <div className="card-body row">
-
                 <div className="col-md-12">
                   <div className="form-group row">
                     <div class="col-sm-6">
@@ -175,9 +147,12 @@ export default class Index extends React.Component {
                             <i className="fa fa-search"/>
                           </span>
                         </div>
-                        <input type="text" className="form-control bl-0" placeholder="Search by food name here..."/>
+                        <input type="text" className="form-control bl-0" placeholder="Search by food name here..." onChange={(event) => this.setState({name: event.target.value})} value={this.state.name}/>
                         <div className="input-group-append">
-                          <button type="button" className="btn btn-info">Submit</button>
+                          <button type="button" className="btn btn-info" onClick={this.onSearch}>Submit</button>
+                        </div>
+                        <div class={`dropdown-menu col-md-12 elevation-2 ${this.state.show}`}>
+                          {dropdownFoods}
                         </div>
                       </div>
                     </div>
@@ -192,12 +167,9 @@ export default class Index extends React.Component {
                     </p>
                   </div>
 
-                  <div class="form-group col-sm-6 pl-0 mb-0 pb-3 pr-0">
+                  <div class="form-group col-sm-12 pl-0 mb-0 pb-3 pr-0">
                     <label>Contains of:</label>
-                    <p>
-                      <span>- White Rice (1 serving)</span> <br/>
-                      <span>- Fried Chicken (2 pieces)</span> <br/>
-                    </p>
+                    <p>{foodContent}</p>
                   </div>
                 </div>
 
@@ -216,35 +188,30 @@ export default class Index extends React.Component {
                     <div class="card-body row">
                       <div className="col-md-4">Calories</div>
                       <div className="col-md-1">:</div>
-                      <div className="col-md-7 text-right">450 kcal</div>
+                      <div className="col-md-7 text-right">{totalCalorie.toFixed(2)} kcal</div>
 
                       <div className="col-md-4">Carbohydrate</div>
                       <div className="col-md-1">:</div>
-                      <div className="col-md-7 text-right">124 g</div>
+                      <div className="col-md-7 text-right">{totalCarbohydrate.toFixed(2)} g</div>
 
                       <div className="col-md-4">Protein</div>
                       <div className="col-md-1">:</div>
-                      <div className="col-md-7 text-right">42 g</div>
+                      <div className="col-md-7 text-right">{totalProtein.toFixed(2)} g</div>
 
                       <div className="col-md-4">Fat</div>
                       <div className="col-md-1">:</div>
-                      <div className="col-md-7 text-right">86 g</div>
+                      <div className="col-md-7 text-right">{totalFat.toFixed(2)} g</div>
                     </div>
                   </div>
                 </div>
 
                 <div class="col-md-6 mt-5">
-                  <button className="btn btn-info btn-block">
-                    SAVE AND ADD AGAIN
-                  </button>
+                  <button className="btn btn-info btn-block" onClick={() => this.onIntakeMeal()}>SAVE AND ADD AGAIN</button>
                 </div>
 
                 <div class="col-md-6 mt-5">
-                  <button className="btn btn-outline-info btn-block">
-                    SAVE AND GO TO DIARY
-                  </button>
+                  <button className="btn btn-outline-info btn-block" onClick={() => this.onIntakeMeal(true)}>SAVE AND GO TO DIARY</button>
                 </div>
-
               </div>
             </div>
           </div>

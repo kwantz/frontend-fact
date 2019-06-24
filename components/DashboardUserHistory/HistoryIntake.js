@@ -8,160 +8,100 @@ import Link from 'next/link';
 
 export default class HistoryActivity extends React.Component {
 
-  componentDidMount () {
+  constructor (props) {
+    super(props)
+
+    this.state = {
+      date: '',
+      data: {
+        week: [],
+        month: []
+      }
+    }
+
+    this.onChangeDate = this.onChangeDate.bind(this)
+    this.onRefresh = this.onRefresh.bind(this)
+  }
+
+  onChangeDate(event) {
+    console.log("Date", event.target.value)
+  }
+
+  async onRefresh() {
+    let date = new Date(this.state.date)
+    const headers = {"Authorization": 'Bearer ' + window.localStorage.getItem("token")}
+    const response = await fetch(`http://127.0.0.1:8000/fact/member/history/intake?year=${date.getFullYear()}&month=${date.getMonth() + 1}&day=${date.getDate()}`, {headers})
+    const json = await response.json()
+
+    const data = {
+      week: json.results.week,
+      month: json.results.month
+    }
+    this.setState({ data })
+  }
+
+  async componentDidMount () {
+    const self = this
+    const date = new Date()
+    const datestr = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
     window.$('#datetimepicker1').datetimepicker({
-      format: 'L'
-    });
-    window.$('#datetimepicker2').datetimepicker({
-      format: 'L'
-    });
+      defaultDate: datestr,
+      format: 'D MMM YYYY',
+    })
+    window.$('#datetimepicker1').on("change.datetimepicker", function(event) {
+      self.setState({ date: event.target.value })
+      self.onRefresh()
+    })
+
+    await this.setState({ date: datestr })
+    await this.onRefresh()
   }
 
   render() {
-    // Chart.pluginService.register({
-    //   beforeDraw: function (chart) {
-    //     //Get ctx from string
-    //     var ctx = chart.chart.ctx;
+    let date = new Date()
+    let monthDate = new Date()
+    const weekLabels = []
 
-    //     //Set font settings to draw it correctly.
-    //     ctx.textAlign = 'center';
-    //     ctx.textBaseline = 'middle';
-    //     var centerX = ((chart.chartArea.left + chart.chartArea.right) / 2);
-    //     var centerY = ((chart.chartArea.top + chart.chartArea.bottom) / 2);
+    if (this.state.date !== '') {
+      date = new Date(this.state.date)
+      weekLabels.push(date.dateformat('date'))
+      for (let i=0; i<6; i++) {
+        date.setDate(date.getDate() - 1)
+        weekLabels.push(date.dateformat('date'))
+      }
 
-    //     if (chart.config.options.elements.calorie) {
-    //       ctx.fillStyle = chart.config.options.elements.calorie.color;
+      date = new Date(this.state.date)
+      monthDate = new Date(date.setDate(date.getDate() - 30))
 
-    //       //Draw text in center
-    //       ctx.font = "30px " + "Arial";
-    //       ctx.fillText(chart.config.options.elements.calorie.text, centerX, centerY - 10);
-
-    //       ctx.font = "15px " + "Arial";
-    //       ctx.fillText('KCAL LEFT', centerX, centerY + 20);
-    //     }
-
-    //     if (chart.config.options.elements.nutrient) {
-    //       // ctx.height = "500px";
-    //       ctx.fillStyle = chart.config.options.elements.nutrient.color;
-
-    //       //Draw text in center
-    //       ctx.font = "15px " + "Arial";
-    //       ctx.fillText(chart.config.options.elements.nutrient.text, centerX, centerY);
-    //     }
-    //   }
-    // });
+      date = new Date(this.state.date)
+    }
 
     const chart = {
       week: {
-        labels: [1,2,3,4,5,6,7],
+        labels: weekLabels.reverse(),
         datasets: [{
-          data: [10, 40, 50, 0, 70, 60, 20, 100],
+          data: this.state.data.week,
           backgroundColor: '#17a2b8'
         }],
         options: {
-          legend: {
-             display: false
-          },
-          tooltips: {
-             enabled: false
-          },
+          legend: { display: false },
+          tooltips: { enabled: false },
           responsive: true,
           scales: {
             barThickness: 0.1,
-            xAxes: [{
-                stacked: true
-            }],
-            yAxes: [{
-                stacked: true
-            }]
-        }
+            xAxes: [{stacked: true}],
+            yAxes: [{stacked: true}]
+          }
         }
       },
       month: {
         labels: ['Below', 'Ideal', 'Over'],
         datasets: [{
-          data: [30, 50, 80],
+          data: [this.state.data.month.below, this.state.data.month.ideal, this.state.data.month.over],
           backgroundColor: ['#17a2b8', '#ffc107', '#dc3545']
         }],
-      },
-      intake: {
-        datasets: [{
-          data: [525, 1600-525],
-          backgroundColor: ['#ffc107'],
-        }],
-        options: {
-          cutoutPercentage: 90,
-          elements: {
-            calorie: {
-              text: 525,
-              color: '#ffc107'
-            }
-          }
-        }
-      },
-      burnt: {
-        datasets: [{
-          data: [1200, 1600-1200],
-          backgroundColor: ['#dc3545'],
-        }],
-        options: {
-          cutoutPercentage: 90,
-          elements: {
-            calorie: {
-              text: 1200,
-              color: '#dc3545'
-            }
-          }
-        }
-      },
-
-      fat: {
-        datasets: [{
-          data: [60, 40],
-          backgroundColor: ['#dc3545'],
-        }],
-        options: {
-          cutoutPercentage: 75,
-          elements: {
-            nutrient: {
-              text: 60 + '%',
-              color: '#dc3545'
-            }
-          }
-        }
-      },
-      protein: {
-        datasets: [{
-          data: [10, 90],
-          backgroundColor: ['#17a2b8'],
-        }],
-        options: {
-          cutoutPercentage: 75,
-          elements: {
-            nutrient: {
-              text: 10 + '%',
-              color: '#17a2b8'
-            }
-          }
-        }
-      },
-      carbohydrate: {
-        datasets: [{
-          data: [80, 20],
-          backgroundColor: ['#ffc107'],
-        }],
-        options: {
-          cutoutPercentage: 75,
-          elements: {
-            nutrient: {
-              text: 80 + '%',
-              color: '#ffc107'
-            }
-          }
-        }
       }
     }
-
 
     const navbarInfo = (
       <div className="text-center navbar-text col-md-12">
@@ -185,7 +125,7 @@ export default class HistoryActivity extends React.Component {
           <div className="offset-md-2 col-md-8">
             <div className="form-group row mb-0">
               <label class="col-form-label mr-3 ml-3">Select range date:</label>
-              <div class="col-sm-3">
+              <div class="col-sm-5">
                 <div className="input-group">
                   <div className="input-group-prepend">
                     <span className="input-group-text">
@@ -195,21 +135,6 @@ export default class HistoryActivity extends React.Component {
                   <input id="datetimepicker1" data-toggle="datetimepicker" data-target="#datetimepicker1" type="text" className="form-control bl-0 datetimepicker-input" placeholder="_ _ / _ _ / _ _ _ _"/>
                 </div>
               </div>
-
-              <label class="col-form-label">to</label>
-
-              <div class="col-sm-3">
-                <div className="input-group">
-                  <div className="input-group-prepend">
-                    <span className="input-group-text">
-                      <i class="far fa-calendar-alt"/>
-                    </span>
-                  </div>
-                  <input id="datetimepicker2" data-toggle="datetimepicker" data-target="#datetimepicker2" type="text" className="form-control bl-0 datetimepicker-input" placeholder="_ _ / _ _ / _ _ _ _"/>
-                </div>
-              </div>
-
-              <button type="button" className="btn btn-info">SUBMIT</button>
             </div>
 
             <div className="card mt-3">
@@ -226,7 +151,7 @@ export default class HistoryActivity extends React.Component {
             <div className="card mt-5">
               <div className="card-header">
                 <h3 className="card-title">
-                  <i className="fa fa-tag mr-2"/> MONTH VIEW
+                  <i className="fa fa-tag mr-2"/> MONTH VIEW ({(this.state.date !== '') ? date.dateformat('date') : ''} - {(this.state.date !== '') ? monthDate.dateformat('date') : ''})
                 </h3>
               </div>
               <div className="card-body">

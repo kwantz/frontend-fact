@@ -11,3 +11,7 @@ Date.prototype.dateformat = function(option = "") {
   if (option === "date") return `${date} ${month} ${year}`
   return `${date} ${month} ${year} ${hour}:${minute}`
 }
+
+String.prototype.dateformat = function() {
+  return ''
+}
