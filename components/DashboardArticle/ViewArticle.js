@@ -17,7 +17,7 @@ class Index extends React.Component {
   }
 
   async onRefresh () {
-    const response = await fetch(`http://103.252.100.230:8000/fact/article/${this.props.router.query.id}`)
+    const response = await fetch(`http://103.252.100.230/fact/article/${this.props.router.query.id}`)
     const json = await response.json()
 
     const {data} = this.state
@@ -56,7 +56,7 @@ class Index extends React.Component {
                   <input type="file" onChange={this.onChangeFile} className="custom-file-input" id="customFile" accept="image/*"/>
                   <label className="custom-file-label" for="customFile">{(this.state.data.image === '') ? 'Choose file' : this.state.data.image}</label>
                 </div>
-                <img className="mt-3" src={`http://103.252.100.230:8000/fact/image/${this.state.data.image}`}/>
+                <img className="mt-3" src={`http://103.252.100.230/fact/image/${this.state.data.image}`}/>
               </div>
             </div>
             <div className="form-group row">

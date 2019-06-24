@@ -30,7 +30,7 @@ export default class Index extends React.Component {
   }
 
   async onRefresh () {
-    const response = await fetch(`http://103.252.100.230:8000/fact/dashboard`)
+    const response = await fetch(`http://103.252.100.230/fact/dashboard`)
     const json = await response.json()
     const data = {
       total_users: json.results.total_users,
@@ -51,7 +51,7 @@ export default class Index extends React.Component {
 
     this.setState({ data })
 
-    const ws = new WebSocket("ws://103.252.100.230:8000/online-users")
+    const ws = new WebSocket("ws://103.252.100.230/online-users")
     const self = this
     ws.onmessage = (e) => {
       const results = JSON.parse(e.data)

@@ -30,7 +30,7 @@ class Index extends React.Component {
   }
 
   async onRefresh() {
-    const response = await fetch(`http://103.252.100.230:8000/fact/user/` + this.props.router.query.id)
+    const response = await fetch(`http://103.252.100.230/fact/user/` + this.props.router.query.id)
     const json = await response.json()
 
     const data = {

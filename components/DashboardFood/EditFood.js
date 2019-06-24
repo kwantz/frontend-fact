@@ -33,7 +33,7 @@ class Index extends React.Component {
     const alert = this.state.alert
     const body = JSON.stringify(this.state.data)
     const headers = {"Authorization": 'Bearer ' + window.localStorage.getItem("token")}
-    const response = await fetch('http://103.252.100.230:8000/fact/food/' + this.props.router.query.id, {method: 'PUT', body, headers})
+    const response = await fetch('http://103.252.100.230/fact/food/' + this.props.router.query.id, {method: 'PUT', body, headers})
     const json = await response.json()
 
     if (typeof json.message === 'undefined' || json.message !== 'Success') {
@@ -53,12 +53,12 @@ class Index extends React.Component {
   }
 
   async onRefresh () {
-    let response = await fetch(`http://103.252.100.230:8000/fact/food-category?name=all`)
+    let response = await fetch(`http://103.252.100.230/fact/food-category?name=all`)
     let json = await response.json()
 
     const categories = json.results.categories
 
-    response = await fetch(`http://103.252.100.230:8000/fact/food/` + this.props.router.query.id)
+    response = await fetch(`http://103.252.100.230/fact/food/` + this.props.router.query.id)
     json = await response.json()
 
     const data = json.results

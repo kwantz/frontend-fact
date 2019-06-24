@@ -51,7 +51,7 @@ class Index extends React.Component {
     if (typeof page === "undefined") page = 1
     if (typeof title === "undefined") title = ""
 
-    const response = await fetch(`http://103.252.100.230:8000/fact/article?page=${page}&title=${title}`)
+    const response = await fetch(`http://103.252.100.230/fact/article?page=${page}&title=${title}`)
     const json = await response.json()
 
     const data = json.results.articles
@@ -87,7 +87,7 @@ class Index extends React.Component {
 
   async onSubmitDelete () {
     const {alert} = this.state
-    const response = await fetch('http://103.252.100.230:8000/fact/article/' + this.state.delete.id, {method: 'DELETE'})
+    const response = await fetch('http://103.252.100.230/fact/article/' + this.state.delete.id, {method: 'DELETE'})
     const json = await response.json()
 
     if (typeof json.message === 'undefined' || json.message !== 'Success') {

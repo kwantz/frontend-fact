@@ -33,7 +33,7 @@ class Index extends React.Component {
   async onSubmit () {
     const body = JSON.stringify(this.state.data)
     const headers = {"Authorization": 'Bearer ' + window.localStorage.getItem("token")}
-    let response = await fetch(`http://103.252.100.230:8000/fact/member/user`, {method: 'PUT', body, headers})
+    let response = await fetch(`http://103.252.100.230/fact/member/user`, {method: 'PUT', body, headers})
     let json = await response.json()
 
     if (json.message === "Success") {
@@ -43,7 +43,7 @@ class Index extends React.Component {
 
   async onRefresh() {
     const headers = {"Authorization": 'Bearer ' + window.localStorage.getItem("token")}
-    const response = await fetch(`http://103.252.100.230:8000/fact/member/user`, {headers})
+    const response = await fetch(`http://103.252.100.230/fact/member/user`, {headers})
     const json = await response.json()
 
     const data = {

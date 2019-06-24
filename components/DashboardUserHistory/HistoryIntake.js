@@ -30,7 +30,7 @@ export default class HistoryActivity extends React.Component {
   async onRefresh() {
     let date = new Date(this.state.date)
     const headers = {"Authorization": 'Bearer ' + window.localStorage.getItem("token")}
-    const response = await fetch(`http://103.252.100.230:8000/fact/member/history/intake?year=${date.getFullYear()}&month=${date.getMonth() + 1}&day=${date.getDate()}`, {headers})
+    const response = await fetch(`http://103.252.100.230/fact/member/history/intake?year=${date.getFullYear()}&month=${date.getMonth() + 1}&day=${date.getDate()}`, {headers})
     const json = await response.json()
 
     const data = {

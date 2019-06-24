@@ -58,7 +58,7 @@ export default class Index extends React.Component {
     await this.setState({ table })
 
     const headers = {"Authorization": 'Bearer ' + window.localStorage.getItem("token")}
-    const response = await fetch('http://103.252.100.230:8000/fact/quote', {headers})
+    const response = await fetch('http://103.252.100.230/fact/quote', {headers})
     const json = await response.json()
 
     const data = json.results.quotes
@@ -80,7 +80,7 @@ export default class Index extends React.Component {
     const body = JSON.stringify(add)
 
     const headers = {"Authorization": 'Bearer ' + window.localStorage.getItem("token")}
-    const response = await fetch('http://103.252.100.230:8000/fact/quote', {method: 'POST', body, headers})
+    const response = await fetch('http://103.252.100.230/fact/quote', {method: 'POST', body, headers})
     const json = await response.json()
 
     if (typeof json.message === 'undefined' || json.message !== 'Success') {
@@ -118,7 +118,7 @@ export default class Index extends React.Component {
     const body = JSON.stringify(edit)
 
     const headers = {"Authorization": 'Bearer ' + window.localStorage.getItem("token")}
-    const response = await fetch('http://103.252.100.230:8000/fact/quote/' + edit.id, {method: 'PUT', body, headers})
+    const response = await fetch('http://103.252.100.230/fact/quote/' + edit.id, {method: 'PUT', body, headers})
     const json = await response.json()
 
     if (typeof json.message === 'undefined' || json.message !== 'Success') {
@@ -146,7 +146,7 @@ export default class Index extends React.Component {
     const body = JSON.stringify(data)
 
     const headers = {"Authorization": 'Bearer ' + window.localStorage.getItem("token")}
-    const response = await fetch('http://103.252.100.230:8000/fact/quote/' + data.id, {method: 'DELETE', body, headers})
+    const response = await fetch('http://103.252.100.230/fact/quote/' + data.id, {method: 'DELETE', body, headers})
     const json = await response.json()
 
     if (typeof json.message === 'undefined' || json.message !== 'Success') {

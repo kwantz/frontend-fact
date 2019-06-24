@@ -20,7 +20,7 @@ export default class Index extends React.Component {
 
   async onSubmit () {
     const body = JSON.stringify(this.state.data)
-    const response = await fetch(`http://103.252.100.230:8000/fact/login`, {method: 'POST', body})
+    const response = await fetch(`http://103.252.100.230/fact/login`, {method: 'POST', body})
     const json = await response.json()
 
     if (typeof json.results !== 'undefined') {
@@ -40,7 +40,7 @@ export default class Index extends React.Component {
   }
 
   async onRefresh () {
-    const response = await fetch(`http://103.252.100.230:8000/fact/member/article`)
+    const response = await fetch(`http://103.252.100.230/fact/member/article`)
     const json = await response.json()
 
     const articles = json.results.articles
@@ -76,7 +76,7 @@ export default class Index extends React.Component {
           <div class={`carousel-item bb-1 bt-1 bg-white ${active}`} style={{height: "400px"}}>
             <div class="clearfix pt-5 pb-5" style={{width: "70%", marginLeft: "15%"}}>
               <div class="float-left mr-3">
-              <img width="250" height="250" src={`http://103.252.100.230:8000/fact/image/${this.state.articles[i].image}`}/>
+              <img width="250" height="250" src={`http://103.252.100.230/fact/image/${this.state.articles[i].image}`}/>
               </div>
               <h5 class="mb-0">{ this.state.articles[i].title }</h5>
               <p class="mb-3">By: { this.state.articles[i].author }</p>

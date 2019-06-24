@@ -31,7 +31,7 @@ export default class Index extends React.Component {
     const alert = this.state.alert
     const body = JSON.stringify(this.state.data)
     const headers = {"Authorization": 'Bearer ' + window.localStorage.getItem("token")}
-    const response = await fetch('http://103.252.100.230:8000/fact/food', {method: 'POST', body, headers})
+    const response = await fetch('http://103.252.100.230/fact/food', {method: 'POST', body, headers})
     const json = await response.json()
 
     if (typeof json.message === 'undefined' || json.message !== 'Success') {
@@ -60,7 +60,7 @@ export default class Index extends React.Component {
   }
 
   async onRefresh () {
-    const response = await fetch(`http://103.252.100.230:8000/fact/food-category?name=all`)
+    const response = await fetch(`http://103.252.100.230/fact/food-category?name=all`)
     const json = await response.json()
 
     const categories = json.results.categories

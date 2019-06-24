@@ -69,7 +69,7 @@ class Index extends React.Component {
     if (typeof page === "undefined") page = 1
     if (typeof name === "undefined") name = ""
 
-    const response = await fetch(`http://103.252.100.230:8000/fact/food-category?page=${page}&name=${name}`)
+    const response = await fetch(`http://103.252.100.230/fact/food-category?page=${page}&name=${name}`)
     const json = await response.json()
 
     const data = json.results.categories
@@ -89,7 +89,7 @@ class Index extends React.Component {
     let {add, alert} = this.state
     const body = JSON.stringify({name: add})
 
-    const response = await fetch('http://103.252.100.230:8000/fact/food-category', {method: 'POST', body})
+    const response = await fetch('http://103.252.100.230/fact/food-category', {method: 'POST', body})
     const json = await response.json()
 
     if (typeof json.message === 'undefined' || json.message !== 'Success') {
@@ -115,7 +115,7 @@ class Index extends React.Component {
     let {edit, alert} = this.state
     const body = JSON.stringify(edit)
 
-    const response = await fetch('http://103.252.100.230:8000/fact/food-category/' + edit.id, {method: 'PUT', body})
+    const response = await fetch('http://103.252.100.230/fact/food-category/' + edit.id, {method: 'PUT', body})
     const json = await response.json()
 
     if (typeof json.message === 'undefined' || json.message !== 'Success') {
@@ -140,7 +140,7 @@ class Index extends React.Component {
     let {alert} = this.state
     const body = JSON.stringify(this.state.delete)
 
-    const response = await fetch('http://103.252.100.230:8000/fact/food-category/' + this.state.delete.id, {method: 'DELETE', body})
+    const response = await fetch('http://103.252.100.230/fact/food-category/' + this.state.delete.id, {method: 'DELETE', body})
     const json = await response.json()
 
     if (typeof json.message === 'undefined' || json.message !== 'Success') {

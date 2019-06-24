@@ -30,7 +30,7 @@ class Index extends React.Component {
   }
 
   async onRefresh () {
-    const response = await fetch(`http://103.252.100.230:8000/fact/user/` + this.props.router.query.id)
+    const response = await fetch(`http://103.252.100.230/fact/user/` + this.props.router.query.id)
     const json = await response.json()
     const data = {
       email: json.results.email,
@@ -44,7 +44,7 @@ class Index extends React.Component {
   async onSubmit () {
     const alert = this.state.alert
     const body = JSON.stringify(this.state.data)
-    const response = await fetch(`http://103.252.100.230:8000/fact/user/` + this.props.router.query.id, {method: "PUT", body})
+    const response = await fetch(`http://103.252.100.230/fact/user/` + this.props.router.query.id, {method: "PUT", body})
     const json = await response.json()
 
     if (typeof json.message === 'undefined' || json.message !== 'Success') {

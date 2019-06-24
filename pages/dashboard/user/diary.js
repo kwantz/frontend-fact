@@ -48,7 +48,7 @@ export default class Index extends React.Component {
       data: this.state.data_delete
     })
     const headers = {"Authorization": 'Bearer ' + window.localStorage.getItem("token")}
-    const response = await fetch(`http://103.252.100.230:8000/fact/member/intake`, {method: "DELETE", body, headers})
+    const response = await fetch(`http://103.252.100.230/fact/member/intake`, {method: "DELETE", body, headers})
     const json = await response.json()
 
     if (json.message === 'Success') {
@@ -79,7 +79,7 @@ export default class Index extends React.Component {
 
   async onRefresh () {
     const headers = {"Authorization": 'Bearer ' + window.localStorage.getItem("token")}
-    const response = await fetch(`http://103.252.100.230:8000/fact/member/diary?year=${this.state.date.getFullYear()}&month=${this.state.date.getMonth() + 1}&day=${this.state.date.getDate()}`, {headers})
+    const response = await fetch(`http://103.252.100.230/fact/member/diary?year=${this.state.date.getFullYear()}&month=${this.state.date.getMonth() + 1}&day=${this.state.date.getDate()}`, {headers})
     const json = await response.json()
 
     const calorie = json.results.calorie
