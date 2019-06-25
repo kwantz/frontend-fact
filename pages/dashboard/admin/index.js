@@ -51,7 +51,7 @@ export default class Index extends React.Component {
 
     this.setState({ data })
 
-    const ws = new WebSocket("ws://103.252.100.230/online-users")
+    const ws = new WebSocket("ws://103.252.100.230:9000/online-users")
     const self = this
     ws.onmessage = (e) => {
       const results = JSON.parse(e.data)
