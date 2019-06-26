@@ -15,7 +15,11 @@ export default class HistoryActivity extends React.Component {
       date: '',
       data: {
         week: [],
-        month: []
+        month: {
+          below: 0,
+          ideal: 0,
+          over: 0,
+        }
       }
     }
 

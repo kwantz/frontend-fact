@@ -1,13 +1,35 @@
 import GuessLayoutHoc from '../components/GuessLayout/GuessLayoutHoc'
 
 export default class Index extends React.Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      user: {
+        status: ''
+      }
+    }
+  }
+
+  async componentDidMount() {
+    const headers = {"Authorization": 'Bearer ' + window.localStorage.getItem("token")}
+    const response = await fetch(`http://103.252.100.230/fact/member/user`, {headers})
+    const json = await response.json()
+
+    const user = {
+      status: json.results.status
+    }
+
+    this.setState({ user })
+  }
+
   render() {
     return (
       <GuessLayoutHoc registerbox="false">
         <div class="d-flex flex-column align-items-center justify-content-center mt-3">
           <h3>From the data analysis, we can conclude that you are</h3>
 
-          <h1 className="mb-4">"Underweight"</h1>
+          <h1 className="mb-4">"{this.state.user.status}"</h1>
 
           <img className="mb-2" width="100" height="100" src="https://www.ikea.cn/cn/en/images/products/ribba-frame-black__0638328_PE698852_S4.JPG" />
 
