@@ -146,8 +146,14 @@ class Index extends React.Component {
 
   onChangeAdd (event) {
     const add = this.state.add
-    add[event.target.name] = event.target.value
-    this.setState({ add })
+    if (event.target.name === 'name' && /^[a-zA-Z]+$/.test(event.target.value.trim())) {
+      add[event.target.name] = event.target.value
+      this.setState({ add })
+    }
+    else {
+      add[event.target.name] = event.target.value
+      this.setState({ add })
+    }
   }
 
   async onRefresh () {
@@ -202,7 +208,7 @@ class Index extends React.Component {
         <div className="card">
           <div className="card-body">
             <form className="form-inline">
-              <SearchInput placeholder="Search by name" onClick={this.queryName} value={this.state.search} onChange={(event) => this.setState({search: event.target.value})}/>
+              <SearchInput placeholder="Search by name" onClick={this.queryName} value={this.state.search} onChange={(event) => this.setState({search: event.target.value.trim()})}/>
               <button type="button" className="btn btn-info ml-auto" data-toggle="modal" data-target="#add">
                 <i className="fa fa-plus" /> Add Activity
               </button>
@@ -220,11 +226,11 @@ class Index extends React.Component {
           <div className="modal-body">
             <div className="form-group">
               <label>Activity Name</label>
-              <input type="text" name="name" onChange={this.onChangeAdd}className="form-control" placeholder="Enter Activity Name"/>
+              <input type="text" name="name" onChange={this.onChangeAdd} className="form-control" placeholder="Enter Activity Name" required/>
             </div>
             <div className="form-group">
               <label>Calorie Burnt (in kcal/kg hour)</label>
-              <input type="number" name="met" onChange={this.onChangeAdd}className="form-control" placeholder="Enter amount of calories"/>
+              <input type="number" name="met" onChange={this.onChangeAdd} min="1" className="form-control" placeholder="Enter amount of calories" required/>
             </div>
           </div>
           <div className="modal-footer">
@@ -243,11 +249,11 @@ class Index extends React.Component {
           <div className="modal-body">
             <div className="form-group">
               <label>Activity Name</label>
-              <input type="text" name="name" className="form-control" placeholder="Enter Activity Name" onChange={this.onChangeEdit} value={this.state.edit.name}/>
+              <input type="text" name="name" className="form-control" placeholder="Enter Activity Name" onChange={this.onChangeEdit} value={this.state.edit.name} required/>
             </div>
             <div className="form-group">
               <label>Calorie Burnt (in kcal/kg hour)</label>
-              <input type="number" name="met" className="form-control" placeholder="Enter amount of calories" onChange={this.onChangeEdit} value={this.state.edit.met}/>
+              <input type="number" name="met" className="form-control" placeholder="Enter amount of calories" onChange={this.onChangeEdit} value={this.state.edit.met} required/>
             </div>
           </div>
           <div className="modal-footer">

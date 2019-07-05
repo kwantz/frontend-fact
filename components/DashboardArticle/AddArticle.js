@@ -80,20 +80,20 @@ export default class Index extends React.Component {
             <div className="form-group row">
               <label className="col-sm-3 col-form-label">Title</label>
               <div className="col-sm-9">
-                <input name="title" value={this.state.data.title} onChange={this.onChange} type="text" className="form-control" placeholder="Enter Title"/>
+                <input name="title" value={this.state.data.title} onChange={this.onChange} type="text" className="form-control" placeholder="Enter Title" required/>
               </div>
             </div>
             <div className="form-group row">
               <label className="col-sm-3 col-form-label">Author</label>
               <div className="col-sm-9">
-                <input name="author" value={this.state.data.author} onChange={this.onChange} type="text" className="form-control" placeholder="Enter Author's Name"/>
+                <input name="author" value={this.state.data.author} onChange={this.onChange} type="text" className="form-control" placeholder="Enter Author's Name" required/>
               </div>
             </div>
             <div className="form-group row">
               <label className="col-sm-3 col-form-label">Image</label>
               <div className="col-sm-9">
                 <div className="custom-file">
-                  <input type="file" onChange={this.onChangeFile} className="custom-file-input" id="customFile" accept="image/*"/>
+                  <input type="file" onChange={this.onChangeFile} className="custom-file-input" id="customFile" accept="image/*" required/>
                   <label className="custom-file-label" for="customFile">{(this.state.data.image === '') ? 'Choose file' : this.state.data.image}</label>
                 </div>
                 <img className="mt-3" src={(this.state.data.image !== '') ? `http://103.252.100.230/fact/image/${this.state.data.image}` : ''}/>
@@ -102,7 +102,7 @@ export default class Index extends React.Component {
             <div className="form-group row">
               <label className="col-sm-3 col-form-label">Content</label>
               <div className="col-sm-9">
-                <textarea name="content" value={this.state.data.content} onChange={this.onChange} className="form-control" id="exampleFormControlTextarea1" rows="5"/>
+                <textarea name="content" value={this.state.data.content} onChange={this.onChange} className="form-control" id="exampleFormControlTextarea1" rows="5" required/>
               </div>
             </div>
             <div className="row mt-5">
