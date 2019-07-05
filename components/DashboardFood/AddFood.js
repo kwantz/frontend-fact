@@ -1,6 +1,7 @@
 import AdminLayoutHoc from '../Layout/AdminLayoutHoc';
 import Alert from '../Alert';
 import Link from 'next/link';
+import Router from 'next/router'
 
 export default class Index extends React.Component {
   constructor (props) {

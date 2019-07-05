@@ -1,4 +1,5 @@
 import "../../styles/styles.scss"
+import Link from 'next/link';
 
 class GuessLayoutHoc extends React.Component {
   render() {
@@ -29,7 +30,9 @@ class GuessLayoutHoc extends React.Component {
         <nav className="navbar navbar-expand bg-info navbar-light border-bottom row mr-0 ml-0" style={styles}>
           <ul className="navbar-nav col-md-3">
             <li className="nav-item d-sm-inline-block">
-              <a className="nav-link font-weight-bold" style={{fontSize:'1.5rem'}}>FACT</a>
+              <Link href="/">
+                <a className="nav-link font-weight-bold" style={{fontSize:'1.5rem'}}>FACT</a>
+              </Link>
             </li>
             <span className="d-flex align-items-center" style={{fontSize:'0.7rem',marginTop:'0.6rem'}}>Food and Activity Calorie Tracker</span>
           </ul>

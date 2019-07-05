@@ -60,9 +60,7 @@ class Index extends React.Component {
               </div>
             </div>
 
-            <Link href="/">
-              <a class="col-md-2 btn btn-secondary">BACK</a>
-            </Link>
+            <button class="col-md-2 btn btn-secondary" onClick={() => Router.back()}>BACK</button>
           </div>
         </div>
       </GuessLayoutHoc>

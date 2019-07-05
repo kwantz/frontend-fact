@@ -108,6 +108,7 @@ class Index extends React.Component {
   }
 
   async onSubmitDelete () {
+    let {alert} = this.state
     const response = await fetch('http://103.252.100.230/fact/activity/' + this.state.delete.id, {method: 'DELETE'})
     const json = await response.json()
 

@@ -8,10 +8,10 @@ class InfoBox extends React.Component {
     return (
       <div className={size}>
         <div className="info-box">
-          <span className={["info-box-icon", color].join(' ')}>
+          <span className={["info-box-icon col-md-3", color].join(' ')}>
             <i className={["fa", icon].join(" ")}/>
           </span>
-          <div className="info-box-content">
+          <div className="info-box-content col-md-9">
             <span className="info-box-text">{ text }</span>
             <span className="info-box-number">{ number }</span>
           </div>

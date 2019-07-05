@@ -107,13 +107,13 @@ class Index extends React.Component {
     const chart = {
       fat: {
         datasets: [{
-          data: [this.state.data.fat, this.state.data.max_fat],
+          data: [100, 500 - 100],
           backgroundColor: ['#dc3545'],
         }],
         options: {
           elements: {
             center: {
-              text: this.state.data.fat + 'g',
+              text: 100 + 'g',
               color: '#dc3545'
             }
           }
@@ -121,13 +121,13 @@ class Index extends React.Component {
       },
       protein: {
         datasets: [{
-          data: [this.state.data.protein, this.state.data.max_protein],
+          data: [200, 500 - 200],
           backgroundColor: ['#17a2b8'],
         }],
         options: {
           elements: {
             center: {
-              text: this.state.data.protein + 'g',
+              text: 200 + 'g',
               color: '#17a2b8'
             }
           }
@@ -135,13 +135,13 @@ class Index extends React.Component {
       },
       carbohydrate: {
         datasets: [{
-          data: [this.state.data.carbohydrate, this.state.data.max_carbohydrate],
+          data: [300, 500 - 300],
           backgroundColor: ['#ffc107'],
         }],
         options: {
           elements: {
             center: {
-              text: this.state.data.carbohydrate + 'g',
+              text: 300 + 'g',
               color: '#ffc107'
             }
           }

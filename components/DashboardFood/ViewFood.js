@@ -9,12 +9,12 @@ class Index extends React.Component {
 
     this.state = {
       data: {
-        fat: '',
-        name: '',
-        calorie: '',
-        protein: '',
-        category: '',
-        carbohydrate: ''
+        fat: '0',
+        name: '-',
+        calorie: '0',
+        protein: '0',
+        category: '-',
+        carbohydrate: '0'
       },
     }
   }
@@ -52,44 +52,60 @@ class Index extends React.Component {
                 </a>
               </Link>
             </div>
-            <form>
-              <div className="form-group row">
-                <label className="col-sm-3 col-form-label">Food Name</label>
-                <div className="col-sm-9">
-                  <input type="text" readonly className="form-control-plaintext" value={this.state.data.name}/>
+            <div className="row">
+              <div className="col-sm-3 br-1">
+                <div className="form-group row">
+                  <label className="col-sm-12 col-form-label">Food Name</label>
+                </div>
+                <div className="form-group row">
+                  <label className="col-sm-12 col-form-label">Category</label>
+                </div>
+                <div className="form-group row">
+                  <label className="col-sm-12 col-form-label">Total Calories</label>
+                </div>
+                <div className="form-group row">
+                  <label className="col-sm-12 col-form-label">Total Carbohydrate</label>
+                </div>
+                <div className="form-group row">
+                  <label className="col-sm-12 col-form-label">Total Protein</label>
+                </div>
+                <div className="form-group row">
+                  <label className="col-sm-12 col-form-label">Total Fat</label>
                 </div>
               </div>
-              <div className="form-group row">
-                <label className="col-sm-3 col-form-label">Category</label>
-                <div className="col-sm-9">
-                  <input type="text" readonly className="form-control-plaintext" value={this.state.data.category}/>
+              <div className="col-sm-9 bl-1">
+                <div className="form-group row">
+                  <div class="col-md-12">
+                    <input type="text" readonly className="form-control-plaintext" value={this.state.data.name}/>
+                  </div>
+                </div>
+                <div className="form-group row">
+                  <div class="col-md-12">
+                    <input type="text" readonly className="form-control-plaintext" value={this.state.data.category}/>
+                  </div>
+                </div>
+                <div className="form-group row">
+                  <div class="col-md-12">
+                    <input type="text" readonly className="form-control-plaintext" value={`${this.state.data.calorie} kcal`}/>
+                  </div>
+                </div>
+                <div className="form-group row">
+                  <div class="col-md-12">
+                    <input type="text" readonly className="form-control-plaintext" value={`${this.state.data.carbohydrate} g`}/>
+                  </div>
+                </div>
+                <div className="form-group row">
+                  <div class="col-md-12">
+                    <input type="text" readonly className="form-control-plaintext" value={`${this.state.data.protein} g`}/>
+                  </div>
+                </div>
+                <div className="form-group row">
+                  <div class="col-md-12">
+                    <input type="text" readonly className="form-control-plaintext" value={`${this.state.data.fat} g`}/>
+                  </div>
                 </div>
               </div>
-              <div className="form-group row">
-                <label className="col-sm-3 col-form-label">Total Calories (in kcal)</label>
-                <div className="col-sm-9">
-                  <input type="text" readonly className="form-control-plaintext" value={this.state.data.calorie}/>
-                </div>
-              </div>
-              <div className="form-group row">
-                <label className="col-sm-3 col-form-label">Total Carbohydrate (in g)</label>
-                <div className="col-sm-9">
-                  <input type="text" readonly className="form-control-plaintext" value={this.state.data.carbohydrate}/>
-                </div>
-              </div>
-              <div className="form-group row">
-                <label className="col-sm-3 col-form-label">Total Protein (in g)</label>
-                <div className="col-sm-9">
-                  <input type="text" readonly className="form-control-plaintext" value={this.state.data.protein}/>
-                </div>
-              </div>
-              <div className="form-group row">
-                <label className="col-sm-3 col-form-label">Total Fat (in g)</label>
-                <div className="col-sm-9">
-                  <input type="text" readonly className="form-control-plaintext" value={this.state.data.fat}/>
-                </div>
-              </div>
-            </form>
+            </div>
           </div>
         </div>
         <div className="row">

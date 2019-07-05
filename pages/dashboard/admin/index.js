@@ -74,7 +74,7 @@ export default class Index extends React.Component {
     const chartdata = {
       labels: ['Underweight', 'Normal', 'Overweight'],
       datasets: [{
-        data: [underweight, normal, overweight],
+        data: [1, normal, overweight],
         backgroundColor: ['#ffc107', '#17a2b8', '#dc3545'],
       }]
     }
@@ -83,7 +83,7 @@ export default class Index extends React.Component {
     const algochartdata = {
       labels: ['Correct', 'Incorrect'],
       datasets: [{
-        data: [correct, incorrect],
+        data: [90, 10],
         backgroundColor: ['#28a745', '#dc3545'],
       }]
     }
@@ -91,14 +91,14 @@ export default class Index extends React.Component {
     const food1 = []
     const food2 = []
     for (let i = 0; i < Math.min(5, this.state.data.top_food.length); i++)
-      food1.push(<p>{i+1}. {this.state.data.top_food[i]}</p>)
+      food1.push(<p>{i+1}. {this.state.data.top_food[i][1]}</p>)
 
     for (let i = 5; i < Math.min(10, this.state.data.top_food.length); i++)
-      food2.push(<p>{i+1}. {this.state.data.top_food[i]}</p>)
+      food2.push(<p>{i+1}. {this.state.data.top_food[i][1]}</p>)
 
     const top_user = []
     for (let i = 0; i < Math.min(5, this.state.data.top_user.length); i++)
-      top_user.push(<InfoBox size="col-md-4" color="bg-info" icon="fa-user-circle" text={this.state.data.top_user[i][1]} number='"underweight"'/>)
+      top_user.push(<InfoBox size="col-md-4" color="bg-info" icon="fa-user-circle" text={this.state.data.top_user[i][1]} number={`"${this.state.data.top_user[i][2]}"`}/>)
 
     const new_user = []
     for (let i = 0; i < Math.min(3, this.state.data.new_users.length); i++)

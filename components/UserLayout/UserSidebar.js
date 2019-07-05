@@ -35,9 +35,11 @@ class UserSidebar extends React.Component {
             <ul className="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
               <li className="nav-item">
                 {navitems}
-                <span className="nav-link">
-                  <i className="nav-icon fas fa-sign-out-alt mr-0" onClick={this.signOut}/>
-                </span>
+                <Link href="/">
+                  <a className="nav-link">
+                    <i className="nav-icon fas fa-sign-out-alt mr-0"/>
+                  </a>
+                </Link>
               </li>
             </ul>
           </nav>

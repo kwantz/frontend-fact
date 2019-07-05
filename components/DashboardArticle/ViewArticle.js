@@ -1,4 +1,5 @@
 import AdminLayoutHoc from '../Layout/AdminLayoutHoc';
+import Alert from '../Alert';
 import Router, { withRouter } from 'next/router';
 
 class Index extends React.Component {
@@ -10,10 +11,32 @@ class Index extends React.Component {
         image: '',
         author: '',
         content: ''
+      },
+      alert: {
+        edit_danger: '',
+        edit_success: '',
       }
     }
 
     this.onRefresh = this.onRefresh.bind(this)
+    this.onSubmit = this.onSubmit.bind(this)
+    this.onChangeFile = this.onChangeFile.bind(this)
+  }
+
+  async onSubmit () {
+    let {alert} = this.state
+    const body = JSON.stringify(this.state.data)
+    const response = await fetch(`http://103.252.100.230/fact/article/${this.props.router.query.id}`, {method: 'PUT', body})
+    const json = await response.json()
+
+    if (typeof json.message === 'undefined' || json.message !== 'Success') {
+      alert.edit_danger = "500 — Internal Server Error"
+      await this.setState({alert})
+    }
+    else {
+      alert.edit_success = "Edit Article, " + this.state.data.title + " — Success"
+      await this.setState({alert})
+    }
   }
 
   async onRefresh () {
@@ -28,6 +51,21 @@ class Index extends React.Component {
     this.setState({ data })
   }
 
+  async onChangeFile () {
+    const input = document.querySelector('input[type="file"]')
+
+    var body = new FormData()
+    body.append('uploads', input.files[0])
+
+    const response = await fetch(`http://103.252.100.230/fact/image/upload`, {method: 'POST', body})
+    const json = await response.json()
+
+    const data = this.state.data
+    data.image = json.results
+
+    this.setState({ data })
+  }
+
   componentDidMount() {
     this.onRefresh()
   }
@@ -35,6 +73,8 @@ class Index extends React.Component {
   render() {
     return (
       <AdminLayoutHoc contentTitle={'View Article'} contentBreadcrumb={["Home", "Newsfeed", "Articles", "View"]}>
+        <Alert type="danger" component={this} attribute="edit_danger"/>
+        <Alert type="success" component={this} attribute="edit_success"/>
         <div className="card">
           <div className="card-body">
             <div className="form-group row">
@@ -67,7 +107,7 @@ class Index extends React.Component {
             </div>
             <div className="row mt-5">
               <div className="col-md-5">
-                <button type="button" className="btn btn-info btn-block">Save</button>
+                <button type="button" className="btn btn-info btn-block" onClick={this.onSubmit}>Save</button>
               </div>
               <div className="col-md-5 offset-md-2">
                 <button type="button" className="btn btn-light btn-block" onClick={() => Router.back()}>Cancel</button>
