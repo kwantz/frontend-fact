@@ -79,12 +79,32 @@ class Index extends React.Component {
 
   onChangeEdit (event) {
     const edit = this.state.edit
+    if (event.target.name === 'name') {
+      if (event.target.value === '' || /^[a-zA-Z]+$/.test(event.target.value.trim()) || /^[a-zA-Z][a-zA-Z0-9 ]+$/.test(event.target.value.trim())) {
+        edit[event.target.name] = event.target.value
+        this.setState({ edit })
+      }
+      return
+    }
+    if (event.target.name === 'met') {
+      let numb = parseFloat(event.target.value)
+      if (event.target.value === '' || (!isNaN(numb))) {
+        edit[event.target.name] = Math.max(numb, 1)
+        this.setState({ edit })
+      }
+      return
+    }
+
     edit[event.target.name] = event.target.value
-    this.setState({edit})
+    this.setState({ edit })
   }
 
   async onSubmitEdit () {
+    event.preventDefault();
+
     const {alert, edit} = this.state
+    edit.name = edit.name.trim()
+    edit.met = Math.max(1, parseFloat(edit.met))
     const body = JSON.stringify(this.state.edit)
     const response = await fetch('http://103.252.100.230/fact/activity/' + edit.id, {method: 'PUT', body})
     const json = await response.json()
@@ -123,9 +143,13 @@ class Index extends React.Component {
     }
   }
 
-  async onSubmitAdd () {
+  async onSubmitAdd (event) {
+    event.preventDefault();
+
     const alert = this.state.alert
-    const add = this.state.add
+    let add = this.state.add
+    add.name = add.name.trim()
+    add.met = Math.max(1, parseFloat(add.met))
     const body = JSON.stringify(this.state.add)
     const response = await fetch('http://103.252.100.230/fact/activity', {method: 'POST', body})
     const json = await response.json()
@@ -146,14 +170,24 @@ class Index extends React.Component {
 
   onChangeAdd (event) {
     const add = this.state.add
-    if (event.target.name === 'name' && /^[a-zA-Z]+$/.test(event.target.value.trim())) {
-      add[event.target.name] = event.target.value
-      this.setState({ add })
+    if (event.target.name === 'name') {
+      if (event.target.value === '' || /^[a-zA-Z]+$/.test(event.target.value.trim()) || /^[a-zA-Z][a-zA-Z0-9 ]+$/.test(event.target.value.trim())) {
+        add[event.target.name] = event.target.value
+        this.setState({ add })
+      }
+      return
     }
-    else {
-      add[event.target.name] = event.target.value
-      this.setState({ add })
+    if (event.target.name === 'met') {
+      let numb = parseFloat(event.target.value)
+      if (event.target.value === '' || (!isNaN(numb))) {
+        add[event.target.name] = Math.max(numb, 1)
+        this.setState({ add })
+      }
+      return
     }
+
+    add[event.target.name] = event.target.value
+    this.setState({ add })
   }
 
   async onRefresh () {
@@ -208,7 +242,7 @@ class Index extends React.Component {
         <div className="card">
           <div className="card-body">
             <form className="form-inline">
-              <SearchInput placeholder="Search by name" onClick={this.queryName} value={this.state.search} onChange={(event) => this.setState({search: event.target.value.trim()})}/>
+              <SearchInput placeholder="Search by name" onClick={this.queryName} value={this.state.search} onChange={(event) => this.setState({search: (event.target.value === '' || /^[a-zA-Z]+$/.test(event.target.value.trim()) || /^[a-zA-Z][a-zA-Z0-9 ]+$/.test(event.target.value.trim())) ? event.target.value : this.state.search})}/>
               <button type="button" className="btn btn-info ml-auto" data-toggle="modal" data-target="#add">
                 <i className="fa fa-plus" /> Add Activity
               </button>
@@ -223,54 +257,56 @@ class Index extends React.Component {
         <Modal id="add" title="Add Activity">
           <Alert type="danger"component={this} attribute="add_danger"/>
           <Alert type="success"component={this} attribute="add_success"/>
-          <div className="modal-body">
-            <div className="form-group">
-              <label>Activity Name</label>
-              <input type="text" name="name" onChange={this.onChangeAdd} className="form-control" placeholder="Enter Activity Name" required/>
+          <form onSubmit={this.onSubmitAdd}>
+            <div className="modal-body">
+              <div className="form-group">
+                <label>Activity Name</label>
+                <input type="text" name="name" value={this.state.add.name} onChange={this.onChangeAdd} className="form-control" placeholder="Enter Activity Name" required/>
+              </div>
+              <div className="form-group">
+                <label>Calorie Burnt (in kcal/kg hour)</label>
+                <input type="number" name="met" value={this.state.add.met} onChange={this.onChangeAdd} min="1" className="form-control" placeholder="Enter amount of calories" required/>
+              </div>
             </div>
-            <div className="form-group">
-              <label>Calorie Burnt (in kcal/kg hour)</label>
-              <input type="number" name="met" onChange={this.onChangeAdd} min="1" className="form-control" placeholder="Enter amount of calories" required/>
+            <div className="modal-footer">
+              <div className="col-md-6">
+                <button type="submit" className="btn btn-info btn-block">Save</button>
+              </div>
+              <div className="col-md-6">
+                <button type="button" className="btn btn-light btn-block" data-dismiss="modal">Cancel</button>
+              </div>
             </div>
-          </div>
-          <div className="modal-footer">
-            <div className="col-md-6">
-              <button type="button" className="btn btn-info btn-block" onClick={this.onSubmitAdd}>Save</button>
-            </div>
-            <div className="col-md-6">
-              <button type="button" className="btn btn-light btn-block" data-dismiss="modal">Cancel</button>
-            </div>
-          </div>
+          </form>
         </Modal>
 
         <Modal id="edit" title="Edit Activity">
           <Alert type="danger"component={this} attribute="edit_danger"/>
           <Alert type="success"component={this} attribute="edit_success"/>
-          <div className="modal-body">
-            <div className="form-group">
-              <label>Activity Name</label>
-              <input type="text" name="name" className="form-control" placeholder="Enter Activity Name" onChange={this.onChangeEdit} value={this.state.edit.name} required/>
+          <form onSubmit={this.onSubmitEdit}>
+            <div className="modal-body">
+              <div className="form-group">
+                <label>Activity Name</label>
+                <input type="text" name="name" value={this.state.edit.name} className="form-control" placeholder="Enter Activity Name" onChange={this.onChangeEdit} required/>
+              </div>
+              <div className="form-group">
+                <label>Calorie Burnt (in kcal/kg hour)</label>
+                <input type="number" name="met" value={this.state.edit.met} className="form-control" placeholder="Enter amount of calories" onChange={this.onChangeEdit} required/>
+              </div>
             </div>
-            <div className="form-group">
-              <label>Calorie Burnt (in kcal/kg hour)</label>
-              <input type="number" name="met" className="form-control" placeholder="Enter amount of calories" onChange={this.onChangeEdit} value={this.state.edit.met} required/>
+            <div className="modal-footer">
+              <div className="col-md-6">
+                <button type="submit" className="btn btn-info btn-block">Save</button>
+              </div>
+              <div className="col-md-6">
+                <button type="button" className="btn btn-light btn-block" data-dismiss="modal">Cancel</button>
+              </div>
             </div>
-          </div>
-          <div className="modal-footer">
-            <div className="col-md-6">
-              <button type="button" className="btn btn-info btn-block" onClick={this.onSubmitEdit}>Save</button>
-            </div>
-            <div className="col-md-6">
-              <button type="button" className="btn btn-light btn-block" data-dismiss="modal">Cancel</button>
-            </div>
-          </div>
+          </form>
         </Modal>
 
         <Modal id="delete" title="Delete Activity">
           <div className="modal-body">
-            <span>
-              Are you sure you want to delete <b>{this.state.delete.name}</b>?
-            </span>
+            <span>Are you sure you want to delete <b>{this.state.delete.name}</b>?</span>
           </div>
           <div className="modal-footer">
             <div className="col-md-6">

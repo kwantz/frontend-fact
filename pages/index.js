@@ -132,7 +132,7 @@ export default class Index extends React.Component {
                   </p>
                   <div class="row">
                     <div class="col-md-12">
-                      <button type="button" class="btn btn-primary btn-block btn-flat" onClick={this.onSubmit}>LOGIN</button>
+                      <button type="button" class="btn btn-info btn-block btn-flat" onClick={this.onSubmit}>LOGIN</button>
                     </div>
                   </div>
                   <p class="mb-0 mt-3 ">

@@ -1,0 +1,43 @@
+email harus email kecil
+
+food detail bisa click dan muncul modal qty
+
+tambah keterangan di category
+
+food bisa banyak category
+
+food setelah add, langsung ke diary
+
+Activity harus di cek kembali
+
+Harus ada splash screen
+
+Sort time yang paling banyak (aktivitas)
+
+Informasi Kcal di setiap calorie
+
+Delete exercise in diary
+
+Harus di scroll di result training
+
+Profile tidak menampilkan data
+
+newsfeed view
+
+over
+
+history terbalik
+
+koma2 tidak perlu ditampilkan
+
+sun, 03 Jun 2019
+
+nilai calorie, fat, protein, carbohydrate...
+
+Select date...
+
+tidak perlu pertahankan koma
+
+black box +
+
+berdasarkan percobaan

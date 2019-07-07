@@ -222,3 +222,29 @@ p.article-content {
   border-radius: 50%;
   text-align: center;
 }
+
+.btn-info, .alert-info, .bg-info, .dashboard-user nav.navbar .nav-link, .dashboard-user .main-sidebar .nav-link, .card-info:not(.card-outline) .card-header {
+  background-color: #22747c !important
+}
+.text-info, .dashboard-user .main-sidebar .nav-link.active {
+  color: #22747c !important
+}
+.profile-gender-2 {
+  display: inline-block;
+  width: 150px;
+  height: 150px;
+  background-image: url('/static/07.jpg');
+  background-size: 600px;
+  background-position-x: 0;
+  background-position-y: 66.7%;
+}
+
+.profile-gender-1 {
+  display: inline-block;
+  width: 150px;
+  height: 150px;
+  background-image: url('/static/07.jpg');
+  background-size: 600px;
+  background-position-x: 66.7%;
+  background-position-y: 0;
+}

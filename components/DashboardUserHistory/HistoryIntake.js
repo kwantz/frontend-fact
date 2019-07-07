@@ -5,6 +5,7 @@ import Modal from '../Modal'
 import Chart from 'chart.js'
 import { Pie, Bar } from 'react-chartjs-2';
 import Link from 'next/link';
+import '../../libraries'
 
 export default class HistoryActivity extends React.Component {
 
@@ -84,26 +85,54 @@ export default class HistoryActivity extends React.Component {
       week: {
         labels: weekLabels.reverse(),
         datasets: [{
+          label: 'Calorie Intake',
           data: this.state.data.week,
-          backgroundColor: '#17a2b8'
+          backgroundColor: '#22747c'
+        }, {
+          label: 'Calorie Burnt',
+          data: [Math.random() + 100, Math.random() + 200, Math.random() + 300, Math.random() + 400, Math.random() + 500, Math.random() + 300, Math.random() + 600],
+          backgroundColor: '#d65640'
         }],
         options: {
-          legend: { display: false },
+          legend: { display: true },
           tooltips: { enabled: false },
-          responsive: true,
-          scales: {
-            barThickness: 0.1,
-            xAxes: [{stacked: true}],
-            yAxes: [{stacked: true}]
+          // responsive: true,
+          // scales: {
+          //   barThickness: 0.1,
+          //   xAxes: [{stacked: true}],
+          //   yAxes: [{stacked: true}]
+          // }
+        }
+      },
+      month_intake: {
+        labels: ['Below', 'Ideal', 'Over'],
+        datasets: [{
+          data: [1, 2, 3],
+          // data: [this.state.data.month.below, this.state.data.month.ideal, this.state.data.month.over],
+          backgroundColor: ['#17a2b8', '#ffc107', '#dc3545']
+        }],
+        options: {
+          legend: {position: 'bottom'},
+          title: {
+            display: true,
+            text: "Calorie Intake"
           }
         }
       },
-      month: {
+      month_burnt: {
         labels: ['Below', 'Ideal', 'Over'],
         datasets: [{
-          data: [this.state.data.month.below, this.state.data.month.ideal, this.state.data.month.over],
+          data: [3, 2, 1],
+          // data: [this.state.data.month.below, this.state.data.month.ideal, this.state.data.month.over],
           backgroundColor: ['#17a2b8', '#ffc107', '#dc3545']
         }],
+        options: {
+          legend: {position: 'bottom'},
+          title: {
+            display: true,
+            text: "Calorie Burnt"
+          }
+        }
       }
     }
 
@@ -114,7 +143,7 @@ export default class HistoryActivity extends React.Component {
             <i className="nav-icon fas fa-chevron-circle-left"/>
           </a>
         </Link>
-        <span className="ml-5 mr-5">Calorie Intake</span>
+        <span className="ml-5 mr-5">Calorie Intake & Burnt</span>
         <Link href="/dashboard/user/history?status=activity">
           <a class="btn btn btn-link text-light">
             <i className="nav-icon fas fa-chevron-circle-right"/>
@@ -128,7 +157,7 @@ export default class HistoryActivity extends React.Component {
         <div className="row pt-5">
           <div className="offset-md-2 col-md-8">
             <div className="form-group row mb-0">
-              <label class="col-form-label mr-3 ml-3">Select range date:</label>
+              <label class="col-form-label mr-3 ml-3">Select date:</label>
               <div class="col-sm-5">
                 <div className="input-group">
                   <div className="input-group-prepend">
@@ -155,11 +184,16 @@ export default class HistoryActivity extends React.Component {
             <div className="card mt-5">
               <div className="card-header">
                 <h3 className="card-title">
-                  <i className="fa fa-tag mr-2"/> MONTH VIEW ({(this.state.date !== '') ? date.dateformat('date') : ''} - {(this.state.date !== '') ? monthDate.dateformat('date') : ''})
+                  <i className="fa fa-tag mr-2"/> MONTH VIEW ({(this.state.date !== '') ? monthDate.dateformat('date') : ''} - {(this.state.date !== '') ? date.dateformat('date') : ''})
                 </h3>
               </div>
-              <div className="card-body">
-                <Pie data={chart.month} options={{legend: {position: 'bottom'}}}/>
+              <div className="card-body row">
+                <div className="col-md-6">
+                  <Pie data={chart.month_intake} options={chart.month_intake.options}/>
+                </div>
+                <div className="col-md-6">
+                  <Pie data={chart.month_burnt} options={chart.month_burnt.options}/>
+                </div>
               </div>
             </div>
           </div>

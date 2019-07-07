@@ -7,9 +7,6 @@ export default class Index extends React.Component {
     return (
       <AdminLayoutHoc contentTitle={'Add Article'} contentBreadcrumb={["Home", "Newsfeed", "Articles", "Add"]}>
         <div className="card">
-          {/* <div className="overlay">
-            <i className="fa fa-sync-alt fa-spin"></i>
-          </div> */}
           <div className="card-body">
             <form>
               <div className="form-group row">

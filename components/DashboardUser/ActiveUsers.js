@@ -149,7 +149,7 @@ class Index extends React.Component {
         <div className="card">
           <div className="card-body">
             <div className="form-inline">
-              <SearchInput placeholder="Search by name" onClick={this.queryName} value={this.state.search} onChange={(event) => this.setState({search: event.target.value})}/>
+              <SearchInput placeholder="Search by name" onClick={this.queryName} value={this.state.search} onChange={(event) => this.setState({search: (event.target.value === '' || /^[a-zA-Z]+$/.test(event.target.value.trim()) || /^[a-zA-Z][a-zA-Z0-9 ]+$/.test(event.target.value.trim())) ? event.target.value : this.state.search})}/>
             </div>
           </div>
         </div>

@@ -53,7 +53,7 @@ export default class HistoryActivity extends React.Component {
 
     const chart = {
       week: {
-        labels: [1,2,3,4,5,6,7],
+        labels: ["01 Jul 2019","02 Jul 2019","03 Jul 2019","04 Jul 2019","05 Jul 2019","06 Jul 2019","07 Jul 2019"],
         datasets: [{
           data: [10, 40, 50, 0, 70, 60, 20, 100],
           backgroundColor: '#17a2b8'
@@ -75,89 +75,6 @@ export default class HistoryActivity extends React.Component {
                 stacked: true
             }]
         }
-        }
-      },
-      month: {
-        labels: ['Below', 'Ideal', 'Over'],
-        datasets: [{
-          data: [30, 50, 80],
-          backgroundColor: ['#17a2b8', '#ffc107', '#dc3545']
-        }],
-      },
-      intake: {
-        datasets: [{
-          data: [525, 1600-525],
-          backgroundColor: ['#ffc107'],
-        }],
-        options: {
-          cutoutPercentage: 90,
-          elements: {
-            calorie: {
-              text: 525,
-              color: '#ffc107'
-            }
-          }
-        }
-      },
-      burnt: {
-        datasets: [{
-          data: [1200, 1600-1200],
-          backgroundColor: ['#dc3545'],
-        }],
-        options: {
-          cutoutPercentage: 90,
-          elements: {
-            calorie: {
-              text: 1200,
-              color: '#dc3545'
-            }
-          }
-        }
-      },
-
-      fat: {
-        datasets: [{
-          data: [60, 40],
-          backgroundColor: ['#dc3545'],
-        }],
-        options: {
-          cutoutPercentage: 75,
-          elements: {
-            nutrient: {
-              text: 60 + '%',
-              color: '#dc3545'
-            }
-          }
-        }
-      },
-      protein: {
-        datasets: [{
-          data: [10, 90],
-          backgroundColor: ['#17a2b8'],
-        }],
-        options: {
-          cutoutPercentage: 75,
-          elements: {
-            nutrient: {
-              text: 10 + '%',
-              color: '#17a2b8'
-            }
-          }
-        }
-      },
-      carbohydrate: {
-        datasets: [{
-          data: [80, 20],
-          backgroundColor: ['#ffc107'],
-        }],
-        options: {
-          cutoutPercentage: 75,
-          elements: {
-            nutrient: {
-              text: 80 + '%',
-              color: '#ffc107'
-            }
-          }
         }
       }
     }
@@ -183,8 +100,8 @@ export default class HistoryActivity extends React.Component {
         <div className="row pt-5">
           <div className="offset-md-2 col-md-8">
             <div className="form-group row mb-0">
-              <label class="col-form-label mr-3 ml-3">Select range date:</label>
-              <div class="col-sm-3">
+              <label class="col-form-label mr-3 ml-3">Select date:</label>
+              <div class="col-sm-5">
                 <div className="input-group">
                   <div className="input-group-prepend">
                     <span className="input-group-text">
@@ -194,21 +111,6 @@ export default class HistoryActivity extends React.Component {
                   <input id="datetimepicker1" data-toggle="datetimepicker" data-target="#datetimepicker1" type="text" className="form-control bl-0 datetimepicker-input" placeholder="_ _ / _ _ / _ _ _ _"/>
                 </div>
               </div>
-
-              <label class="col-form-label">to</label>
-
-              <div class="col-sm-3">
-                <div className="input-group">
-                  <div className="input-group-prepend">
-                    <span className="input-group-text">
-                      <i class="far fa-calendar-alt"/>
-                    </span>
-                  </div>
-                  <input id="datetimepicker2" data-toggle="datetimepicker" data-target="#datetimepicker2" type="text" className="form-control bl-0 datetimepicker-input" placeholder="_ _ / _ _ / _ _ _ _"/>
-                </div>
-              </div>
-
-              <button type="button" className="btn btn-info">SUBMIT</button>
             </div>
 
             <div className="card mt-3">
@@ -237,6 +139,11 @@ export default class HistoryActivity extends React.Component {
                 <div class="col-md-4">Low</div>
                 <div class="col-md-4 text-center">Medium</div>
                 <div class="col-md-4 text-right">High</div>
+
+                <div class="col-md-12 mt-4">
+                  <label class="mb-0">Mostly done activities:</label>
+                  <h4>WALKING</h4>
+                </div>
 
                 <div class="col-md-12 mt-4 row">
                   <label class="col-md-12 mb-0">Day with the most active hours</label>
@@ -274,11 +181,6 @@ export default class HistoryActivity extends React.Component {
                       <span>10 hours</span>
                     </div>
                   </div>
-                </div>
-
-                <div class="col-md-12 mt-4">
-                  <label class="mb-0">Mostly done activities:</label>
-                  <h4>WALKING</h4>
                 </div>
               </div>
             </div>

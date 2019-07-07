@@ -4,6 +4,7 @@ import Chart from 'chart.js'
 import { Doughnut } from 'react-chartjs-2';
 import Link from 'next/link';
 import { withRouter } from 'next/router';
+import '../../libraries'
 
 class Index extends React.Component {
   constructor(props) {
@@ -11,6 +12,7 @@ class Index extends React.Component {
     this.state = {
       data: {
         name: '',
+        gender: '',
         email: '',
         birth_year: '',
         status: '',
@@ -40,10 +42,11 @@ class Index extends React.Component {
       weight: json.results.weight,
       height: json.results.height,
       bmi: json.results.bmi,
-      carbohydrate: json.results.carbohydrate,
-      protein: json.results.protein,
-      fat: json.results.fat,
-      activity_level: json.results.activity_level
+      carbohydrate: parseFloat(json.results.carbohydrate).display(),
+      protein: parseFloat(json.results.protein).display(),
+      fat: parseFloat(json.results.fat).display(),
+      activity_level: json.results.activity_level,
+      gender: json.results.gender
     }
 
     this.setState({ data })
@@ -80,7 +83,9 @@ class Index extends React.Component {
             <div className="row">
               <div className="col-md-3">
                 <div className="content-center">
-                  <p className="text-center"><i className="fa fa-user-circle" style={{fontSize: "150px"}}/></p>
+                  <p className="text-center">
+                    <span class={`profile-gender-${this.state.data.gender}`}/>
+                  </p>
                   <h5 className="text-center mb-0">{this.state.data.name}</h5>
                 </div>
               </div>

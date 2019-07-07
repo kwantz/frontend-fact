@@ -370,7 +370,7 @@ export default class Index extends React.Component {
               </div>
 
               <div class="offset-md-6 col-md-6">
-                <button type="button" class="btn btn-info" onClick={this.onAddSubmit}>SAVE</button>
+                <button type="button" class="btn btn-info btn-block" onClick={this.onAddSubmit}>SAVE</button>
               </div>
             </div>
           </Modal>

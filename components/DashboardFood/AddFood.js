@@ -28,15 +28,17 @@ export default class Index extends React.Component {
     this.onRefresh = this.onRefresh.bind(this)
   }
 
-  async onSubmit () {
+  async onSubmit (event) {
+    event.preventDefault()
+
     const alert = this.state.alert
     const body = JSON.stringify(this.state.data)
     const headers = {"Authorization": 'Bearer ' + window.localStorage.getItem("token")}
     const response = await fetch('http://103.252.100.230/fact/food', {method: 'POST', body, headers})
     const json = await response.json()
 
-    if (typeof json.message === 'undefined' || json.message !== 'Success') {
-      alert.add_danger = "500 — Internal Server Error"
+    if (json.message !== 'Success') {
+      alert.add_danger = json.message
       await this.setState({alert})
     }
     else {
@@ -56,6 +58,22 @@ export default class Index extends React.Component {
 
   onChange (event) {
     const data = this.state.data
+    if (event.target.name === 'name') {
+      if (event.target.value === '' || /^[A-Z]+$/.test(event.target.value.trim()) || /^[A-Z][a-zA-Z0-9 ]+$/.test(event.target.value.trim())) {
+        data[event.target.name] = event.target.value
+        this.setState({ data })
+      }
+      return
+    }
+    if (['calorie', 'fat', 'protein', 'carbohydrate'].includes(event.target.name)) {
+      let numb = parseFloat(event.target.value)
+      if (event.target.value === '' || (!isNaN(numb))) {
+        data[event.target.name] = Math.max(numb, 0)
+        this.setState({ data })
+      }
+      return
+    }
+
     data[event.target.name] = event.target.value
     this.setState({ data })
   }
@@ -85,18 +103,18 @@ export default class Index extends React.Component {
       <AdminLayoutHoc contentTitle={'Add Food'} contentBreadcrumb={["Home", "Food", "Food Lists", "Add"]}>
         <Alert type="danger" component={this} attribute="add_danger"/>
         <Alert type="success" component={this} attribute="add_success"/>
-        <div className="card">
+        <form className="card" onSubmit={this.onSubmit}>
           <div className="card-body">
             <div className="form-group row">
               <label className="col-sm-3 col-form-label">Food Name</label>
               <div className="col-sm-9">
-                <input name="name" value={this.state.data.name} type="text" className="form-control" placeholder="Enter Food Name" onChange={this.onChange}/>
+                <input name="name" value={this.state.data.name} type="text" className="form-control" placeholder="Enter Food Name" onChange={this.onChange} required/>
               </div>
             </div>
             <div className="form-group row">
               <label className="col-sm-3 col-form-label">Category</label>
               <div className="col-sm-9">
-                <select name="category" value={this.state.data.category} className="form-control" onChange={this.onChange}>
+                <select name="category" value={this.state.data.category} className="form-control" onChange={this.onChange} required>
                   {options}
                 </select>
               </div>
@@ -104,37 +122,37 @@ export default class Index extends React.Component {
             <div className="form-group row">
               <label className="col-sm-3 col-form-label">Total Calories (in kcal)</label>
               <div className="col-sm-9">
-                <input name="calorie" value={this.state.data.calorie} type="number" className="form-control" placeholder="Enter Amount of Calories" onChange={this.onChange}/>
+                <input name="calorie" value={this.state.data.calorie} type="number" className="form-control" placeholder="Enter Amount of Calories" onChange={this.onChange} required/>
               </div>
             </div>
             <div className="form-group row">
               <label className="col-sm-3 col-form-label">Total Carbohydrate (in g)</label>
               <div className="col-sm-9">
-                <input name="carbohydrate" value={this.state.data.carbohydrate} type="number" className="form-control" placeholder="Enter Amount of Carbohydrate" onChange={this.onChange}/>
+                <input name="carbohydrate" value={this.state.data.carbohydrate} type="number" className="form-control" placeholder="Enter Amount of Carbohydrate" onChange={this.onChange} required/>
               </div>
             </div>
             <div className="form-group row">
               <label className="col-sm-3 col-form-label">Total Protein (in g)</label>
               <div className="col-sm-9">
-                <input name="protein" value={this.state.data.protein} type="number" className="form-control" placeholder="Enter Amount of Protein" onChange={this.onChange}/>
+                <input name="protein" value={this.state.data.protein} type="number" className="form-control" placeholder="Enter Amount of Protein" onChange={this.onChange} required/>
               </div>
             </div>
             <div className="form-group row">
               <label className="col-sm-3 col-form-label">Total Fat (in g)</label>
               <div className="col-sm-9">
-                <input name="fat" value={this.state.data.fat} type="number" className="form-control" placeholder="Enter Amount of Fat" onChange={this.onChange}/>
+                <input name="fat" value={this.state.data.fat} type="number" className="form-control" placeholder="Enter Amount of Fat" onChange={this.onChange} required/>
               </div>
             </div>
             <div className="row mt-5">
               <div className="col-md-5">
-                <button type="button" className="btn btn-info btn-block" onClick={this.onSubmit}>Save</button>
+                <button type="submit" className="btn btn-info btn-block">Save</button>
               </div>
               <div className="col-md-5 offset-md-2">
                 <button type="button" className="btn btn-light btn-block" onClick={() => Router.back()}>Cancel</button>
               </div>
             </div>
           </div>
-        </div>
+        </form>
       </AdminLayoutHoc>
     )
   }

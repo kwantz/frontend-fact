@@ -9,6 +9,7 @@ export default class Index extends React.Component {
     this.state = {
       data: [],
       total: 0,
+      show: '',
       add: {
         desc: '',
         author: ''
@@ -66,16 +67,30 @@ export default class Index extends React.Component {
     table.pages = json.results.pages
     table.loading = false
 
-    this.setState({ data, table, total })
+    let a = new Date(json.results.last_date)
+    let b = new Date()
+
+    const show = (a.dateformat('date') === b.dateformat('date')) ? 'hide' : ''
+    this.setState({ data, table, total, show })
   }
 
   onChangeAdd (event) {
     const add = this.state.add
+    if (event.target.name === 'desc') {
+      if (event.target.value === '' || /^[a-zA-Z0-9 ]+$/.test(event.target.value.trim())) {
+        add[event.target.name] = event.target.value
+        this.setState({add})
+      }
+      return
+    }
+
     add[event.target.name] = event.target.value
     this.setState({add})
   }
 
-  async onSubmitAdd () {
+  async onSubmitAdd (event) {
+    event.preventDefault()
+
     let {add, alert} = this.state
     const body = JSON.stringify(add)
 
@@ -96,6 +111,7 @@ export default class Index extends React.Component {
 
       await this.setState({add, alert})
       this.onRefresh()
+      window.$('#add').modal('hide');
     }
   }
 
@@ -109,11 +125,21 @@ export default class Index extends React.Component {
 
   onChangeEdit (event) {
     const edit = this.state.edit
+    if (event.target.name === 'desc') {
+      if (event.target.value === '' || /^[a-zA-Z0-9 ]+$/.test(event.target.value.trim())) {
+        edit[event.target.name] = event.target.value
+        this.setState({edit})
+      }
+      return
+    }
+
     edit[event.target.name] = event.target.value
     this.setState({edit})
   }
 
-  async onSubmitEdit () {
+  async onSubmitEdit (event) {
+    event.preventDefault()
+
     let {edit, alert} = this.state
     const body = JSON.stringify(edit)
 
@@ -189,7 +215,9 @@ export default class Index extends React.Component {
       <AdminLayoutHoc contentTitle={`Quotes (${this.state.total})`} contentBreadcrumb={["Home", "Newsfeed", "Quotes"]}>
         <Alert type="danger"component={this} attribute="delete_danger"/>
         <Alert type="success"component={this} attribute="delete_success"/>
-        <div className="card">
+        <Alert type="danger" component={this} attribute="add_danger"/>
+        <Alert type="success" component={this} attribute="add_success"/>
+        <div className={`card ${this.state.show}`}>
           <div className="card-body">
             <div className="form-inline">
               <button type="button" className="btn btn-info ml-auto" data-toggle="modal" data-target="#add">
@@ -204,49 +232,51 @@ export default class Index extends React.Component {
         </Table>
 
         <Modal id="add" title="Add Quote">
-          <Alert type="danger" component={this} attribute="add_danger"/>
-          <Alert type="success" component={this} attribute="add_success"/>
-          <div className="modal-body">
-            <div className="form-group">
-              <label>Quote</label>
-              <textarea name="desc" value={this.state.add.desc} onChange={this.onChangeAdd} rows="3" className="form-control" placeholder="Enter quote here"/>
+          <form onSubmit={this.onSubmitAdd}>
+            <div className="modal-body">
+              <div className="form-group">
+                <label>Quote</label>
+                <textarea name="desc" value={this.state.add.desc} onChange={this.onChangeAdd} rows="3" className="form-control" placeholder="Enter quote here" required/>
+              </div>
+              <div className="form-group">
+                <label>Author</label>
+                <input name="author" value={this.state.add.author} onChange={this.onChangeAdd} type="text" className="form-control" placeholder="Enter author's name"/>
+              </div>
             </div>
-            <div className="form-group">
-              <label>Author</label>
-              <input name="author" value={this.state.add.author} onChange={this.onChangeAdd} type="text" className="form-control" placeholder="Enter author's name"/>
+            <div className="modal-footer">
+              <div className="col-md-6">
+                <button type="submit" className="btn btn-info btn-block">Save</button>
+              </div>
+              <div className="col-md-6">
+                <button type="button" className="btn btn-light btn-block" data-dismiss="modal">Cancel</button>
+              </div>
             </div>
-          </div>
-          <div className="modal-footer">
-            <div className="col-md-6">
-              <button onClick={this.onSubmitAdd} type="button" className="btn btn-info btn-block" >Save</button>
-            </div>
-            <div className="col-md-6">
-              <button type="button" className="btn btn-light btn-block" data-dismiss="modal">Cancel</button>
-            </div>
-          </div>
+          </form>
         </Modal>
 
         <Modal id="edit" title="Edit Quote">
           <Alert type="danger" component={this} attribute="edit_danger"/>
           <Alert type="success" component={this} attribute="edit_success"/>
-          <div className="modal-body">
-            <div className="form-group">
-              <label>Quote</label>
-              <textarea name="desc" value={this.state.edit.desc} onChange={this.onChangeEdit} rows="3" className="form-control" placeholder="Enter quote here"/>
+          <form onSubmit={this.onSubmitEdit}>
+            <div className="modal-body">
+              <div className="form-group">
+                <label>Quote</label>
+                <textarea name="desc" value={this.state.edit.desc} onChange={this.onChangeEdit} rows="3" className="form-control" placeholder="Enter quote here"/>
+              </div>
+              <div className="form-group">
+                <label>Author</label>
+                <input name="author" value={this.state.edit.author} onChange={this.onChangeEdit} type="text" className="form-control" placeholder="Enter author's name"/>
+              </div>
             </div>
-            <div className="form-group">
-              <label>Author</label>
-              <input name="author" value={this.state.edit.author} onChange={this.onChangeEdit} type="text" className="form-control" placeholder="Enter author's name"/>
+            <div className="modal-footer">
+              <div className="col-md-6">
+                <button type="submit" className="btn btn-info btn-block" >Save</button>
+              </div>
+              <div className="col-md-6">
+                <button type="button" className="btn btn-light btn-block" data-dismiss="modal">Cancel</button>
+              </div>
             </div>
-          </div>
-          <div className="modal-footer">
-            <div className="col-md-6">
-              <button onClick={this.onSubmitEdit} type="button" className="btn btn-info btn-block" >Save</button>
-            </div>
-            <div className="col-md-6">
-              <button type="button" className="btn btn-light btn-block" data-dismiss="modal">Cancel</button>
-            </div>
-          </div>
+          </form>
         </Modal>
 
         <Modal id="delete" title="Delete Quote">

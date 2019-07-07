@@ -23,8 +23,16 @@ class Index extends React.Component {
     this.onChangeFile = this.onChangeFile.bind(this)
   }
 
-  async onSubmit () {
+  async onSubmit (event) {
+    event.preventDefault()
+
     let {alert} = this.state
+
+    if (this.state.data.content.length < 100) {
+      alert.edit_danger = "Content should be 100 words or more"
+      return await this.setState({alert})
+    }
+
     const body = JSON.stringify(this.state.data)
     const response = await fetch(`http://103.252.100.230/fact/article/${this.props.router.query.id}`, {method: 'PUT', body})
     const json = await response.json()
@@ -48,6 +56,27 @@ class Index extends React.Component {
     data.image = json.results.image,
     data.author = json.results.author,
     data.content = json.results.content
+    this.setState({ data })
+  }
+
+  onChange (event) {
+    const data = this.state.data
+    if (event.target.name === 'title') {
+      if (event.target.value === '' || /^[a-zA-Z0-9 ]+$/.test(event.target.value.trim())) {
+        data[event.target.name] = event.target.value
+        this.setState({ data })
+      }
+      return
+    }
+    if (event.target.name === 'author') {
+      if (event.target.value === '' || /^[A-Z]+$/.test(event.target.value.trim()) || /^[A-Z][a-zA-Z0-9 ]+$/.test(event.target.value.trim())) {
+        data[event.target.name] = event.target.value
+        this.setState({ data })
+      }
+      return
+    }
+
+    data[event.target.name] = event.target.value
     this.setState({ data })
   }
 
@@ -75,25 +104,25 @@ class Index extends React.Component {
       <AdminLayoutHoc contentTitle={'View Article'} contentBreadcrumb={["Home", "Newsfeed", "Articles", "View"]}>
         <Alert type="danger" component={this} attribute="edit_danger"/>
         <Alert type="success" component={this} attribute="edit_success"/>
-        <div className="card">
+        <form className="card" onSubmit={this.onSubmit}>
           <div className="card-body">
             <div className="form-group row">
               <label className="col-sm-3 col-form-label">Title</label>
               <div className="col-sm-9">
-                <input type="text" className="form-control" value={this.state.data.title}/>
+                <input type="text" className="form-control" value={this.state.data.title} onChange={this.onChange} name="title" required/>
               </div>
             </div>
             <div className="form-group row">
               <label className="col-sm-3 col-form-label">Author</label>
               <div className="col-sm-9">
-                <input type="text" className="form-control" value={this.state.data.author}/>
+                <input type="text" className="form-control" value={this.state.data.author} onChange={this.onChange} name="author" required/>
               </div>
             </div>
             <div className="form-group row">
               <label className="col-sm-3 col-form-label">Image</label>
               <div className="col-sm-9">
                 <div className="custom-file">
-                  <input type="file" onChange={this.onChangeFile} className="custom-file-input" id="customFile" accept="image/*"/>
+                  <input type="file" onChange={this.onChangeFile} className="custom-file-input" id="customFile" accept="image/*" required/>
                   <label className="custom-file-label" for="customFile">{(this.state.data.image === '') ? 'Choose file' : this.state.data.image}</label>
                 </div>
                 <img className="mt-3" src={`http://103.252.100.230/fact/image/${this.state.data.image}`}/>
@@ -102,19 +131,19 @@ class Index extends React.Component {
             <div className="form-group row">
               <label className="col-sm-3 col-form-label">Content</label>
               <div className="col-sm-9">
-                <textarea className="form-control" id="exampleFormControlTextarea1" rows="5" value={this.state.data.content}/>
+                <textarea className="form-control" rows="5" value={this.state.data.content} onChange={this.onChange} name="content" required/>
               </div>
             </div>
             <div className="row mt-5">
               <div className="col-md-5">
-                <button type="button" className="btn btn-info btn-block" onClick={this.onSubmit}>Save</button>
+                <button type="submit" className="btn btn-info btn-block">Save</button>
               </div>
               <div className="col-md-5 offset-md-2">
                 <button type="button" className="btn btn-light btn-block" onClick={() => Router.back()}>Cancel</button>
               </div>
             </div>
           </div>
-        </div>
+        </form>
       </AdminLayoutHoc>
     )
   }

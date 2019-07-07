@@ -16,7 +16,7 @@ String.prototype.dateformat = function() {
   return ''
 }
 
-Number.prototype.displayDecimal = function() {
+Number.prototype.display = function() {
   return Math.round(this.valueOf() * 100) / 100
 }
 

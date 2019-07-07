@@ -7,7 +7,7 @@ const AdminHeader = (props) => (
         <a className="nav-link" data-widget="pushmenu" href="#"><i className="fa fa-bars"/></a>
       </li>
       <li className="nav-item d-none d-sm-inline-block">
-        <Link href="/"><a className="nav-link">Home</a></Link>
+        <Link href="/dashboard/admin"><a className="nav-link">Home</a></Link>
       </li>
     </ul>
 
@@ -21,9 +21,11 @@ const AdminHeader = (props) => (
             <i className="fa fa-cog mr-2"/> Profile
           </a>
           <div className="dropdown-divider"/>
-          <a href="#" className="dropdown-item text-danger logout">
-            <i className="fa fa-sign-out mr-2"/> Logout
-          </a>
+          <Link href="/">
+            <a className="dropdown-item text-danger logout">
+              <i className="fa fa-sign-out mr-2"/> Logout
+            </a>
+          </Link>
         </div>
       </li>
     </ul>
