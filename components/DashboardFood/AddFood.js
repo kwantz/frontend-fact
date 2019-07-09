@@ -73,6 +73,12 @@ export default class Index extends React.Component {
       }
       return
     }
+    if (event.target.name === 'category') {
+      let result = event.target.selectedOptions.map(option => option.label)
+      data[event.target.name] = result
+      this.setState({ data })
+      return
+    }
 
     data[event.target.name] = event.target.value
     this.setState({ data })
@@ -114,7 +120,7 @@ export default class Index extends React.Component {
             <div className="form-group row">
               <label className="col-sm-3 col-form-label">Category</label>
               <div className="col-sm-9">
-                <select name="category" value={this.state.data.category} className="form-control" onChange={this.onChange} required>
+                <select name="category" className="form-control" onChange={this.onChange} required multiple>
                   {options}
                 </select>
               </div>

@@ -74,7 +74,7 @@ export default class Index extends React.Component {
     const chartdata = {
       labels: ['Underweight', 'Normal', 'Overweight'],
       datasets: [{
-        data: [1, normal, overweight],
+        data: [underweight, normal, overweight],
         backgroundColor: ['#ffc107', '#17a2b8', '#dc3545'],
       }]
     }
@@ -83,7 +83,7 @@ export default class Index extends React.Component {
     const algochartdata = {
       labels: ['Correct', 'Incorrect'],
       datasets: [{
-        data: [90, 10],
+        data: [incorrect, correct],
         backgroundColor: ['#28a745', '#dc3545'],
       }]
     }
@@ -108,7 +108,6 @@ export default class Index extends React.Component {
       <AdminLayoutHoc contentTitle={'Dashboards'} contentBreadcrumb={["Home", "Dashboard"]}>
         <div className="row">
           <InfoBox size="col-md-3" color="bg-info" icon="fa-user-friends" text="Total Users" number={this.state.data.total_users}/>
-          <InfoBox size="col-md-3" color="bg-danger" icon="fa-user-plus" text="New Users" number={this.state.data.new_users.length}/>
           <InfoBox size="col-md-3" color="bg-success" icon="fa-user-clock" text="Online Users" number={this.state.data.online_users}/>
         </div>
 
@@ -136,20 +135,9 @@ export default class Index extends React.Component {
         </div>
 
         <div className="row">
-          <Card size="col-md-8" title="ALGORITHM ACCURACY TO TRACK">
+          <Card size="col-md-8" title="TRACKING ACCURACY">
             <div className="chart">
               <Pie data={algochartdata} options={{legend: {position: 'right'}}}/>
-            </div>
-          </Card>
-
-          <Card size="col-md-4" title="NEW USERS">
-            <div className="row">
-              {new_user}
-              <div className="col-md-12 text-right">
-                <Link href="/dashboard/admin/see-new">
-                  <a>See all</a>
-                </Link>
-              </div>
             </div>
           </Card>
         </div>

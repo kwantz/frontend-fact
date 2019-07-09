@@ -11,6 +11,7 @@ class Index extends React.Component {
     super(props)
     this.state = {
       data: [],
+      status: '',
       block: {
         id: 0,
         name: '',
@@ -25,6 +26,7 @@ class Index extends React.Component {
           {title: "#", size: "75px"},
           {title: "Profile", size: "150px"},
           {title: "Name", size: "auto"},
+          {title: "Status", size: "auto"},
           {title: "Action", size: "200px"}
         ]
       },
@@ -39,6 +41,12 @@ class Index extends React.Component {
     this.queryName = this.queryName.bind(this)
     this.onRefresh = this.onRefresh.bind(this)
     this.submitBlock = this.submitBlock.bind(this)
+    this.filterUser = this.filterUser.bind(this)
+  }
+
+  async filterUser (event) {
+    await this.setState({ status: event.target.value })
+    await this.onRefresh()
   }
 
   onBlock (user) {
@@ -76,22 +84,16 @@ class Index extends React.Component {
     if (typeof page === "undefined") page = 1
     if (typeof name === "undefined") name = ""
 
-    try {
-      const response = await fetch(`http://103.252.100.230/fact/user?page=${page}&name=${name}`)
-      const json = await response.json()
-      // console.log(response.json())
+    const response = await fetch(`http://103.252.100.230/fact/user?page=${page}&name=${name}&status=${this.state.status}`)
+    const json = await response.json()
+    // console.log(response.json())
 
-      const data = json.results.users
-      const total = json.results.total
-      table.pages = json.results.pages
-      table.loading = false
+    const data = json.results.users
+    const total = json.results.total
+    table.pages = json.results.pages
+    table.loading = false
 
-      this.setState({ data, table, total })
-    }
-    catch (e) {
-      console.log(e)
-    }
-
+    this.setState({ data, table, total })
   }
 
   async submitBlock () {
@@ -129,14 +131,14 @@ class Index extends React.Component {
         <tr key={user.id}>
           <td>{i + 1}</td>
           <td>
-            <i className="fa fa-user-circle" style={{fontSize: "50px"}}/>
+            <span class={`profile-gender-${user.gender}-half`}/>
           </td>
           <td>{user.name}</td>
+          <td>{user.status}</td>
           <td>
             <Link href={`/dashboard/admin/users/active?status=view&id=${user.id}`}>
               <a className="btn btn-link">View</a>
             </Link>
-            <button className="btn btn-link text-danger ml-3" data-toggle="modal" data-target="#block" onClick={() =>  this.onBlock(user)}>Delete</button>
           </td>
         </tr>
       )
@@ -147,9 +149,22 @@ class Index extends React.Component {
         <Alert type="danger" component={this} attribute="block_danger"/>
         <Alert type="success" component={this} attribute="block_success"/>
         <div className="card">
-          <div className="card-body">
-            <div className="form-inline">
-              <SearchInput placeholder="Search by name" onClick={this.queryName} value={this.state.search} onChange={(event) => this.setState({search: (event.target.value === '' || /^[a-zA-Z]+$/.test(event.target.value.trim()) || /^[a-zA-Z][a-zA-Z0-9 ]+$/.test(event.target.value.trim())) ? event.target.value : this.state.search})}/>
+          <div className="card-body row">
+            <div className="col-md-3">
+              <select class="form-control" name="status" onChange={this.filterUser}>
+                <option value="">All Status</option>
+                <option value="Underweight">Underweight</option>
+                <option value="Normal">Normal</option>
+                <option value="Overweight">Overweight</option>
+                <option value="Class I Obesity">Class I Obesity</option>
+                <option value="Class II Obesity">Class II Obesity</option>
+                <option value="Class III Obesity">Class III Obesity</option>
+              </select>
+            </div>
+            <div className="col-md-6">
+              <div className="form-inline">
+                <SearchInput placeholder="Search by name" onClick={this.queryName} value={this.state.search} onChange={(event) => this.setState({search: (event.target.value === '' || /^[a-zA-Z]+$/.test(event.target.value.trim()) || /^[a-zA-Z][a-zA-Z0-9 ]+$/.test(event.target.value.trim())) ? event.target.value : this.state.search})}/>
+              </div>
             </div>
           </div>
         </div>
@@ -157,34 +172,6 @@ class Index extends React.Component {
         <Table table={this.state.table}>
           {tbody}
         </Table>
-
-        <Modal id="block" title="Block User">
-          <div className="modal-body">
-            <p>Are you sure you want to block <b>{this.state.block.name}</b>?</p>
-          </div>
-          <div className="modal-footer">
-            <div className="col-md-6">
-              <button type="button" className="btn btn-light btn-block" data-dismiss="modal">No</button>
-            </div>
-            <div className="col-md-6">
-              <button type="button" className="btn btn-danger btn-block" data-dismiss="modal" data-toggle="modal" data-target="#confirmation">Yes</button>
-            </div>
-          </div>
-        </Modal>
-
-        <Modal id="confirmation" title="Reason for blocking">
-          <div className="modal-body">
-            <textarea name="reason_block" value={this.state.block.reason_block} onChange={this.onChange} className="form-control" rows="3" />
-          </div>
-          <div className="modal-footer">
-            <div className="col-md-6">
-              <button type="button" className="btn btn-danger btn-block" data-dismiss="modal" onClick={this.submitBlock}>Save</button>
-            </div>
-            <div className="col-md-6">
-              <button type="button" className="btn btn-light btn-block" data-dismiss="modal">No</button>
-            </div>
-          </div>
-        </Modal>
       </AdminLayoutHoc>
     )
   }

@@ -66,26 +66,28 @@ class Index extends React.Component {
       <AdminLayoutHoc contentTitle={'Edit User'} contentBreadcrumb={["Home", "Users", "Active Users", "Edit"]}>
         <Alert type="danger" component={this} attribute="edit_danger"/>
         <Alert type="success" component={this} attribute="edit_success"/>
-        <div className="card">
-          <div className="card-body">
-            <div className="form-group">
-              <label>Email address</label>
-              <input name="email" value={this.state.data.email} onChange={this.onChange} type="email" className="form-control" placeholder="Enter email" />
-            </div>
-            <div className="form-group">
-              <label>New Password</label>
-              <input name="password" value={this.state.data.password} onChange={this.onChange} type="password" className="form-control" placeholder="Enter new password" />
-            </div>
-            <div className="form-group">
-              <label>Confirm New Password</label>
-              <input name="re_password" value={this.state.data.re_password} onChange={this.onChange} type="password" className="form-control" placeholder="Confirm new password" />
-            </div>
-            <div className="row mt-5">
-              <div className="col-md-5">
-                <button type="button" className="btn btn-info btn-block" onClick={this.onSubmit}>Save</button>
+        <div className="col-md-8 offset-md-2">
+          <div className="card">
+            <div className="card-body">
+              <div className="form-group">
+                <label>Email address</label>
+                <input name="email" value={this.state.data.email} onChange={this.onChange} type="email" className="form-control" placeholder="Enter email" />
               </div>
-              <div className="col-md-5 offset-md-2">
-                <button type="button" className="btn btn-light btn-block"onClick={() => Router.back()}>Cancel</button>
+              <div className="form-group">
+                <label>New Password</label>
+                <input name="password" value={this.state.data.password} onChange={this.onChange} type="password" className="form-control" placeholder="Enter new password" />
+              </div>
+              <div className="form-group">
+                <label>Confirm New Password</label>
+                <input name="re_password" value={this.state.data.re_password} onChange={this.onChange} type="password" className="form-control" placeholder="Confirm new password" />
+              </div>
+              <div className="row mt-5">
+                <div className="col-md-5">
+                  <button type="button" className="btn btn-info btn-block" onClick={this.onSubmit}>Save</button>
+                </div>
+                <div className="col-md-5 offset-md-2">
+                  <button type="button" className="btn btn-light btn-block"onClick={() => Router.back()}>Cancel</button>
+                </div>
               </div>
             </div>
           </div>

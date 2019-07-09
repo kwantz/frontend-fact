@@ -4,19 +4,9 @@ export default [
     name: 'Dashboard',
     icon: 'fa fa-tachometer-alt'
   }, {
+    path: '/dashboard/admin/users/active',
     name: 'Users',
-    icon: 'fa fa-users',
-    tree: [
-      {
-        path: '/dashboard/admin/users/active',
-        name: 'Active Users',
-        icon: 'far fa-circle'
-      }, {
-        path: '/dashboard/admin/users/blocked',
-        name: 'Blocked Users',
-        icon: 'far fa-circle'
-      }
-    ]
+    icon: 'fa fa-users'
   }, {
     name: 'Food',
     icon: 'fas fa-utensils',

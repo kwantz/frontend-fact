@@ -65,6 +65,7 @@ body, .modal {
   padding-right: 0rem;
   padding-bottom: 0.375rem;
   padding-left: 0.75rem;
+  border-right: 0;
 }
 
 .input-group > .input-group-prepend > .input-group-text.right {
@@ -229,7 +230,7 @@ p.article-content {
 .text-info, .dashboard-user .main-sidebar .nav-link.active {
   color: #22747c !important
 }
-.profile-gender-2 {
+.profile-gender-1 {
   display: inline-block;
   width: 150px;
   height: 150px;
@@ -239,12 +240,31 @@ p.article-content {
   background-position-y: 66.7%;
 }
 
-.profile-gender-1 {
+.profile-gender-2 {
   display: inline-block;
   width: 150px;
   height: 150px;
   background-image: url('/static/07.jpg');
   background-size: 600px;
+  background-position-x: 66.7%;
+  background-position-y: 0;
+}
+.profile-gender-1-half {
+  display: inline-block;
+  width: 75px;
+  height: 75px;
+  background-image: url('/static/07.jpg');
+  background-size: 300px;
+  background-position-x: 0;
+  background-position-y: 66.7%;
+}
+
+.profile-gender-2-half {
+  display: inline-block;
+  width: 75px;
+  height: 75px;
+  background-image: url('/static/07.jpg');
+  background-size: 300px;
   background-position-x: 66.7%;
   background-position-y: 0;
 }

@@ -14,6 +14,10 @@ class Index extends React.Component {
         email: "",
         activity: "",
         category: "",
+        gender: {
+          id: 0,
+          name: ''
+        },
         old: 0,
         weight: 0,
         height: 0,
@@ -38,6 +42,7 @@ class Index extends React.Component {
       email: json.results.email,
       activity: json.results.activity,
       category: json.results.category,
+      gender: json.results.gender,
       old: json.results.old,
       weight: json.results.weight,
       height: json.results.height,
@@ -107,13 +112,13 @@ class Index extends React.Component {
     const chart = {
       fat: {
         datasets: [{
-          data: [100, 500 - 100],
+          data: [this.state.data.fat, this.state.data.max_fat - this.state.data.fat],
           backgroundColor: ['#dc3545'],
         }],
         options: {
           elements: {
             center: {
-              text: 100 + 'g',
+              text: this.state.data.fat + 'g',
               color: '#dc3545'
             }
           }
@@ -121,13 +126,13 @@ class Index extends React.Component {
       },
       protein: {
         datasets: [{
-          data: [200, 500 - 200],
+          data: [this.state.data.protein, this.state.data.max_protein - this.state.data.protein],
           backgroundColor: ['#17a2b8'],
         }],
         options: {
           elements: {
             center: {
-              text: 200 + 'g',
+              text: this.state.data.protein + 'g',
               color: '#17a2b8'
             }
           }
@@ -135,13 +140,13 @@ class Index extends React.Component {
       },
       carbohydrate: {
         datasets: [{
-          data: [300, 500 - 300],
+          data: [this.state.data.carbohydrate, this.state.data.max_carbohydrate - this.state.data.carbohydrate],
           backgroundColor: ['#ffc107'],
         }],
         options: {
           elements: {
             center: {
-              text: 300 + 'g',
+              text: this.state.data.carbohydrate + 'g',
               color: '#ffc107'
             }
           }
@@ -156,9 +161,11 @@ class Index extends React.Component {
             <div className="row">
               <div className="col-md-3">
                 <div className="content-center">
-                  <p className="text-center"><i className="fa fa-user-circle" style={{fontSize: "50px"}}/></p>
+                  <p className="text-center">
+                    <span class={`profile-gender-${this.state.data.gender.id}-half`}/>
+                  </p>
                   <h5 className="text-center mb-0">{this.state.data.name}</h5>
-                  <p className="text-center">{this.state.data.old} y.o.</p>
+                  <p className="text-center">{this.state.data.old} y.o. ({this.state.data.gender.name})</p>
                 </div>
               </div>
 
