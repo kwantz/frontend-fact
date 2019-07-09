@@ -2,7 +2,11 @@ import AdminLayoutHoc from '../../../../components/Layout/AdminLayoutHoc';
 import Modal from '../../../../components/Modal';
 import Table from '../../../../components/Table';
 import Alert from '../../../../components/Alert';
+<<<<<<< HEAD
 import '../../../../libraries'
+=======
+import '../../../../libraries';
+>>>>>>> bda888d141c8af2148859fc31e405a6444d48005
 
 export default class Index extends React.Component {
   constructor (props) {
@@ -207,7 +211,7 @@ export default class Index extends React.Component {
         <tr key={quote.id}>
           <td>{i + 1}</td>
           <td>{quote.desc}</td>
-          <td>{quote.author}</td>
+          <td>{quote.author || '-'}</td>
           <td>
             <button className="btn btn-link" data-toggle="modal" data-target="#edit" onClick={() => this.editQuote(quote)}>Edit</button>
             <button className="btn btn-link text-danger ml-3" data-toggle="modal" data-target="#delete" onClick={() => this.deleteQuote(quote)}>Delete</button>

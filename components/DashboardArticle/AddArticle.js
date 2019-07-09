@@ -34,7 +34,7 @@ export default class Index extends React.Component {
       alert.add_danger = "Content should be 100 words or more"
       return await this.setState({alert})
     }
-
+    this.state.data.content.trim()
     const body = JSON.stringify(this.state.data)
     const headers = {"Authorization": 'Bearer ' + window.localStorage.getItem("token")}
     const response = await fetch('http://103.252.100.230/fact/article', {method: 'POST', body, headers})
@@ -102,7 +102,7 @@ export default class Index extends React.Component {
       <AdminLayoutHoc contentTitle={'Add Article'} contentBreadcrumb={["Home", "Newsfeed", "Articles", "Add"]}>
         <Alert type="danger" component={this} attribute="add_danger"/>
         <Alert type="success" component={this} attribute="add_success"/>
-        <form className="card" onSubmit={this.onSubmit}>
+        <form className="card col-md-8 offset-md-2" onSubmit={this.onSubmit}>
           <div className="card-body">
             <div className="form-group row">
               <label className="col-sm-3 col-form-label">Title</label>

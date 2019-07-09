@@ -29,10 +29,14 @@ class Index extends React.Component {
     json = await response.json()
 
     const data = json.results
-    for (let i = 0, l = categories.length; i < l; i++)
-      if (parseInt(categories[i].id) === parseInt(data.category))
-        data.category = categories[i].name
 
+    let contain = ""
+    for (let i = 0, l = data.category.length; i < l; i++) {
+      if (i > 0) contain += ", "
+      contain += data.category[i].name
+    }
+
+    data.category = contain
     this.setState({ data, categories })
   }
 
@@ -43,7 +47,7 @@ class Index extends React.Component {
   render() {
     return (
       <AdminLayoutHoc contentTitle={'View Food'} contentBreadcrumb={["Home", "Food", "Food Lists", "View"]}>
-        <div className="card">
+        <div className="card col-md-8 offset-md-2">
           <div className="card-body">
             <div className="row ml-0 mr-0">
               <Link href={`/dashboard/admin/food/lists?status=edit&id=` + this.props.router.query.id}>
@@ -109,7 +113,7 @@ class Index extends React.Component {
           </div>
         </div>
         <div className="row">
-          <div className="col-md-2">
+          <div className="col-md-2 offset-md-2">
             <button type="button" className="btn btn-info btn-block" onClick={() => Router.back()}>Back</button>
           </div>
         </div>
