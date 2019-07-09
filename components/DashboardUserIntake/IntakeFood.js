@@ -199,13 +199,13 @@ export default class Index extends React.Component {
               <label class="col-form-label col-sm-1 pt-0">Add:</label>
               <div class="col-sm-1">
                 <div class="custom-control custom-radio custom-control-inline">
-                  <input class="custom-control-input" type="radio" name="gridRadios" id="gridRadios1" value="option1" checked/>
+                  <input autocomplete="off" class="custom-control-input" type="radio" name="gridRadios" id="gridRadios1" value="option1" checked/>
                   <label class="custom-control-label btn-link text-dark" for="gridRadios1">Food</label>
                 </div>
               </div>
               <div className="col-sm-1">
                 <div class="custom-control custom-radio custom-control-inline">
-                  <input class="custom-control-input" type="radio" name="gridRadios" id="gridRadios2" value="option2"/>
+                  <input autocomplete="off" class="custom-control-input" type="radio" name="gridRadios" id="gridRadios2" value="option2"/>
                   <label class="custom-control-label" for="gridRadios2">
                     <Link href="/dashboard/user/intake?status=meal">
                       <a class="text-dark">Meal</a>
@@ -239,7 +239,7 @@ export default class Index extends React.Component {
                             <i className="fa fa-search"/>
                           </span>
                         </div>
-                        <input type="text" className="form-control bl-0" placeholder="Search by food name here..." name="name" onChange={this.onChangeFood} value={this.state.data.name}/>
+                        <input autocomplete="off" type="text" className="form-control bl-0" placeholder="Search by food name here..." name="name" onChange={this.onChangeFood} value={this.state.data.name}/>
                         <div className="input-group-append">
                           <button type="button" className="btn btn-info" onClick={this.onSearch}>Submit</button>
                         </div>
@@ -264,7 +264,7 @@ export default class Index extends React.Component {
                   <div class="form-group col-sm-4 pl-0 bb-2 mb-0 pb-3 pr-0">
                     <label>Calories Amount:</label>
                     <div class="input-group">
-                      <input type="number" class="form-control br-0" value={this.state.data.qty} min="1" onChange={this.onChangeFood} name="qty"/>
+                      <input autocomplete="off" type="number" class="form-control br-0" value={this.state.data.qty} min="1" onChange={this.onChangeFood} name="qty"/>
                       <div class="input-group-prepend">
                         <div class="input-group-text right">serving</div>
                       </div>
@@ -316,7 +316,7 @@ export default class Index extends React.Component {
               <div class="form-group row">
                 <label class="col-sm-3 col-form-label">Food Name</label>
                 <div class="col-sm-9">
-                  <input type="text" class="form-control" placeholder="Enter food" required name="name" value={this.state.add.name} onChange={this.onAddChange}/>
+                  <input autocomplete="off" type="text" class="form-control" placeholder="Enter food" required name="name" value={this.state.add.name} onChange={this.onAddChange}/>
                   <small class="form-text text-muted text-right">*required</small>
                 </div>
               </div>
@@ -333,7 +333,7 @@ export default class Index extends React.Component {
               <div class="form-group row">
                 <label class="col-sm-3 col-form-label">Calories</label>
                 <div class="col-sm-5">
-                  <input type="number" class="form-control" placeholder="Enter calories" min="0" name="calorie" value={this.state.add.calorie} onChange={this.onAddChange}/>
+                  <input autocomplete="off" type="number" class="form-control" placeholder="Enter calories" min="0" name="calorie" value={this.state.add.calorie} onChange={this.onAddChange}/>
                   <small class="form-text text-muted text-right">*required</small>
                 </div>
                 <span class="col-sm-4 col-form-label">
@@ -344,7 +344,7 @@ export default class Index extends React.Component {
               <div class="form-group row">
                 <label class="col-sm-3 col-form-label">Carbohydrate</label>
                 <div class="col-sm-5">
-                  <input type="number" class="form-control" placeholder="Enter carbohydrate" min="0" name="carbohydrate" value={this.state.add.carbohydrate} onChange={this.onAddChange}/>
+                  <input autocomplete="off" type="number" class="form-control" placeholder="Enter carbohydrate" min="0" name="carbohydrate" value={this.state.add.carbohydrate} onChange={this.onAddChange}/>
                 </div>
                 <span class="col-sm-4 col-form-label">
                   (g per serving)
@@ -354,7 +354,7 @@ export default class Index extends React.Component {
               <div class="form-group row">
                 <label class="col-sm-3 col-form-label">Protein</label>
                 <div class="col-sm-5">
-                  <input type="number" class="form-control" placeholder="Enter protein" min="0" name="protein" value={this.state.add.protein} onChange={this.onAddChange}/>
+                  <input autocomplete="off" type="number" class="form-control" placeholder="Enter protein" min="0" name="protein" value={this.state.add.protein} onChange={this.onAddChange}/>
                 </div>
                 <span class="col-sm-4 col-form-label">
                   (g per serving)
@@ -364,7 +364,7 @@ export default class Index extends React.Component {
               <div class="form-group row">
                 <label class="col-sm-3 col-form-label">Fat</label>
                 <div class="col-sm-5">
-                  <input type="number" class="form-control" placeholder="Enter fat" min="0" name="fat" value={this.state.add.fat} onChange={this.onAddChange}/>
+                  <input autocomplete="off" type="number" class="form-control" placeholder="Enter fat" min="0" name="fat" value={this.state.add.fat} onChange={this.onAddChange}/>
                 </div>
                 <span class="col-sm-4 col-form-label">
                   (g per serving)

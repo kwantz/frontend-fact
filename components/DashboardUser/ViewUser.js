@@ -174,13 +174,13 @@ class Index extends React.Component {
                   <div className="form-group row">
                     <label className="col-sm-3 col-form-label">Email Address</label>
                     <div className="col-sm-9">
-                      <input type="text" readonly className="form-control-plaintext" value={this.state.data.email}/>
+                      <input autocomplete="off" type="text" readonly className="form-control-plaintext" value={this.state.data.email}/>
                     </div>
                   </div>
                   <div className="form-group row">
                     <label className="col-sm-3 col-form-label">Password</label>
                     <div className="col-sm-9">
-                      <input type="password" readonly className="form-control-plaintext" value="............"/>
+                      <input autocomplete="off" type="password" readonly className="form-control-plaintext" value="............"/>
                     </div>
                   </div>
                 </form>

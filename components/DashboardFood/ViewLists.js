@@ -6,6 +6,7 @@ import Link from 'next/link';
 import Router from 'next/router'
 import Alert from '../Alert'
 import { withRouter } from 'next/router';
+import '../../libraries'
 
 class Index extends React.Component {
   constructor (props) {
@@ -137,8 +138,8 @@ class Index extends React.Component {
           <td>{food.category}</td>
           <td>{food.calorie}</td>
           <td>
-            <Link href={`/dashboard/admin/food/lists?status=view&id=${food.id}`}>
-              <a className="btn btn-link">View</a>
+            <Link href={`/dashboard/admin/food/lists?status=edit&id=${food.id}`}>
+              <a className="btn btn-link">Edit</a>
             </Link>
             <button className="btn btn-link text-danger ml-3" data-toggle="modal" data-target="#delete" onClick={() =>  this.deleteFood(food)}>Delete</button>
           </td>
@@ -165,7 +166,7 @@ class Index extends React.Component {
                   {options}
                 </select>
               </div>
-              <SearchInput placeholder="Search by name" value={this.state.search} onChange={(event) => this.setState({search: (event.target.value === '' || /^[a-zA-Z]+$/.test(event.target.value.trim()) || /^[a-zA-Z][a-zA-Z0-9 ]+$/.test(event.target.value.trim())) ? event.target.value : this.state.search})}/>
+              <SearchInput placeholder="Search by name" value={this.state.search} onChange={(event) => this.setState({search: (event.target.value.validate()) ? event.target.value : this.state.search})}/>
               <Link href="/dashboard/admin/food/lists?status=add">
                 <a className="btn btn-info ml-auto">
                   <i className="fa fa-plus" /> Add Food

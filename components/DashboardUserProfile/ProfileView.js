@@ -93,15 +93,15 @@ class Index extends React.Component {
               <div class="col-md-9">
                 <div className="form-group">
                   <label>Email Address:</label>
-                  <input type="text" readonly className="form-control-plaintext" value={this.state.data.email}/>
+                  <input autocomplete="off" type="text" readonly className="form-control-plaintext" value={this.state.data.email}/>
                 </div>
                 <div className="form-group">
                   <label>Birth Year:</label>
-                  <input type="text" readonly className="form-control-plaintext" value={this.state.data.birth_year}/>
+                  <input autocomplete="off" type="text" readonly className="form-control-plaintext" value={this.state.data.birth_year}/>
                 </div>
                 <div className="form-group">
                   <label>Status:</label>
-                  <input type="text" readonly className="form-control-plaintext" value={this.state.data.status}/>
+                  <input autocomplete="off" type="text" readonly className="form-control-plaintext" value={this.state.data.status}/>
                 </div>
               </div>
             </div>
@@ -113,21 +113,21 @@ class Index extends React.Component {
                   <label class="col-sm-3 col-form-label">Weight</label>
                   <label class="col-form-label">:</label>
                   <div class="col-sm-8">
-                    <input type="text" readonly class="form-control-plaintext" value={`${this.state.data.weight} kg`}/>
+                    <input autocomplete="off" type="text" readonly class="form-control-plaintext" value={`${this.state.data.weight} kg`}/>
                   </div>
                 </div>
                 <div class="form-group row mb-0">
                   <label class="col-sm-3 col-form-label">Height</label>
                   <label class="col-form-label">:</label>
                   <div class="col-sm-8">
-                    <input type="text" readonly class="form-control-plaintext" value={`${this.state.data.height} cm`}/>
+                    <input autocomplete="off" type="text" readonly class="form-control-plaintext" value={`${this.state.data.height} cm`}/>
                   </div>
                 </div>
                 <div class="form-group row mb-0">
                   <label class="col-sm-3 col-form-label">BMI</label>
                   <label class="col-form-label">:</label>
                   <div class="col-sm-8">
-                    <input type="text" readonly class="form-control-plaintext" value={parseFloat(this.state.data.bmi).toFixed(1)}/>
+                    <input autocomplete="off" type="text" readonly class="form-control-plaintext" value={parseFloat(this.state.data.bmi).toFixed(1)}/>
                   </div>
                 </div>
               </div>

@@ -53,12 +53,12 @@ export default class Index extends React.Component {
         <form onSubmit={this.onSubmit}>
           <div class="form-group">
             <label>Password</label>
-            <input type="password" class="form-control" placeholder="Enter your password" name="password" value={this.state.password} onChange={this.onChange} required/>
+            <input autocomplete="off" type="password" class="form-control" placeholder="Enter your password" name="password" value={this.state.password} onChange={this.onChange} required/>
           </div>
 
           <div class="form-group">
             <label>Confirm Password</label>
-            <input type="password" class="form-control" placeholder="Confirm your password" name="re_password" value={this.state.re_password} onChange={this.onChange} required/>
+            <input autocomplete="off" type="password" class="form-control" placeholder="Confirm your password" name="re_password" value={this.state.re_password} onChange={this.onChange} required/>
           </div>
 
           <button className="btn btn-info btn-block" type="submit">SAVE</button>

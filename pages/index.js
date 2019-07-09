@@ -118,13 +118,13 @@ export default class Index extends React.Component {
               <div class="card">
                 <div class="card-body login-card-body">
                   <div class="input-group mb-3">
-                    <input name="email" type="email" class="form-control" placeholder="Email" value={this.state.email} onChange={this.onChange}/>
+                    <input autocomplete="off" name="email" type="email" class="form-control" placeholder="Email" value={this.state.email} onChange={this.onChange}/>
                     <div class="input-group-append">
                       <span class="fa fa-envelope input-group-text" style={{fontWeight: "900"}}/>
                     </div>
                   </div>
                   <div class="input-group mb-3">
-                    <input name="password" type="password" class="form-control" placeholder="Password" value={this.state.password} onChange={this.onChange}/>
+                    <input autocomplete="off" name="password" type="password" class="form-control" placeholder="Password" value={this.state.password} onChange={this.onChange}/>
                     <div class="input-group-append">
                       <span class="fas fa-key input-group-text" style={{fontWeight: "900"}}/>
                     </div>

@@ -75,13 +75,13 @@ class Index extends React.Component {
             <div class="col-md-6">
               <div class="form-group">
                 <label for="exampleInputEmail1">Name</label>
-                <input type="email" class="form-control" value={this.state.data.name} name="name" onChange={this.onChange}/>
+                <input autocomplete="off" type="email" class="form-control" value={this.state.data.name} name="name" onChange={this.onChange}/>
               </div>
             </div>
             <div class="col-md-6">
               <div class="form-group">
                 <label for="exampleInputEmail1">Email Address</label>
-                <input type="email" class="form-control" value={this.state.data.email} name="email" onChange={this.onChange}/>
+                <input autocomplete="off" type="email" class="form-control" value={this.state.data.email} name="email" onChange={this.onChange}/>
               </div>
             </div>
 
@@ -94,7 +94,7 @@ class Index extends React.Component {
                       <i class="fas fa-male" style={{fontSize: '35px'}}/>
                     </label>
                     <br/>
-                    <input class="form-check-input custom-control-input" type="radio" name="gender" id="male" value="1" checked={parseInt(this.state.data.gender) === 1} name="gender" onChange={this.onChange}/>
+                    <input autocomplete="off" class="form-check-input custom-control-input" type="radio" name="gender" id="male" value="1" checked={parseInt(this.state.data.gender) === 1} name="gender" onChange={this.onChange}/>
                     <label class="form-check-label custom-control-label" for="male">Male</label>
                   </div>
 
@@ -103,7 +103,7 @@ class Index extends React.Component {
                       <i class="fas fa-female" style={{fontSize: '35px'}}/>
                     </label>
                     <br/>
-                    <input class="form-check-input custom-control-input" type="radio" name="gender" id="female" value="2" checked={parseInt(this.state.data.gender) === 2} name="gender" onChange={this.onChange}/>
+                    <input autocomplete="off" class="form-check-input custom-control-input" type="radio" name="gender" id="female" value="2" checked={parseInt(this.state.data.gender) === 2} name="gender" onChange={this.onChange}/>
                     <label class="form-check-label custom-control-label" for="female">Female</label>
                   </div>
                 </div>
@@ -119,7 +119,7 @@ class Index extends React.Component {
                       <i class="far fa-calendar-alt"/>
                     </div>
                   </div>
-                  <input type="number" class="form-control bl-0" placeholder="_ _ _ _" value={this.state.data.birth_year} name="birth_year" onChange={this.onChange}/>
+                  <input autocomplete="off" type="number" class="form-control bl-0" placeholder="_ _ _ _" value={this.state.data.birth_year} name="birth_year" onChange={this.onChange}/>
                 </div>
               </div>
             </div>
@@ -128,7 +128,7 @@ class Index extends React.Component {
               <div class="form-group">
                 <label>Weight</label>
                 <div class="input-group">
-                  <input type="number" class="form-control br-0" placeholder="Enter weight" value={this.state.data.weight} name="weight" onChange={this.onChange}/>
+                  <input autocomplete="off" type="number" class="form-control br-0" placeholder="Enter weight" value={this.state.data.weight} name="weight" onChange={this.onChange}/>
                   <div class="input-group-prepend">
                     <div class="input-group-text right">kg</div>
                   </div>
@@ -140,7 +140,7 @@ class Index extends React.Component {
               <div class="form-group">
                 <label>Height</label>
                 <div class="input-group">
-                  <input type="number" class="form-control br-0" placeholder="Enter weight" value={this.state.data.height} name="height" onChange={this.onChange}/>
+                  <input autocomplete="off" type="number" class="form-control br-0" placeholder="Enter weight" value={this.state.data.height} name="height" onChange={this.onChange}/>
                   <div class="input-group-prepend">
                     <div class="input-group-text right">cm</div>
                   </div>

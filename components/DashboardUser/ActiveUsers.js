@@ -5,6 +5,7 @@ import Modal from '../Modal';
 import Alert from '../Alert';
 import SearchInput from '../SearchInput';
 import Router, { withRouter } from 'next/router';
+import '../../libraries'
 
 class Index extends React.Component {
   constructor (props) {
@@ -165,7 +166,7 @@ class Index extends React.Component {
             </div>
             <div className="col-md-6">
               <div className="form-inline">
-                <SearchInput placeholder="Search by name" onClick={this.queryName} value={this.state.search} onChange={(event) => this.setState({search: (event.target.value === '' || /^[a-zA-Z]+$/.test(event.target.value.trim()) || /^[a-zA-Z][a-zA-Z0-9 ]+$/.test(event.target.value.trim())) ? event.target.value : this.state.search})}/>
+                <SearchInput placeholder="Search by name" onClick={this.queryName} value={this.state.search} onChange={(event) => this.setState({search: (event.target.value.validate()) ? event.target.value : this.state.search})}/>
               </div>
             </div>
           </div>

@@ -6,6 +6,7 @@ import Alert from '../Alert';
 import Link from 'next/link';
 import Router from 'next/router'
 import { withRouter } from 'next/router';
+import '../../libraries'
 
 class Index extends React.Component {
   constructor (props) {
@@ -120,7 +121,7 @@ class Index extends React.Component {
           <td>{article.published_by}</td>
           <td>
             <Link href={`/dashboard/admin/newsfeed/articles?status=view&id=${article.id}`}>
-              <a className="btn btn-link">View</a>
+              <a className="btn btn-link">Edit</a>
             </Link>
             <button className="btn btn-link text-danger ml-3" data-toggle="modal" data-target="#delete" onClick={() =>  this.deleteArticle(article)}>Delete</button>
           </td>
@@ -135,7 +136,7 @@ class Index extends React.Component {
         <div className="card">
           <div className="card-body">
             <form className="form-inline" onSubmit={this.queryTitle}>
-              <SearchInput placeholder="Search by title" value={this.state.search} onChange={(event) => this.setState({search: (event.target.value === '' || /^[a-zA-Z]+$/.test(event.target.value.trim()) || /^[a-zA-Z][a-zA-Z0-9 ]+$/.test(event.target.value.trim())) ? event.target.value : this.state.search})}/>
+              <SearchInput placeholder="Search by title" value={this.state.search} onChange={(event) => this.setState({search: (event.target.value.validate()) ? event.target.value : this.state.search})}/>
               <Link href="/dashboard/admin/newsfeed/articles?status=add">
                 <a className="btn btn-info ml-auto">
                   <i className="fa fa-plus" /> Add Article

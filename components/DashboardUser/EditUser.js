@@ -75,15 +75,15 @@ class Index extends React.Component {
             <div className="card-body">
               <div className="form-group">
                 <label>Email address</label>
-                <input name="email" value={this.state.data.email} onChange={this.onChange} type="email" className="form-control" placeholder="Enter email" required/>
+                <input autocomplete="off" name="email" value={this.state.data.email} onChange={this.onChange} type="email" className="form-control" placeholder="Enter email" required/>
               </div>
               <div className="form-group">
                 <label>New Password</label>
-                <input name="password" value={this.state.data.password} onChange={this.onChange} type="password" className="form-control" placeholder="Enter new password" required/>
+                <input autocomplete="off" name="password" value={this.state.data.password} onChange={this.onChange} type="password" className="form-control" placeholder="Enter new password" required/>
               </div>
               <div className="form-group">
                 <label>Confirm New Password</label>
-                <input name="re_password" value={this.state.data.re_password} onChange={this.onChange} type="password" className="form-control" placeholder="Confirm new password" required/>
+                <input autocomplete="off" name="re_password" value={this.state.data.re_password} onChange={this.onChange} type="password" className="form-control" placeholder="Confirm new password" required/>
               </div>
               <div className="row mt-5">
                 <div className="col-md-5">

@@ -14,14 +14,14 @@ export default class AddUser extends React.Component {
                             <div className="form-group">
                                 <label htmlFor="validation-ex" className="col-sm-3">First name</label>
                                 <div className="col-sm-12">
-                                    <input type="text" className="form-control is-valid" id="validation-ex" placeholder="Anil" value="" required/>
+                                    <input autocomplete="off" type="text" className="form-control is-valid" id="validation-ex" placeholder="Anil" value="" required/>
                                     <div className="valid-feedback"><i className="fa fa-check-circle"/> Looks good!</div>
                                 </div>
                             </div>
                             <div className="form-group">
                                 <label htmlFor="validation-ex" className="col-sm-3">Last name</label>
                                 <div className="col-sm-12">
-                                    <input type="text" className="form-control is-invalid" id="validation-ex" placeholder="" value="" required/>
+                                    <input autocomplete="off" type="text" className="form-control is-invalid" id="validation-ex" placeholder="" value="" required/>
                                     <div className="invalid-feedback"><i className="fa fa-exclamation-circle"/> Enter a last name</div>
                                 </div>
                             </div>
@@ -47,7 +47,7 @@ export default class AddUser extends React.Component {
                                 <label htmlFor="check-1" className="col-sm-3 control-label">Checkbox</label>
                                 <div className="col-sm-offset-2 col-sm-10">
                                     <div className="form-check">
-                                        <input className="form-check-input" id="check-1" type="checkbox" value="option1"/>
+                                        <input autocomplete="off" className="form-check-input" id="check-1" type="checkbox" value="option1"/>
                                         <label className="form-check-label" htmlFor="check-1">Checkbox</label>
                                     </div>
                                 </div>
@@ -56,7 +56,7 @@ export default class AddUser extends React.Component {
                                 <label htmlFor="radio-1" className="col-sm-3 control-label">Radio</label>
                                 <div className="col-sm-offset-2 col-sm-10">
                                     <div className="form-check">
-                                        <input className="form-check-input" id="radio-1" type="radio" value="option1"/>
+                                        <input autocomplete="off" className="form-check-input" id="radio-1" type="radio" value="option1"/>
                                         <label className="form-check-label" htmlFor="radio-1">Radio</label>
                                     </div>
                                 </div>
@@ -65,7 +65,7 @@ export default class AddUser extends React.Component {
                                 <label htmlFor="terms-1" className="col-sm-12 control-label">Terms and conditions</label>
                                 <div className="col-sm-offset-2 col-sm-10">
                                     <div className="form-check">
-                                        <input className="form-check-input is-invalid" type="checkbox" value="" id="invalidCheck3" required/>
+                                        <input autocomplete="off" className="form-check-input is-invalid" type="checkbox" value="" id="invalidCheck3" required/>
                                         <label className="form-check-label" htmlFor="invalidCheck3">
                                             Agree to terms and conditions
                                         </label>

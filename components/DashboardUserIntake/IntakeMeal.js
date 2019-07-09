@@ -116,7 +116,7 @@ export default class Index extends React.Component {
               <label class="col-form-label col-sm-1 pt-0">Add:</label>
               <div class="col-sm-1">
                 <div class="custom-control custom-radio custom-control-inline">
-                  <input class="custom-control-input" type="radio" name="gridRadios" id="gridRadios1" value="option1"/>
+                  <input autocomplete="off" class="custom-control-input" type="radio" name="gridRadios" id="gridRadios1" value="option1"/>
                   <label class="custom-control-label" for="gridRadios1">
                     <Link href="/dashboard/user/intake?status=meal">
                       <a class="text-dark">Food</a>
@@ -126,7 +126,7 @@ export default class Index extends React.Component {
               </div>
               <div className="col-sm-1">
                 <div class="custom-control custom-radio custom-control-inline">
-                  <input class="custom-control-input" type="radio" name="gridRadios" id="gridRadios2" value="option2" checked/>
+                  <input autocomplete="off" class="custom-control-input" type="radio" name="gridRadios" id="gridRadios2" value="option2" checked/>
                   <label class="custom-control-label" for="gridRadios2">
                     Meal
                   </label>
@@ -147,7 +147,7 @@ export default class Index extends React.Component {
                             <i className="fa fa-search"/>
                           </span>
                         </div>
-                        <input type="text" className="form-control bl-0" placeholder="Search by food name here..." onChange={(event) => this.setState({name: event.target.value})} value={this.state.name}/>
+                        <input autocomplete="off" type="text" className="form-control bl-0" placeholder="Search by food name here..." onChange={(event) => this.setState({name: event.target.value})} value={this.state.name}/>
                         <div className="input-group-append">
                           <button type="button" className="btn btn-info" onClick={this.onSearch}>Submit</button>
                         </div>

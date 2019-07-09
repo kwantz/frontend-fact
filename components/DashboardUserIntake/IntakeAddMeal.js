@@ -166,7 +166,7 @@ export default class Index extends React.Component {
                   <div className="form-group row">
                     <label class="col-form-label col-sm-2">Meal Name:</label>
                     <div class="col-sm-4">
-                      <input type="text" className="form-control" placeholder="Enter meal name" required onChange={(event) => this.setState({name: event.target.value})} value={this.state.name}/>
+                      <input autocomplete="off" type="text" className="form-control" placeholder="Enter meal name" required onChange={(event) => this.setState({name: event.target.value})} value={this.state.name}/>
                       <small class="form-text text-muted text-right">*required</small>
                     </div>
                   </div>
@@ -225,7 +225,7 @@ export default class Index extends React.Component {
                           <i className="fa fa-search"/>
                         </span>
                       </div>
-                      <input type="text" className="form-control bl-0" placeholder="Search by food name here..." name="name" onChange={this.onChangeFood} value={this.state.data.name}/>
+                      <input autocomplete="off" type="text" className="form-control bl-0" placeholder="Search by food name here..." name="name" onChange={this.onChangeFood} value={this.state.data.name}/>
                       <div className="input-group-append">
                         <button type="button" className="btn btn-info" onClick={this.onSearch}>Submit</button>
                       </div>
@@ -252,7 +252,7 @@ export default class Index extends React.Component {
                 <div class="form-group col-sm-4 pl-0 bb-2 mb-0 pb-3 pr-0">
                   <label>Calories Amount:</label>
                   <div class="input-group">
-                    <input type="number" class="form-control br-0" value={this.state.data.qty} min="1" onChange={this.onChangeFood} name="qty"/>
+                    <input autocomplete="off" type="number" class="form-control br-0" value={this.state.data.qty} min="1" onChange={this.onChangeFood} name="qty"/>
                     <div class="input-group-prepend">
                       <div class="input-group-text right">serving</div>
                     </div>

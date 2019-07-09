@@ -17,7 +17,7 @@ export default class Users extends React.Component {
                             <h3 className="card-title">Current active users</h3>
                             <div className="card-tools">
                                 <div className="input-group input-group-sm" style={{width: '150px'}}>
-                                    <input type="text" name="table_search" className="form-control float-right" placeholder="Search"/>
+                                    <input autocomplete="off" type="text" name="table_search" className="form-control float-right" placeholder="Search"/>
                                     <div className="input-group-append">
                                         <button type="submit" className="btn btn-default"><i className="fa fa-search"/></button>
                                     </div>

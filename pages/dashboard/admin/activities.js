@@ -271,11 +271,11 @@ class Index extends React.Component {
             <div className="modal-body">
               <div className="form-group">
                 <label>Activity Name</label>
-                <input type="text" name="name" value={this.state.add.name} onChange={this.onChangeAdd} className="form-control" placeholder="Enter Activity Name" required autocomplete="off"/>
+                <input autocomplete="off" type="text" name="name" value={this.state.add.name} onChange={this.onChangeAdd} className="form-control" placeholder="Enter Activity Name" required/>
               </div>
               <div className="form-group">
                 <label>Calorie Burnt (in kcal/kg hour)</label>
-                <input type="number" name="met" value={this.state.add.met} onChange={this.onChangeAdd} min="0" max="30" className="form-control" placeholder="Enter amount of calories" required/>
+                <input autocomplete="off" type="number" name="met" value={this.state.add.met} onChange={this.onChangeAdd} min="0" max="30" className="form-control" placeholder="Enter amount of calories" required/>
               </div>
             </div>
             <div className="modal-footer">
@@ -296,11 +296,11 @@ class Index extends React.Component {
             <div className="modal-body">
               <div className="form-group">
                 <label>Activity Name</label>
-                <input type="text" name="name" value={this.state.edit.name} className="form-control" placeholder="Enter Activity Name" onChange={this.onChangeEdit} required/>
+                <input autocomplete="off" type="text" name="name" value={this.state.edit.name} className="form-control" placeholder="Enter Activity Name" onChange={this.onChangeEdit} required/>
               </div>
               <div className="form-group">
                 <label>Calorie Burnt (in kcal/kg hour)</label>
-                <input type="number" name="met" value={this.state.edit.met} className="form-control" min="0" max="30" placeholder="Enter amount of calories" onChange={this.onChangeEdit} required/>
+                <input autocomplete="off" type="number" name="met" value={this.state.edit.met} className="form-control" min="0" max="30" placeholder="Enter amount of calories" onChange={this.onChangeEdit} required/>
               </div>
             </div>
             <div className="modal-footer">

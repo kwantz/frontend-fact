@@ -1,5 +1,6 @@
 import GuessLayoutHoc from '../components/GuessLayout/GuessLayoutHoc'
 import Link from 'next/link';
+import '../libraries'
 
 export default class Index extends React.Component {
   constructor (props) {
@@ -23,7 +24,7 @@ export default class Index extends React.Component {
 
     console.log(this.state.data.password)
 
-    if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,16}$/.test(this.state.data.password)) {
+    if (this.state.data.password.invalidpass()) {
       return window.alert("Password minimum 8 and maximum 16 characters, at least 1 uppercase letter, 1 lowercase letter, and 1 number.")
     }
 
@@ -51,22 +52,22 @@ export default class Index extends React.Component {
         <form onSubmit={this.onSubmit}>
           <div class="form-group">
             <label>Name</label>
-            <input type="text" class="form-control" placeholder="Enter your name" name="name" value={this.state.name} onChange={this.onChange} required/>
+            <input autocomplete="off" type="text" class="form-control" placeholder="Enter your name" name="name" value={this.state.name} onChange={this.onChange} required/>
           </div>
 
           <div class="form-group">
             <label>Email Address</label>
-            <input type="email" class="form-control" placeholder="Enter your email address" name="email" value={this.state.email} onChange={this.onChange} required/>
+            <input autocomplete="off" type="email" class="form-control" placeholder="Enter your email address" name="email" value={this.state.email} onChange={this.onChange} required/>
           </div>
 
           <div class="form-group">
             <label>Password</label>
-            <input type="password" class="form-control" placeholder="Enter your password" name="password" value={this.state.password} onChange={this.onChange} required/>
+            <input autocomplete="off" type="password" class="form-control" placeholder="Enter your password" name="password" value={this.state.password} onChange={this.onChange} required/>
           </div>
 
           <div class="form-group">
             <label>Confirm Password</label>
-            <input type="password" class="form-control" placeholder="Confirm your password" name="re_password" value={this.state.re_password} onChange={this.onChange} required/>
+            <input autocomplete="off" type="password" class="form-control" placeholder="Confirm your password" name="re_password" value={this.state.re_password} onChange={this.onChange} required/>
           </div>
 
           <button type="submit" class="btn btn-info btn-block">SIGN UP</button>

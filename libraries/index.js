@@ -16,6 +16,10 @@ String.prototype.validate = function() {
   return this.valueOf() === '' || /^[A-Z]$/.test(this.valueOf().trim()) || /^[A-Z][a-zA-Z0-9!@#$%^&*()_+-=:";'<>?,./ ]+$/.test(this.valueOf().trim())
 }
 
+String.prototype.invalidpass = function() {
+  return !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,16}$/.test(this.valueOf())
+}
+
 Number.prototype.display = function() {
   return Math.round(this.valueOf() * 100) / 100
 }

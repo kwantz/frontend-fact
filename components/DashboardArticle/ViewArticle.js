@@ -1,6 +1,7 @@
 import AdminLayoutHoc from '../Layout/AdminLayoutHoc';
 import Alert from '../Alert';
 import Router, { withRouter } from 'next/router';
+import '../../libraries'
 
 class Index extends React.Component {
   constructor(props) {
@@ -65,14 +66,14 @@ class Index extends React.Component {
   onChange (event) {
     const data = this.state.data
     if (event.target.name === 'title') {
-      if (event.target.value === '' || /^[a-zA-Z0-9 ]+$/.test(event.target.value.trim())) {
+      if (event.target.value.validate()) {
         data[event.target.name] = event.target.value
         this.setState({ data })
       }
       return
     }
     if (event.target.name === 'author') {
-      if (event.target.value === '' || /^[A-Z]+$/.test(event.target.value.trim()) || /^[A-Z][a-zA-Z0-9 ]+$/.test(event.target.value.trim())) {
+      if (event.target.value.validate()) {
         data[event.target.name] = event.target.value
         this.setState({ data })
       }
@@ -112,20 +113,20 @@ class Index extends React.Component {
             <div className="form-group row">
               <label className="col-sm-3 col-form-label">Title</label>
               <div className="col-sm-9">
-                <input type="text" className="form-control" value={this.state.data.title} onChange={this.onChange} name="title" required/>
+                <input autocomplete="off" type="text" className="form-control" value={this.state.data.title} onChange={this.onChange} name="title" required/>
               </div>
             </div>
             <div className="form-group row">
               <label className="col-sm-3 col-form-label">Author</label>
               <div className="col-sm-9">
-                <input type="text" className="form-control" value={this.state.data.author} onChange={this.onChange} name="author" required/>
+                <input autocomplete="off" type="text" className="form-control" value={this.state.data.author} onChange={this.onChange} name="author" required/>
               </div>
             </div>
             <div className="form-group row">
               <label className="col-sm-3 col-form-label">Image</label>
               <div className="col-sm-9">
                 <div className="custom-file">
-                  <input type="file" onChange={this.onChangeFile} className="custom-file-input" id="customFile" accept="image/*" required/>
+                  <input autocomplete="off" type="file" onChange={this.onChangeFile} className="custom-file-input" id="customFile" accept="image/*" required/>
                   <label className="custom-file-label" for="customFile">{(this.state.data.image === '') ? 'Choose file' : this.state.data.image}</label>
                 </div>
                 <img className="mt-3" src={`http://103.252.100.230/fact/image/${this.state.data.image}`}/>

@@ -125,7 +125,7 @@ export default class Index extends React.Component {
             <div className="col-md-8">
               <label>File</label>
               <div className="custom-file">
-                <input type="file" onChange={this.onChangeFile} className="custom-file-input" id="customFile" accept=".csv"/>
+                <input autocomplete="off" type="file" onChange={this.onChangeFile} className="custom-file-input" id="customFile" accept=".csv"/>
                 <label className="custom-file-label text-left" for="customFile">{this.state.filename}</label>
               </div>
             </div>

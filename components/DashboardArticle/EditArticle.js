@@ -12,7 +12,7 @@ export default class Index extends React.Component {
               <div className="form-group row">
                 <label className="col-sm-3 col-form-label">Title</label>
                 <div className="col-sm-9">
-                  <input type="text" className="form-control" placeholder="Enter Food Name"/>
+                  <input autocomplete="off" type="text" className="form-control" placeholder="Enter Food Name"/>
                 </div>
               </div>
               <div className="form-group row">

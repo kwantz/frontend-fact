@@ -11,7 +11,7 @@ class SearchInput extends React.Component {
             <i className="fa fa-search"/>
           </span>
         </div>
-        <input type="text" className="form-control bl-0" placeholder={placeholder} value={value} onChange={onChange}/>
+        <input autocomplete="off" type="text" className="form-control bl-0" placeholder={placeholder} value={value} onChange={onChange}/>
         <div className="input-group-append">
           <button type="submit" className="btn btn-info">Submit</button>
         </div>

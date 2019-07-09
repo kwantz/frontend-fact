@@ -2,6 +2,7 @@ import AdminLayoutHoc from '../../../../components/Layout/AdminLayoutHoc';
 import Modal from '../../../../components/Modal';
 import Table from '../../../../components/Table';
 import Alert from '../../../../components/Alert';
+import '../../../../libraries'
 
 export default class Index extends React.Component {
   constructor (props) {
@@ -77,7 +78,7 @@ export default class Index extends React.Component {
   onChangeAdd (event) {
     const add = this.state.add
     if (event.target.name === 'desc') {
-      if (event.target.value === '' || /^[a-zA-Z0-9 ]+$/.test(event.target.value.trim())) {
+      if (event.target.value.validate()) {
         add[event.target.name] = event.target.value
         this.setState({add})
       }
@@ -128,7 +129,7 @@ export default class Index extends React.Component {
   onChangeEdit (event) {
     const edit = this.state.edit
     if (event.target.name === 'desc') {
-      if (event.target.value === '' || /^[a-zA-Z0-9 ]+$/.test(event.target.value.trim())) {
+      if (event.target.value.validate()) {
         edit[event.target.name] = event.target.value
         this.setState({edit})
       }
@@ -244,7 +245,7 @@ export default class Index extends React.Component {
               </div>
               <div className="form-group">
                 <label>Author</label>
-                <input name="author" value={this.state.add.author} onChange={this.onChangeAdd} type="text" className="form-control" placeholder="Enter author's name"/>
+                <input autocomplete="off" name="author" value={this.state.add.author} onChange={this.onChangeAdd} type="text" className="form-control" placeholder="Enter author's name"/>
               </div>
             </div>
             <div className="modal-footer">
@@ -269,7 +270,7 @@ export default class Index extends React.Component {
               </div>
               <div className="form-group">
                 <label>Author</label>
-                <input name="author" value={this.state.edit.author} onChange={this.onChangeEdit} type="text" className="form-control" placeholder="Enter author's name"/>
+                <input autocomplete="off" name="author" value={this.state.edit.author} onChange={this.onChangeEdit} type="text" className="form-control" placeholder="Enter author's name"/>
               </div>
             </div>
             <div className="modal-footer">

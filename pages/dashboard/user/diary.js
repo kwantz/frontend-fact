@@ -195,7 +195,7 @@ export default class Index extends React.Component {
           <div className="row mt-3">
             <div className="col-md-1 my-auto">
               <div class={`custom-control custom-checkbox ${this.state.delete_status === idx ? '' : 'hide'}`}>
-                <input type="checkbox" class="custom-control-input" id={`intake_${intake[idx][i].id}`} checked={this.state.data_delete.indexOf(intake[idx][i].id) > -1} onChange={() => this.toggleChecked(intake[idx][i].id)}/>
+                <input autocomplete="off" type="checkbox" class="custom-control-input" id={`intake_${intake[idx][i].id}`} checked={this.state.data_delete.indexOf(intake[idx][i].id) > -1} onChange={() => this.toggleChecked(intake[idx][i].id)}/>
                 <label class="custom-control-label" for={`intake_${intake[idx][i].id}`}/>
               </div>
             </div>
@@ -248,7 +248,7 @@ export default class Index extends React.Component {
         <div className="row mt-3">
           <div className="col-md-1 my-auto">
             <div class={`custom-control custom-checkbox ${this.state.delete_status === 'exercise' ? '' : 'hide'}`}>
-              <input type="checkbox" class="custom-control-input" id={`burnt_${this.state.burnt[i].id}`} checked={this.state.data_delete.indexOf(this.state.burnt[i].id) > -1} onChange={() => this.toggleChecked(this.state.burnt[i].id)}/>
+              <input autocomplete="off" type="checkbox" class="custom-control-input" id={`burnt_${this.state.burnt[i].id}`} checked={this.state.data_delete.indexOf(this.state.burnt[i].id) > -1} onChange={() => this.toggleChecked(this.state.burnt[i].id)}/>
               <label class="custom-control-label" for={`burnt_${this.state.burnt[i].id}`}/>
             </div>
           </div>
@@ -316,7 +316,7 @@ export default class Index extends React.Component {
                     <i className="fas fa-trash-alt"/>
                   </button>
                   <div class={`custom-control custom-checkbox ${this.state.delete_status === 'breakfast' ? '' : 'hide'}`}>
-                    <input type="checkbox" class="custom-control-input" id="intake_breakfast" checked={this.state.data_delete.length === this.state.intake.breakfast.length} onChange={() => this.checkedAll('breakfast')}/>
+                    <input autocomplete="off" type="checkbox" class="custom-control-input" id="intake_breakfast" checked={this.state.data_delete.length === this.state.intake.breakfast.length} onChange={() => this.checkedAll('breakfast')}/>
                     <label class="custom-control-label mt-1" for="intake_breakfast"/>
                   </div>
                 </div>
@@ -350,7 +350,7 @@ export default class Index extends React.Component {
                     <i className="fas fa-trash-alt"/>
                   </button>
                   <div class={`custom-control custom-checkbox ${this.state.delete_status === 'lunch' ? '' : 'hide'}`}>
-                    <input type="checkbox" class="custom-control-input" id="intake_lunch" checked={this.state.data_delete.length === this.state.intake.lunch.length} onChange={() => this.checkedAll('lunch')}/>
+                    <input autocomplete="off" type="checkbox" class="custom-control-input" id="intake_lunch" checked={this.state.data_delete.length === this.state.intake.lunch.length} onChange={() => this.checkedAll('lunch')}/>
                     <label class="custom-control-label mt-1" for="intake_lunch"/>
                   </div>
                 </div>
@@ -384,7 +384,7 @@ export default class Index extends React.Component {
                     <i className="fas fa-trash-alt"/>
                   </button>
                   <div class={`custom-control custom-checkbox ${this.state.delete_status === 'dinner' ? '' : 'hide'}`}>
-                    <input type="checkbox" class="custom-control-input" id="intake_dinner" checked={this.state.data_delete.length === this.state.intake.dinner.length} onChange={() => this.checkedAll('dinner')}/>
+                    <input autocomplete="off" type="checkbox" class="custom-control-input" id="intake_dinner" checked={this.state.data_delete.length === this.state.intake.dinner.length} onChange={() => this.checkedAll('dinner')}/>
                     <label class="custom-control-label mt-1" for="intake_dinner"/>
                   </div>
                 </div>
@@ -418,7 +418,7 @@ export default class Index extends React.Component {
                     <i className="fas fa-trash-alt"/>
                   </button>
                   <div class={`custom-control custom-checkbox ${this.state.delete_status === 'snack' ? '' : 'hide'}`}>
-                    <input type="checkbox" class="custom-control-input" id="intake_snack" checked={this.state.data_delete.length === this.state.intake.snack.length} onChange={() => this.checkedAll('snack')}/>
+                    <input autocomplete="off" type="checkbox" class="custom-control-input" id="intake_snack" checked={this.state.data_delete.length === this.state.intake.snack.length} onChange={() => this.checkedAll('snack')}/>
                     <label class="custom-control-label mt-1" for="intake_snack"/>
                   </div>
                 </div>
@@ -452,7 +452,7 @@ export default class Index extends React.Component {
                     <i className="fas fa-trash-alt"/>
                   </button>
                   <div class={`custom-control custom-checkbox ${this.state.delete_status === 'exercise' ? '' : 'hide'}`}>
-                    <input type="checkbox" class="custom-control-input" id="intake_exercise" checked={this.state.data_delete.length === this.state.burnt.length} onChange={() => this.checkedAll('exercise')}/>
+                    <input autocomplete="off" type="checkbox" class="custom-control-input" id="intake_exercise" checked={this.state.data_delete.length === this.state.burnt.length} onChange={() => this.checkedAll('exercise')}/>
                     <label class="custom-control-label mt-1" for="intake_exercise"/>
                   </div>
                 </div>

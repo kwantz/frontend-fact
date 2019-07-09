@@ -49,17 +49,17 @@ class Index extends React.Component {
           <div className="card offset-md-3 col-md-6 pt-3">
             <div class="form-group">
               <label for="exampleInputEmail1">Current Password</label>
-              <input type="password" class="form-control"  placeholder="Enter Current Password" value={this.state.old_password} name="old_password" onChange={this.onChange}/>
+              <input autocomplete="off" type="password" class="form-control"  placeholder="Enter Current Password" value={this.state.old_password} name="old_password" onChange={this.onChange}/>
             </div>
 
             <div class="form-group">
               <label for="exampleInputEmail1">New Password</label>
-              <input type="password" class="form-control"  placeholder="Enter New Password" value={this.state.password} name="password" onChange={this.onChange}/>
+              <input autocomplete="off" type="password" class="form-control"  placeholder="Enter New Password" value={this.state.password} name="password" onChange={this.onChange}/>
             </div>
 
             <div class="form-group">
               <label for="exampleInputEmail1">Confirm New Password</label>
-              <input type="password" class="form-control"  placeholder="Confirm New Password" value={this.state.re_password} name="re_password" onChange={this.onChange}/>
+              <input autocomplete="off" type="password" class="form-control"  placeholder="Confirm New Password" value={this.state.re_password} name="re_password" onChange={this.onChange}/>
             </div>
 
             <div class="row mb-3">

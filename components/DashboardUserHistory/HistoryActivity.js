@@ -108,7 +108,7 @@ export default class HistoryActivity extends React.Component {
                       <i class="far fa-calendar-alt"/>
                     </span>
                   </div>
-                  <input id="datetimepicker1" data-toggle="datetimepicker" data-target="#datetimepicker1" type="text" className="form-control bl-0 datetimepicker-input" placeholder="_ _ / _ _ / _ _ _ _"/>
+                  <input autocomplete="off" id="datetimepicker1" data-toggle="datetimepicker" data-target="#datetimepicker1" type="text" className="form-control bl-0 datetimepicker-input" placeholder="_ _ / _ _ / _ _ _ _"/>
                 </div>
               </div>
             </div>

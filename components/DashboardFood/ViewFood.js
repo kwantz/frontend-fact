@@ -76,32 +76,32 @@ class Index extends React.Component {
               <div className="col-sm-9 bl-1">
                 <div className="form-group row">
                   <div class="col-md-12">
-                    <input type="text" readonly className="form-control-plaintext" value={this.state.data.name}/>
+                    <input autocomplete="off" type="text" readonly className="form-control-plaintext" value={this.state.data.name}/>
                   </div>
                 </div>
                 <div className="form-group row">
                   <div class="col-md-12">
-                    <input type="text" readonly className="form-control-plaintext" value={this.state.data.category}/>
+                    <input autocomplete="off" type="text" readonly className="form-control-plaintext" value={this.state.data.category}/>
                   </div>
                 </div>
                 <div className="form-group row">
                   <div class="col-md-12">
-                    <input type="text" readonly className="form-control-plaintext" value={`${this.state.data.calorie} kcal`}/>
+                    <input autocomplete="off" type="text" readonly className="form-control-plaintext" value={`${this.state.data.calorie} kcal`}/>
                   </div>
                 </div>
                 <div className="form-group row">
                   <div class="col-md-12">
-                    <input type="text" readonly className="form-control-plaintext" value={`${this.state.data.carbohydrate} g`}/>
+                    <input autocomplete="off" type="text" readonly className="form-control-plaintext" value={`${this.state.data.carbohydrate} g`}/>
                   </div>
                 </div>
                 <div className="form-group row">
                   <div class="col-md-12">
-                    <input type="text" readonly className="form-control-plaintext" value={`${this.state.data.protein} g`}/>
+                    <input autocomplete="off" type="text" readonly className="form-control-plaintext" value={`${this.state.data.protein} g`}/>
                   </div>
                 </div>
                 <div className="form-group row">
                   <div class="col-md-12">
-                    <input type="text" readonly className="form-control-plaintext" value={`${this.state.data.fat} g`}/>
+                    <input autocomplete="off" type="text" readonly className="form-control-plaintext" value={`${this.state.data.fat} g`}/>
                   </div>
                 </div>
               </div>
