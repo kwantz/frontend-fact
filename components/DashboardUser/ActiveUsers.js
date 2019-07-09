@@ -103,10 +103,12 @@ class Index extends React.Component {
     const json = await response.json()
 
     if (typeof json.message === 'undefined' || json.message !== 'Success') {
-      alert.block_danger = "500 — Internal Server Error"
+      window.scrollTo(0, 0)
+      alert.block_danger = json.message
       await this.setState({alert})
     }
     else {
+      window.scrollTo(0, 0)
       alert.block_success = "Block User, " + this.state.block.name + " — Success"
       const block = {
         id: 0,

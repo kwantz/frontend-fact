@@ -12,8 +12,8 @@ Date.prototype.dateformat = function(option = "") {
   return `${date} ${month} ${year} ${hour}:${minute}`
 }
 
-String.prototype.dateformat = function() {
-  return ''
+String.prototype.validate = function() {
+  return this.valueOf() === '' || /^[A-Z]$/.test(this.valueOf().trim()) || /^[A-Z][a-zA-Z0-9!@#$%^&*()_+-=:";'<>?,./ ]+$/.test(this.valueOf().trim())
 }
 
 Number.prototype.display = function() {

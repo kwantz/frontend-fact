@@ -13,7 +13,7 @@ class SearchInput extends React.Component {
         </div>
         <input type="text" className="form-control bl-0" placeholder={placeholder} value={value} onChange={onChange}/>
         <div className="input-group-append">
-          <button type="button" className="btn btn-info" onClick={onClick}>Submit</button>
+          <button type="submit" className="btn btn-info">Submit</button>
         </div>
       </div>
     )

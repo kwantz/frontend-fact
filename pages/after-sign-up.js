@@ -42,6 +42,23 @@ export default class Index extends React.Component {
     this.setState({ data })
   }
 
+  async componentDidMount() {
+    if (typeof this.props.url.query.key === "undefined") {
+      return window.location.href = "/"
+    }
+
+    let response = await fetch(`http://103.252.100.230/fact/confirm-email/${this.props.url.query.key}`, {method: 'POST'})
+    let json = await response.json()
+
+    if (typeof json.results === "undefined") {
+      return window.location.href = "/"
+    }
+
+    window.localStorage.setItem("name", json.results.name)
+    window.localStorage.setItem("token", json.results.token)
+    window.localStorage.setItem("role", parseInt(json.results.role))
+  }
+
   render() {
     return (
       <GuessLayoutHoc registerbox="false">

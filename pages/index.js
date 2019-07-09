@@ -24,12 +24,16 @@ export default class Index extends React.Component {
     const json = await response.json()
 
     if (typeof json.results !== 'undefined') {
+      window.localStorage.setItem("name", json.results.name)
       window.localStorage.setItem("token", json.results.token)
       window.localStorage.setItem("role", parseInt(json.results.role))
 
       window.location.href = (json.results.role === 1)
         ? "/dashboard/admin"
         : "/dashboard/user/diary"
+    }
+    else {
+      window.alert(json.message)
     }
   }
 

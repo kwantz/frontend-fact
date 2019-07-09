@@ -50,10 +50,12 @@ class Index extends React.Component {
     const json = await response.json()
 
     if (typeof json.message === 'undefined' || json.message !== 'Success') {
-      alert.delete_danger = "500 — Internal Server Error"
+      window.scrollTo(0, 0)
+      alert.delete_danger = json.message
       await this.setState({alert})
     }
     else {
+      window.scrollTo(0, 0)
       alert.delete_success = "Delete Food, " + this.state.delete.name + " — Success"
       const data = {
         id: -1,
@@ -91,7 +93,9 @@ class Index extends React.Component {
     this.setState({ data, table, total, categories })
   }
 
-  async queryName () {
+  async queryName (event) {
+    event.preventDefault();
+
     await Router.push({
       pathname: '/dashboard/admin/food/lists',
       query: {
@@ -155,19 +159,19 @@ class Index extends React.Component {
         <Alert type="success" component={this} attribute="delete_success"/>
         <div className="card">
           <div className="card-body">
-            <div className="form-inline">
+            <form className="form-inline" onSubmit={this.queryName}>
               <div className="form-group mr-3">
                 <select className="form-control" onChange={this.queryCategory} value={this.props.router.query.category}>
                   {options}
                 </select>
               </div>
-              <SearchInput placeholder="Search by name" onClick={this.queryName} value={this.state.search} onChange={(event) => this.setState({search: (event.target.value === '' || /^[a-zA-Z]+$/.test(event.target.value.trim()) || /^[a-zA-Z][a-zA-Z0-9 ]+$/.test(event.target.value.trim())) ? event.target.value : this.state.search})}/>
+              <SearchInput placeholder="Search by name" value={this.state.search} onChange={(event) => this.setState({search: (event.target.value === '' || /^[a-zA-Z]+$/.test(event.target.value.trim()) || /^[a-zA-Z][a-zA-Z0-9 ]+$/.test(event.target.value.trim())) ? event.target.value : this.state.search})}/>
               <Link href="/dashboard/admin/food/lists?status=add">
                 <a className="btn btn-info ml-auto">
                   <i className="fa fa-plus" /> Add Food
                 </a>
               </Link>
-            </div>
+            </form>
           </div>
         </div>
 

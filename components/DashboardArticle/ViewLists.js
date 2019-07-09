@@ -66,7 +66,9 @@ class Index extends React.Component {
     this.onRefresh()
   }
 
-  async queryTitle () {
+  async queryTitle (event) {
+    event.preventDefault();
+
     await Router.push({
       pathname: '/dashboard/admin/newsfeed/articles',
       query: {
@@ -91,10 +93,12 @@ class Index extends React.Component {
     const json = await response.json()
 
     if (typeof json.message === 'undefined' || json.message !== 'Success') {
-      alert.delete_danger = "500 — Internal Server Error"
+      window.scrollTo(0, 0)
+      alert.delete_danger = json.message
       await this.setState({alert})
     }
     else {
+      window.scrollTo(0, 0)
       alert.delete_success = "Delete Article, " + this.state.delete.title + " — Success"
       await this.setState({alert})
       this.onRefresh()
@@ -130,8 +134,8 @@ class Index extends React.Component {
         <Alert type="success" component={this} attribute="delete_success"/>
         <div className="card">
           <div className="card-body">
-            <form className="form-inline">
-              <SearchInput placeholder="Search by title" onClick={this.queryTitle} value={this.state.search} onChange={(event) => this.setState({search: (event.target.value === '' || /^[a-zA-Z]+$/.test(event.target.value.trim()) || /^[a-zA-Z][a-zA-Z0-9 ]+$/.test(event.target.value.trim())) ? event.target.value : this.state.search})}/>
+            <form className="form-inline" onSubmit={this.queryTitle}>
+              <SearchInput placeholder="Search by title" value={this.state.search} onChange={(event) => this.setState({search: (event.target.value === '' || /^[a-zA-Z]+$/.test(event.target.value.trim()) || /^[a-zA-Z][a-zA-Z0-9 ]+$/.test(event.target.value.trim())) ? event.target.value : this.state.search})}/>
               <Link href="/dashboard/admin/newsfeed/articles?status=add">
                 <a className="btn btn-info ml-auto">
                   <i className="fa fa-plus" /> Add Article

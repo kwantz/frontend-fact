@@ -41,17 +41,21 @@ class Index extends React.Component {
     this.setState({ data })
   }
 
-  async onSubmit () {
+  async onSubmit (event) {
+    event.preventDefault();
+
     const alert = this.state.alert
     const body = JSON.stringify(this.state.data)
     const response = await fetch(`http://103.252.100.230/fact/user/` + this.props.router.query.id, {method: "PUT", body})
     const json = await response.json()
 
     if (typeof json.message === 'undefined' || json.message !== 'Success') {
-      alert.edit_danger = "500 — Internal Server Error"
+      window.scrollTo(0, 0)
+      alert.edit_danger = json.message
       await this.setState({alert})
     }
     else {
+      window.scrollTo(0, 0)
       alert.edit_success = "Edit User, " + this.state.data.email + " — Success"
       await this.setState({alert})
     }
@@ -66,24 +70,24 @@ class Index extends React.Component {
       <AdminLayoutHoc contentTitle={'Edit User'} contentBreadcrumb={["Home", "Users", "Active Users", "Edit"]}>
         <Alert type="danger" component={this} attribute="edit_danger"/>
         <Alert type="success" component={this} attribute="edit_success"/>
-        <div className="col-md-8 offset-md-2">
+        <form className="col-md-8 offset-md-2" onSubmit={this.onSubmit}>
           <div className="card">
             <div className="card-body">
               <div className="form-group">
                 <label>Email address</label>
-                <input name="email" value={this.state.data.email} onChange={this.onChange} type="email" className="form-control" placeholder="Enter email" />
+                <input name="email" value={this.state.data.email} onChange={this.onChange} type="email" className="form-control" placeholder="Enter email" required/>
               </div>
               <div className="form-group">
                 <label>New Password</label>
-                <input name="password" value={this.state.data.password} onChange={this.onChange} type="password" className="form-control" placeholder="Enter new password" />
+                <input name="password" value={this.state.data.password} onChange={this.onChange} type="password" className="form-control" placeholder="Enter new password" required/>
               </div>
               <div className="form-group">
                 <label>Confirm New Password</label>
-                <input name="re_password" value={this.state.data.re_password} onChange={this.onChange} type="password" className="form-control" placeholder="Confirm new password" />
+                <input name="re_password" value={this.state.data.re_password} onChange={this.onChange} type="password" className="form-control" placeholder="Confirm new password" required/>
               </div>
               <div className="row mt-5">
                 <div className="col-md-5">
-                  <button type="button" className="btn btn-info btn-block" onClick={this.onSubmit}>Save</button>
+                  <button type="button" className="btn btn-info btn-block">Save</button>
                 </div>
                 <div className="col-md-5 offset-md-2">
                   <button type="button" className="btn btn-light btn-block"onClick={() => Router.back()}>Cancel</button>
@@ -91,7 +95,7 @@ class Index extends React.Component {
               </div>
             </div>
           </div>
-        </div>
+        </form>
       </AdminLayoutHoc>
     )
   }

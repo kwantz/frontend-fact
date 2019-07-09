@@ -17,10 +17,6 @@ const AdminHeader = (props) => (
           <i className="fa fa-user mr-2"/> Admin <i className="fa fa-caret-down"/>
         </a>
         <div className="dropdown-menu dropdown-menu-right">
-          <a href="#" className="dropdown-item">
-            <i className="fa fa-cog mr-2"/> Profile
-          </a>
-          <div className="dropdown-divider"/>
           <Link href="/">
             <a className="dropdown-item text-danger logout">
               <i className="fa fa-sign-out mr-2"/> Logout

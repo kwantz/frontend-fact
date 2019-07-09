@@ -4,6 +4,7 @@ import Modal from '../../../components/Modal';
 import Alert from '../../../components/Alert';
 import SearchInput from "../../../components/SearchInput";
 import Router, { withRouter } from 'next/router';
+import '../../../libraries'
 
 class Index extends React.Component {
   constructor(props) {
@@ -13,12 +14,12 @@ class Index extends React.Component {
       search: '',
       add: {
         name: '',
-        met: '',
+        met: 0,
       },
       edit: {
         id: '',
         name: '',
-        met: ''
+        met: 0
       },
       delete: {
         id: '',
@@ -58,7 +59,9 @@ class Index extends React.Component {
     this.onSubmitAdd = this.onSubmitAdd.bind(this)
   }
 
-  async queryName() {
+  async queryName(event) {
+    event.preventDefault()
+
     await Router.push({
       pathname: '/dashboard/admin/activities',
       query: {
@@ -80,7 +83,7 @@ class Index extends React.Component {
   onChangeEdit (event) {
     const edit = this.state.edit
     if (event.target.name === 'name') {
-      if (event.target.value === '' || /^[a-zA-Z]+$/.test(event.target.value.trim()) || /^[a-zA-Z][a-zA-Z0-9 ]+$/.test(event.target.value.trim())) {
+      if (event.target.value.validate()) {
         edit[event.target.name] = event.target.value
         this.setState({ edit })
       }
@@ -89,7 +92,7 @@ class Index extends React.Component {
     if (event.target.name === 'met') {
       let numb = parseFloat(event.target.value)
       if (event.target.value === '' || (!isNaN(numb))) {
-        edit[event.target.name] = Math.max(numb, 1)
+        edit[event.target.name] = Math.min(Math.max(numb, 0), 30)
         this.setState({ edit })
       }
       return
@@ -99,21 +102,23 @@ class Index extends React.Component {
     this.setState({ edit })
   }
 
-  async onSubmitEdit () {
+  async onSubmitEdit (event) {
     event.preventDefault();
 
     const {alert, edit} = this.state
     edit.name = edit.name.trim()
-    edit.met = Math.max(1, parseFloat(edit.met))
+    edit.met = Math.min(Math.max(0, parseFloat(edit.met)), 30)
     const body = JSON.stringify(this.state.edit)
     const response = await fetch('http://103.252.100.230/fact/activity/' + edit.id, {method: 'PUT', body})
     const json = await response.json()
 
     if (typeof json.message === 'undefined' || json.message !== 'Success') {
-      alert.edit_danger = "500 — Internal Server Error"
+      window.scrollTo(0, 0)
+      alert.edit_danger = json.message
       await this.setState({alert})
     }
     else {
+      window.scrollTo(0, 0)
       alert.edit_success = "Edit Activity, " + edit.name + " — Success"
       await this.setState({alert})
       this.onRefresh()
@@ -133,10 +138,12 @@ class Index extends React.Component {
     const json = await response.json()
 
     if (typeof json.message === 'undefined' || json.message !== 'Success') {
-      alert.delete_danger = "500 — Internal Server Error"
+      window.scrollTo(0, 0)
+      alert.delete_danger = json.message
       await this.setState({alert})
     }
     else {
+      window.scrollTo(0, 0)
       alert.delete_success = "Delete Activity, " + this.state.delete.name + " — Success"
       await this.setState({alert})
       this.onRefresh()
@@ -149,16 +156,18 @@ class Index extends React.Component {
     const alert = this.state.alert
     let add = this.state.add
     add.name = add.name.trim()
-    add.met = Math.max(1, parseFloat(add.met))
+    add.met = Math.min(Math.max(0, parseFloat(add.met)), 30)
     const body = JSON.stringify(this.state.add)
     const response = await fetch('http://103.252.100.230/fact/activity', {method: 'POST', body})
     const json = await response.json()
 
     if (typeof json.message === 'undefined' || json.message !== 'Success') {
-      alert.add_danger = "500 — Internal Server Error"
+      window.scrollTo(0, 0)
+      alert.add_danger = json.message
       await this.setState({alert})
     }
     else {
+      window.scrollTo(0, 0)
       alert.add_success = "Add Activity, " + add.name + " — Success"
       add.name = ''
       add.met = ''
@@ -171,16 +180,17 @@ class Index extends React.Component {
   onChangeAdd (event) {
     const add = this.state.add
     if (event.target.name === 'name') {
-      if (event.target.value === '' || /^[a-zA-Z]+$/.test(event.target.value.trim()) || /^[a-zA-Z][a-zA-Z0-9 ]+$/.test(event.target.value.trim())) {
+      if (event.target.value.validate()) {
         add[event.target.name] = event.target.value
         this.setState({ add })
       }
       return
     }
     if (event.target.name === 'met') {
+      console.log("MET", event.target.value)
       let numb = parseFloat(event.target.value)
       if (event.target.value === '' || (!isNaN(numb))) {
-        add[event.target.name] = Math.max(numb, 1)
+        add[event.target.name] = Math.min(Math.max(numb, 0), 30)
         this.setState({ add })
       }
       return
@@ -241,8 +251,8 @@ class Index extends React.Component {
         <Alert type="success"component={this} attribute="delete_success"/>
         <div className="card">
           <div className="card-body">
-            <form className="form-inline">
-              <SearchInput placeholder="Search by name" onClick={this.queryName} value={this.state.search} onChange={(event) => this.setState({search: (event.target.value === '' || /^[a-zA-Z]+$/.test(event.target.value.trim()) || /^[a-zA-Z][a-zA-Z0-9 ]+$/.test(event.target.value.trim())) ? event.target.value : this.state.search})}/>
+            <form className="form-inline" onSubmit={this.queryName}>
+              <SearchInput placeholder="Search by name" value={this.state.search} onChange={(event) => this.setState({search: (event.target.value.validate()) ? event.target.value : this.state.search})}/>
               <button type="button" className="btn btn-info ml-auto" data-toggle="modal" data-target="#add">
                 <i className="fa fa-plus" /> Add Activity
               </button>
@@ -261,11 +271,11 @@ class Index extends React.Component {
             <div className="modal-body">
               <div className="form-group">
                 <label>Activity Name</label>
-                <input type="text" name="name" value={this.state.add.name} onChange={this.onChangeAdd} className="form-control" placeholder="Enter Activity Name" required/>
+                <input type="text" name="name" value={this.state.add.name} onChange={this.onChangeAdd} className="form-control" placeholder="Enter Activity Name" required autocomplete="off"/>
               </div>
               <div className="form-group">
                 <label>Calorie Burnt (in kcal/kg hour)</label>
-                <input type="number" name="met" value={this.state.add.met} onChange={this.onChangeAdd} min="1" className="form-control" placeholder="Enter amount of calories" required/>
+                <input type="number" name="met" value={this.state.add.met} onChange={this.onChangeAdd} min="0" max="30" className="form-control" placeholder="Enter amount of calories" required/>
               </div>
             </div>
             <div className="modal-footer">
@@ -290,7 +300,7 @@ class Index extends React.Component {
               </div>
               <div className="form-group">
                 <label>Calorie Burnt (in kcal/kg hour)</label>
-                <input type="number" name="met" value={this.state.edit.met} className="form-control" placeholder="Enter amount of calories" onChange={this.onChangeEdit} required/>
+                <input type="number" name="met" value={this.state.edit.met} className="form-control" min="0" max="30" placeholder="Enter amount of calories" onChange={this.onChangeEdit} required/>
               </div>
             </div>
             <div className="modal-footer">

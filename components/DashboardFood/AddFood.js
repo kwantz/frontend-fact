@@ -38,10 +38,12 @@ export default class Index extends React.Component {
     const json = await response.json()
 
     if (json.message !== 'Success') {
+      window.scrollTo(0, 0)
       alert.add_danger = json.message
       await this.setState({alert})
     }
     else {
+      window.scrollTo(0, 0)
       alert.add_success = "Add Food, " + this.state.data.name + " — Success"
       const data = {
         fat: '',

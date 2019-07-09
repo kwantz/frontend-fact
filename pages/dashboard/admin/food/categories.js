@@ -53,7 +53,9 @@ class Index extends React.Component {
     this.deleteCategory = this.deleteCategory.bind(this)
   }
 
-  async queryName() {
+  async queryName(event) {
+    event.preventDefault();
+
     await Router.push({
       pathname: '/dashboard/admin/food/categories',
       query: {
@@ -93,10 +95,12 @@ class Index extends React.Component {
     const json = await response.json()
 
     if (typeof json.message === 'undefined' || json.message !== 'Success') {
-      alert.add_danger = "500 — Internal Server Error"
+      window.scrollTo(0, 0)
+      alert.add_danger = json.message
       await this.setState({alert})
     }
     else {
+      window.scrollTo(0, 0)
       alert.add_success = "Add Category, " + add + " — Success"
       add = ''
 
@@ -119,10 +123,12 @@ class Index extends React.Component {
     const json = await response.json()
 
     if (typeof json.message === 'undefined' || json.message !== 'Success') {
-      alert.edit_danger = "500 — Internal Server Error"
+      window.scrollTo(0, 0)
+      alert.edit_danger = json.message
       await this.setState({alert})
     }
     else {
+      window.scrollTo(0, 0)
       alert.edit_success = "Edit Category, " + edit.name + " — Success"
       await this.setState({alert})
       this.onRefresh()
@@ -145,7 +151,7 @@ class Index extends React.Component {
 
     if (typeof json.message === 'undefined' || json.message !== 'Success') {
       window.scrollTo(0, 0)
-      alert.delete_danger = "500 — Internal Server Error"
+      alert.delete_danger = json.message
       await this.setState({alert})
     }
     else {
@@ -197,8 +203,8 @@ class Index extends React.Component {
         <Alert type="success"component={this} attribute="delete_success"/>
         <div className="card">
           <div className="card-body">
-            <form className="form-inline">
-              <SearchInput placeholder="Search by name" onClick={this.queryName} value={this.state.search} onChange={(event) => this.setState({search: (event.target.value === '' || /^[a-zA-Z]+$/.test(event.target.value.trim()) || /^[a-zA-Z][a-zA-Z0-9 ]+$/.test(event.target.value.trim())) ? event.target.value : this.state.search})}/>
+            <form className="form-inline" onSubmit={this.queryName}>
+              <SearchInput placeholder="Search by name" value={this.state.search} onChange={(event) => this.setState({search: (event.target.value === '' || /^[a-zA-Z]+$/.test(event.target.value.trim()) || /^[a-zA-Z][a-zA-Z0-9 ]+$/.test(event.target.value.trim())) ? event.target.value : this.state.search})}/>
               <button type="button" className="btn btn-info ml-auto" data-toggle="modal" data-target="#add">
                 <i className="fa fa-plus" /> Add Category
               </button>

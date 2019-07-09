@@ -1,6 +1,18 @@
 import Link from 'next/link';
 
 class UserHeader extends React.Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      name: ''
+    }
+  }
+
+  componentDidMount() {
+    this.setState({ name: window.localStorage.getItem("name") })
+  }
+
   render() {
     return (
       <nav className="navbar navbar-expand navbar-light bg-info elevation-1 row">
@@ -24,7 +36,7 @@ class UserHeader extends React.Component {
         <div className="clearfix col-md-3 mb-0 navbar-text">
           <span className="nav-link float-right ml-3">
             <i className="nav-icon fas fa-user mr-3"/>
-            <span>Erick Kwantan</span>
+            <span>{this.state.name}</span>
           </span>
           <Link href="/newsfeed">
             <a className="nav-link float-right">

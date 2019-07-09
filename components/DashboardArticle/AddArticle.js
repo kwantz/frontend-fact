@@ -29,6 +29,7 @@ export default class Index extends React.Component {
     const alert = this.state.alert
 
     if (this.state.data.content.length < 100) {
+      window.scrollTo(0, 0)
       alert.add_danger = "Content should be 100 words or more"
       return await this.setState({alert})
     }
@@ -39,10 +40,12 @@ export default class Index extends React.Component {
     const json = await response.json()
 
     if (typeof json.message === 'undefined' || json.message !== 'Success') {
-      alert.add_danger = "500 — Internal Server Error"
+      window.scrollTo(0, 0)
+      alert.add_danger = json.message
       await this.setState({alert})
     }
     else {
+      window.scrollTo(0, 0)
       alert.add_success = "Add Article, " + this.state.data.title + " — Success"
       const data = {
         title: '',

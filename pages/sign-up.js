@@ -18,18 +18,24 @@ export default class Index extends React.Component {
     this.onChange = this.onChange.bind(this)
   }
 
-  async onSubmit () {
+  async onSubmit (event) {
+    event.preventDefault()
+
+    console.log(this.state.data.password)
+
+    if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,16}$/.test(this.state.data.password)) {
+      return window.alert("Password minimum 8 and maximum 16 characters, at least 1 uppercase letter, 1 lowercase letter, and 1 number.")
+    }
+
     const body = JSON.stringify(this.state.data)
     let response = await fetch(`http://103.252.100.230/fact/register`, {method: 'POST', body})
     let json = await response.json()
 
     if (json.message === 'Success') {
-      response = await fetch(`http://103.252.100.230/fact/login`, {method: 'POST', body})
-      json = await response.json()
-
-      window.localStorage.setItem("token", json.results.token)
-      window.localStorage.setItem("role", parseInt(json.results.role))
-      window.location.href = "/after-sign-up"
+      window.alert("Please check your email to get link to confirm your email!")
+    }
+    else {
+      window.alert(json.message)
     }
   }
 
@@ -42,27 +48,29 @@ export default class Index extends React.Component {
   render() {
     return (
       <GuessLayoutHoc registerbox="true" title="SIGN UP">
-        <div class="form-group">
-          <label>Name</label>
-          <input type="text" class="form-control" placeholder="Enter your name" name="name" value={this.state.name} onChange={this.onChange}/>
-        </div>
+        <form onSubmit={this.onSubmit}>
+          <div class="form-group">
+            <label>Name</label>
+            <input type="text" class="form-control" placeholder="Enter your name" name="name" value={this.state.name} onChange={this.onChange} required/>
+          </div>
 
-        <div class="form-group">
-          <label>Email Address</label>
-          <input type="email" class="form-control" placeholder="Enter your email address" name="email" value={this.state.email} onChange={this.onChange}/>
-        </div>
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" class="form-control" placeholder="Enter your email address" name="email" value={this.state.email} onChange={this.onChange} required/>
+          </div>
 
-        <div class="form-group">
-          <label>Password</label>
-          <input type="password" class="form-control" placeholder="Enter your password" name="password" value={this.state.password} onChange={this.onChange}/>
-        </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" class="form-control" placeholder="Enter your password" name="password" value={this.state.password} onChange={this.onChange} required/>
+          </div>
 
-        <div class="form-group">
-          <label>Confirm Password</label>
-          <input type="password" class="form-control" placeholder="Confirm your password" name="re_password" value={this.state.re_password} onChange={this.onChange}/>
-        </div>
+          <div class="form-group">
+            <label>Confirm Password</label>
+            <input type="password" class="form-control" placeholder="Confirm your password" name="re_password" value={this.state.re_password} onChange={this.onChange} required/>
+          </div>
 
-        <button type="button" class="btn btn-info btn-block" onClick={this.onSubmit}>SIGN UP</button>
+          <button type="submit" class="btn btn-info btn-block">SIGN UP</button>
+        </form>
       </GuessLayoutHoc>
     )
   }

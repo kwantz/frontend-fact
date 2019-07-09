@@ -99,10 +99,12 @@ export default class Index extends React.Component {
     const json = await response.json()
 
     if (typeof json.message === 'undefined' || json.message !== 'Success') {
-      alert.add_danger = "500 — Internal Server Error"
+      window.scrollTo(0, 0)
+      alert.add_danger = json.message
       await this.setState({alert})
     }
     else {
+      window.scrollTo(0, 0)
       alert.add_success = "Add Category, " + add.desc + " — Success"
       add = {
         desc: '',
@@ -148,12 +150,13 @@ export default class Index extends React.Component {
     const json = await response.json()
 
     if (typeof json.message === 'undefined' || json.message !== 'Success') {
-      alert.edit_danger = "500 — Internal Server Error"
+      window.scrollTo(0, 0)
+      alert.edit_danger = json.message
       await this.setState({alert})
     }
     else {
+      window.scrollTo(0, 0)
       alert.edit_success = "Edit Category, " + edit.desc + " — Success"
-
       await this.setState({alert})
       this.onRefresh()
     }
@@ -176,12 +179,13 @@ export default class Index extends React.Component {
     const json = await response.json()
 
     if (typeof json.message === 'undefined' || json.message !== 'Success') {
-      alert.delete_danger = "500 — Internal Server Error"
+      window.scrollTo(0, 0)
+      alert.delete_danger = json.message
       await this.setState({alert})
     }
     else {
+      window.scrollTo(0, 0)
       alert.delete_success = "Delete Category, " + data.desc + " — Success"
-
       await this.setState({alert})
       this.onRefresh()
     }

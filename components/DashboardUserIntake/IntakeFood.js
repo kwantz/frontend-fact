@@ -130,10 +130,12 @@ export default class Index extends React.Component {
     let json = await response.json()
 
     if (typeof json.message === 'undefined' || json.message !== 'Success') {
-      alert.add_danger = "500 — Internal Server Error"
+      window.scrollTo(0, 0)
+      alert.add_danger = json.message
       await this.setState({alert})
     }
     else {
+      window.scrollTo(0, 0)
       alert.add_success = "Add Food, " + this.state.add.name + " — Success"
       const add = {
         name: '',
