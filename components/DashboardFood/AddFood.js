@@ -12,7 +12,7 @@ export default class Index extends React.Component {
         fat: '',
         name: '',
         calorie: '',
-        protein: '',
+        protein: [],
         category: '',
         carbohydrate: ''
       },
@@ -74,7 +74,8 @@ export default class Index extends React.Component {
       return
     }
     if (event.target.name === 'category') {
-      let result = event.target.selectedOptions.map(option => option.label)
+      // console.log(event.target.selectedOptions, event.target.selectedOptions[0])
+      let result = Array.from(event.target.selectedOptions).map(option => option.value)
       data[event.target.name] = result
       this.setState({ data })
       return
@@ -109,7 +110,7 @@ export default class Index extends React.Component {
       <AdminLayoutHoc contentTitle={'Add Food'} contentBreadcrumb={["Home", "Food", "Food Lists", "Add"]}>
         <Alert type="danger" component={this} attribute="add_danger"/>
         <Alert type="success" component={this} attribute="add_success"/>
-        <form className="card" onSubmit={this.onSubmit}>
+        <form className="card col-md-8 offset-md-2" onSubmit={this.onSubmit}>
           <div className="card-body">
             <div className="form-group row">
               <label className="col-sm-3 col-form-label">Food Name</label>

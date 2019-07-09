@@ -88,6 +88,8 @@ class Index extends React.Component {
     table.pages = json.results.pages
     table.loading = false
 
+    console.log("JSON", json.results)
+
     this.setState({ data, table, total, categories })
   }
 
@@ -126,11 +128,16 @@ class Index extends React.Component {
     const page = ((parseInt(this.props.router.query.page) || 1) - 1) * 30
     for (let i = 0, l = this.state.data.length; i < l; i++) {
       const food = this.state.data[i];
+      const category = "";
+      for (let i = 0, l = food.category.length; i < l; i++) {
+        if (i > 0) category += ", "
+        category += food.category[i].name
+      }
       tbody.push(
         <tr key={food.id}>
           <td>{page + i + 1}</td>
           <td>{food.name}</td>
-          <td>{food.category}</td>
+          <td>{category}</td>
           <td>{food.calorie}</td>
           <td>
             <Link href={`/dashboard/admin/food/lists?status=view&id=${food.id}`}>

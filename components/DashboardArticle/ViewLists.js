@@ -6,6 +6,7 @@ import Alert from '../Alert';
 import Link from 'next/link';
 import Router from 'next/router'
 import { withRouter } from 'next/router';
+import '../../libraries'
 
 class Index extends React.Component {
   constructor (props) {
