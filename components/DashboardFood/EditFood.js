@@ -49,7 +49,8 @@ class Index extends React.Component {
       await this.setState({alert})
     }
   }
-
+// TODO
+// [ ] Delfat select option is object, not int array
   onChange (event) {
     const data = this.state.data
     if (event.target.name === 'name') {
@@ -107,7 +108,7 @@ class Index extends React.Component {
       <AdminLayoutHoc contentTitle={'Edit Food'} contentBreadcrumb={["Home", "Food", "Food Lists", "Edit"]}>
         <Alert type="danger" component={this} attribute="edit_danger"/>
         <Alert type="success" component={this} attribute="edit_success"/>
-        <form className="card col-md-8 offset-md-2" onSubmit={this.onSubmit}>
+        <form className="card" onSubmit={this.onSubmit}>
           <div className="card-body">
             <div className="form-group row">
               <label className="col-sm-3 col-form-label">Food Name</label>

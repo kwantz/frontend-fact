@@ -2,11 +2,7 @@ import AdminLayoutHoc from '../../../../components/Layout/AdminLayoutHoc';
 import Modal from '../../../../components/Modal';
 import Table from '../../../../components/Table';
 import Alert from '../../../../components/Alert';
-<<<<<<< HEAD
-import '../../../../libraries'
-=======
 import '../../../../libraries';
->>>>>>> bda888d141c8af2148859fc31e405a6444d48005
 
 export default class Index extends React.Component {
   constructor (props) {
