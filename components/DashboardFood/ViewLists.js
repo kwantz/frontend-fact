@@ -173,7 +173,7 @@ class Index extends React.Component {
                   {options}
                 </select>
               </div>
-              <SearchInput placeholder="Search by name" value={this.state.search} onChange={(event) => this.setState({search: (event.target.value.validate()) ? event.target.value : this.state.search})}/>
+              <SearchInput placeholder="Search by name" value={this.state.search} onChange={(event) => this.setState({search: (event.target.value.validsearch()) ? event.target.value : this.state.search})}/>
               <Link href="/dashboard/admin/food/lists?status=add">
                 <a className="btn btn-info ml-auto">
                   <i className="fa fa-plus" /> Add Food

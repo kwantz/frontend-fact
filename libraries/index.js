@@ -16,6 +16,10 @@ String.prototype.validate = function() {
   return this.valueOf() === '' || /^[A-Z]$/.test(this.valueOf().trim()) || /^[A-Z][a-zA-Z0-9!@#$%^&*()_+-=:";'<>?,./ ]+$/.test(this.valueOf().trim())
 }
 
+String.prototype.validsearch = function() {
+  return this.valueOf() === '' || /^[a-zA-Z0-9!@#$%^&*()_+-=:";'<>?,./ ]+$/.test(this.valueOf().trim())
+}
+
 String.prototype.invalidpass = function() {
   return !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,16}$/.test(this.valueOf())
 }

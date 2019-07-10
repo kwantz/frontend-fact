@@ -65,7 +65,9 @@ class Index extends React.Component {
     this.setState({block})
   }
 
-  async queryName () {
+  async queryName (event) {
+    event.preventDefault();
+
     await Router.push({
       pathname: '/dashboard/admin/users/active',
       query: {
@@ -152,8 +154,8 @@ class Index extends React.Component {
         <Alert type="danger" component={this} attribute="block_danger"/>
         <Alert type="success" component={this} attribute="block_success"/>
         <div className="card">
-          <div className="card-body row">
-            <div className="col-md-3">
+          <form className="card-body row" onSubmit={this.queryName}>
+            <div className="col-md-2">
               <select class="form-control" name="status" onChange={this.filterUser}>
                 <option value="">All Status</option>
                 <option value="Underweight">Underweight</option>
@@ -166,10 +168,10 @@ class Index extends React.Component {
             </div>
             <div className="col-md-6">
               <div className="form-inline">
-                <SearchInput placeholder="Search by name" onClick={this.queryName} value={this.state.search} onChange={(event) => this.setState({search: (event.target.value.validate()) ? event.target.value : this.state.search})}/>
+                <SearchInput placeholder="Search by name" value={this.state.search} onChange={(event) => this.setState({search: (event.target.value.validsearch()) ? event.target.value : this.state.search})}/>
               </div>
             </div>
-          </div>
+          </form>
         </div>
 
         <Table table={this.state.table}>

@@ -32,8 +32,15 @@ class Index extends React.Component {
   async onSubmit (event) {
     event.preventDefault()
 
-    const alert = this.state.alert
-    const body = JSON.stringify(this.state.data)
+    const {alert, data} = this.state
+
+    data.name = data.name.trim()
+    data.calorie = Math.min(Math.max(data.calorie, 0), 5000)
+    data.fat = Math.min(Math.max(data.fat, 0), 1000)
+    data.protein = Math.min(Math.max(data.protein, 0), 1000)
+    data.carbohydrate = Math.min(Math.max(data.carbohydrate, 0), 1000)
+
+    const body = JSON.stringify(data)
     const headers = {"Authorization": 'Bearer ' + window.localStorage.getItem("token")}
     const response = await fetch('http://103.252.100.230/fact/food/' + this.props.router.query.id, {method: 'PUT', body, headers})
     const json = await response.json()
@@ -60,10 +67,18 @@ class Index extends React.Component {
       }
       return
     }
-    if (['calorie', 'fat', 'protein', 'carbohydrate'].includes(event.target.name)) {
+    if (event.target.name === 'calorie') {
       let numb = parseFloat(event.target.value)
       if (event.target.value === '' || (!isNaN(numb))) {
-        data[event.target.name] = Math.max(numb, 0)
+        data[event.target.name] = Math.min(Math.max(numb, 0), 5000)
+        this.setState({ data })
+      }
+      return
+    }
+    if ([, 'fat', 'protein', 'carbohydrate'].includes(event.target.name)) {
+      let numb = parseFloat(event.target.value)
+      if (event.target.value === '' || (!isNaN(numb))) {
+        data[event.target.name] = Math.min(Math.max(numb, 0), 1000)
         this.setState({ data })
       }
       return
@@ -90,6 +105,7 @@ class Index extends React.Component {
     json = await response.json()
 
     const data = json.results
+    data.category = data.category.map(x => x.id)
     this.setState({ data, categories })
   }
 
@@ -101,7 +117,7 @@ class Index extends React.Component {
     const options = []
     for (let i = 0, l = this.state.categories.length; i < l; i++) {
       const category = this.state.categories[i];
-      options.push(<option value={category.id} selected={this.state.data.category.map(x => x.id).indexOf(category.id) !== -1}>{category.name}</option>)
+      options.push(<option value={category.id} selected={this.state.data.category.indexOf(category.id) !== -1}>{category.name}</option>)
     }
 
     return (
@@ -127,25 +143,25 @@ class Index extends React.Component {
             <div className="form-group row">
               <label className="col-sm-3 col-form-label">Total Calories (in kcal)</label>
               <div className="col-sm-9">
-                <input autocomplete="off" name="calorie" value={this.state.data.calorie} type="number" className="form-control" placeholder="Enter Amount of Calories" onChange={this.onChange} required/>
+                <input autocomplete="off" name="calorie" value={this.state.data.calorie} type="number" min="0" max="5000" className="form-control" placeholder="Enter Amount of Calories" onChange={this.onChange} required/>
               </div>
             </div>
             <div className="form-group row">
               <label className="col-sm-3 col-form-label">Total Carbohydrate (in g)</label>
               <div className="col-sm-9">
-                <input autocomplete="off" name="carbohydrate" value={this.state.data.carbohydrate} type="number" className="form-control" placeholder="Enter Amount of Carbohydrate" onChange={this.onChange} required/>
+                <input autocomplete="off" name="carbohydrate" value={this.state.data.carbohydrate} type="number" min="0" max="1000" className="form-control" placeholder="Enter Amount of Carbohydrate" onChange={this.onChange} required/>
               </div>
             </div>
             <div className="form-group row">
               <label className="col-sm-3 col-form-label">Total Protein (in g)</label>
               <div className="col-sm-9">
-                <input autocomplete="off" name="protein" value={this.state.data.protein} type="number" className="form-control" placeholder="Enter Amount of Protein" onChange={this.onChange} required/>
+                <input autocomplete="off" name="protein" value={this.state.data.protein} type="number" min="0" max="1000" className="form-control" placeholder="Enter Amount of Protein" onChange={this.onChange} required/>
               </div>
             </div>
             <div className="form-group row">
               <label className="col-sm-3 col-form-label">Total Fat (in g)</label>
               <div className="col-sm-9">
-                <input autocomplete="off" name="fat" value={this.state.data.fat} type="number" className="form-control" placeholder="Enter Amount of Fat" onChange={this.onChange} required/>
+                <input autocomplete="off" name="fat" value={this.state.data.fat} type="number" min="0" max="1000" className="form-control" placeholder="Enter Amount of Fat" onChange={this.onChange} required/>
               </div>
             </div>
             <div className="row mt-5">

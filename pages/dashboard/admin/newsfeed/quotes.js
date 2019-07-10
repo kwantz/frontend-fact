@@ -68,7 +68,7 @@ export default class Index extends React.Component {
     table.pages = json.results.pages
     table.loading = false
 
-    let a = new Date(json.results.last_date)
+    let a = new Date(json.results.date)
     let b = new Date()
 
     const show = (a.dateformat('date') === b.dateformat('date')) ? 'hide' : ''
@@ -266,7 +266,7 @@ export default class Index extends React.Component {
             <div className="modal-body">
               <div className="form-group">
                 <label>Quote</label>
-                <textarea name="desc" value={this.state.edit.desc} onChange={this.onChangeEdit} rows="3" className="form-control" placeholder="Enter quote here"/>
+                <textarea name="desc" value={this.state.edit.desc} onChange={this.onChangeEdit} rows="3" className="form-control" placeholder="Enter quote here" required/>
               </div>
               <div className="form-group">
                 <label>Author</label>

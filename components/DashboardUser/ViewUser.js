@@ -3,7 +3,7 @@ import Card from '../Card';
 import Chart from 'chart.js'
 import { Doughnut } from 'react-chartjs-2';
 import Link from 'next/link';
-import { withRouter } from 'next/router';
+import Router, { withRouter } from 'next/router';
 
 class Index extends React.Component {
   constructor(props) {
@@ -238,6 +238,10 @@ class Index extends React.Component {
               </div>
             </div>
           </div>
+        </div>
+
+        <div className="col-md-2">
+          <button type="button" className="btn btn-info btn-block" onClick={() => Router.back()}>BACK</button>
         </div>
       </AdminLayoutHoc>
     )

@@ -8,6 +8,7 @@ class Index extends React.Component {
     super(props)
     this.state = {
       data: {
+        temp: "",
         email: "",
         password: "",
         re_password: "",
@@ -33,6 +34,7 @@ class Index extends React.Component {
     const response = await fetch(`http://103.252.100.230/fact/user/` + this.props.router.query.id)
     const json = await response.json()
     const data = {
+      temp: json.results.email,
       email: json.results.email,
       password: "",
       re_password: "",
@@ -45,6 +47,23 @@ class Index extends React.Component {
     event.preventDefault();
 
     const alert = this.state.alert
+
+    if (this.state.data.temp === this.state.data.email && this.state.data.password === "" && this.state.data.re_password === "") {
+      return Router.back()
+    }
+
+    if (this.state.data.temp !== this.state.data.email && this.state.data.password === "" && this.state.data.re_password === "") {
+      window.scrollTo(0, 0)
+      alert.edit_danger = "New Password and Confirm are required for new email."
+      return await this.setState({alert})
+    }
+
+    if (this.state.data.password.invalidpass()) {
+      window.scrollTo(0, 0)
+      alert.edit_danger = "Password minimum 8 and maximum 16 characters, at least 1 uppercase letter, 1 lowercase letter, and 1 number."
+      return await this.setState({alert})
+    }
+
     const body = JSON.stringify(this.state.data)
     const response = await fetch(`http://103.252.100.230/fact/user/` + this.props.router.query.id, {method: "PUT", body})
     const json = await response.json()
@@ -79,15 +98,15 @@ class Index extends React.Component {
               </div>
               <div className="form-group">
                 <label>New Password</label>
-                <input autocomplete="off" name="password" value={this.state.data.password} onChange={this.onChange} type="password" className="form-control" placeholder="Enter new password" required/>
+                <input autocomplete="off" name="password" value={this.state.data.password} onChange={this.onChange} type="password" className="form-control" placeholder="Enter new password"/>
               </div>
               <div className="form-group">
                 <label>Confirm New Password</label>
-                <input autocomplete="off" name="re_password" value={this.state.data.re_password} onChange={this.onChange} type="password" className="form-control" placeholder="Confirm new password" required/>
+                <input autocomplete="off" name="re_password" value={this.state.data.re_password} onChange={this.onChange} type="password" className="form-control" placeholder="Confirm new password"/>
               </div>
               <div className="row mt-5">
                 <div className="col-md-5">
-                  <button type="button" className="btn btn-info btn-block">Save</button>
+                  <button type="submit" className="btn btn-info btn-block">Save</button>
                 </div>
                 <div className="col-md-5 offset-md-2">
                   <button type="button" className="btn btn-light btn-block"onClick={() => Router.back()}>Cancel</button>

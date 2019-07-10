@@ -136,7 +136,7 @@ class Index extends React.Component {
         <div className="card">
           <div className="card-body">
             <form className="form-inline" onSubmit={this.queryTitle}>
-              <SearchInput placeholder="Search by title" value={this.state.search} onChange={(event) => this.setState({search: (event.target.value.validate()) ? event.target.value : this.state.search})}/>
+              <SearchInput placeholder="Search by title" value={this.state.search} onChange={(event) => this.setState({search: (event.target.value.validsearch()) ? event.target.value : this.state.search})}/>
               <Link href="/dashboard/admin/newsfeed/articles?status=add">
                 <a className="btn btn-info ml-auto">
                   <i className="fa fa-plus" /> Add Article

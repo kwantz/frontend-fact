@@ -85,10 +85,14 @@ class Index extends React.Component {
   }
 
   onChangeAdd (event) {
-    this.setState({add: event.target.value})
+    if (event.target.value.validate()) {
+      this.setState({add: event.target.value})
+    }
   }
 
-  async onSubmitAdd () {
+  async onSubmitAdd (event) {
+    event.preventDefault()
+
     let {add, alert} = this.state
     const body = JSON.stringify({name: add})
 
@@ -112,11 +116,21 @@ class Index extends React.Component {
 
   onChangeEdit (event) {
     let {edit} = this.state
+    if (event.target.name === 'name') {
+      if (event.target.value.validate()) {
+        edit[event.target.name] = event.target.value
+        this.setState({ edit })
+      }
+      return
+    }
+    
     edit[event.target.name] = event.target.value
     this.setState({ edit })
   }
 
-  async onSubmitEdit () {
+  async onSubmitEdit (event) {
+    event.preventDefault()
+
     let {edit, alert} = this.state
     const body = JSON.stringify(edit)
 
@@ -205,7 +219,7 @@ class Index extends React.Component {
         <div className="card">
           <div className="card-body">
             <form className="form-inline" onSubmit={this.queryName}>
-              <SearchInput placeholder="Search by name" value={this.state.search} onChange={(event) => this.setState({search: (event.target.value.validate()) ? event.target.value : this.state.search})}/>
+              <SearchInput placeholder="Search by name" value={this.state.search} onChange={(event) => this.setState({search: (event.target.value.validsearch()) ? event.target.value : this.state.search})}/>
               <button type="button" className="btn btn-info ml-auto" data-toggle="modal" data-target="#add">
                 <i className="fa fa-plus" /> Add Category
               </button>
@@ -220,39 +234,43 @@ class Index extends React.Component {
         <Modal id="add" title="Add Category">
           <Alert type="danger"component={this} attribute="add_danger"/>
           <Alert type="success"component={this} attribute="add_success"/>
-          <div className="modal-body">
-            <div className="form-group">
-              <label>Category Name</label>
-              <input autocomplete="off" type="text" className="form-control" placeholder="Enter Category Name" value={this.state.add} onChange={this.onChangeAdd}/>
+          <form onSubmit={this.onSubmitAdd}>
+            <div className="modal-body">
+              <div className="form-group">
+                <label>Category Name</label>
+                <input autocomplete="off" type="text" className="form-control" placeholder="Enter Category Name" value={this.state.add} onChange={this.onChangeAdd} required/>
+              </div>
             </div>
-          </div>
-          <div className="modal-footer">
-            <div className="col-md-6">
-              <button type="button" className="btn btn-info btn-block" onClick={this.onSubmitAdd}>Save</button>
+            <div className="modal-footer">
+              <div className="col-md-6">
+                <button type="submit" className="btn btn-info btn-block">Save</button>
+              </div>
+              <div className="col-md-6">
+                <button type="button" className="btn btn-light btn-block" data-dismiss="modal">Cancel</button>
+              </div>
             </div>
-            <div className="col-md-6">
-              <button type="button" className="btn btn-light btn-block" data-dismiss="modal">Cancel</button>
-            </div>
-          </div>
+          </form>
         </Modal>
 
         <Modal id="edit" title="Edit Category">
           <Alert type="danger"component={this} attribute="edit_danger"/>
           <Alert type="success"component={this} attribute="edit_success"/>
-          <div className="modal-body">
-            <div className="form-group">
-              <label>Category Name</label>
-              <input autocomplete="off" type="text" name="name" className="form-control" placeholder="Enter Category Name" value={this.state.edit.name} onChange={this.onChangeEdit}/>
+          <form onSubmit={this.onSubmitEdit}>
+            <div className="modal-body">
+              <div className="form-group">
+                <label>Category Name</label>
+                <input autocomplete="off" type="text" name="name" className="form-control" placeholder="Enter Category Name" value={this.state.edit.name} onChange={this.onChangeEdit} required/>
+              </div>
             </div>
-          </div>
-          <div className="modal-footer">
-            <div className="col-md-6">
-              <button type="button" className="btn btn-info btn-block" onClick={this.onSubmitEdit}>Save</button>
+            <div className="modal-footer">
+              <div className="col-md-6">
+                <button type="submit" className="btn btn-info btn-block">Save</button>
+              </div>
+              <div className="col-md-6">
+                <button type="button" className="btn btn-light btn-block" data-dismiss="modal">Cancel</button>
+              </div>
             </div>
-            <div className="col-md-6">
-              <button type="button" className="btn btn-light btn-block" data-dismiss="modal">Cancel</button>
-            </div>
-          </div>
+          </form>
         </Modal>
 
         <Modal id="delete" title="Delete Category">
