@@ -54,12 +54,12 @@ export default class Index extends React.Component {
       window.scrollTo(0, 0)
       alert.add_success = "Add Food, " + this.state.data.name + " — Success"
       const data = {
-        fat: '',
+        fat: 0,
         name: '',
-        calorie: '',
-        protein: '',
-        category: '',
-        carbohydrate: ''
+        calorie: 0,
+        protein: 0,
+        category: [],
+        carbohydrate: 0
       }
 
       await this.setState({data, alert})

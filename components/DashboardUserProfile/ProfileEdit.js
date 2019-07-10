@@ -12,9 +12,9 @@ class Index extends React.Component {
       data: {
         name: '',
         email: '',
-        birth_year: '',
-        weight: '',
-        height: '',
+        birth_year: 1997,
+        weight: 0,
+        height: 0,
         gender: '',
       }
     }

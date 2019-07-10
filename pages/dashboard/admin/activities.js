@@ -170,7 +170,7 @@ class Index extends React.Component {
       window.scrollTo(0, 0)
       alert.add_success = "Add Activity, " + add.name + " — Success"
       add.name = ''
-      add.met = ''
+      add.met = 0
 
       await this.setState({add, alert})
       this.onRefresh()
@@ -214,7 +214,7 @@ class Index extends React.Component {
     table.pages = json.results.pages
     table.loading = false
 
-    this.setState({ data, table, total })
+    this.setState({ data, table, total, search: (typeof name === "undefined") ? "" : name })
   }
 
   componentDidMount () {

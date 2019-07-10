@@ -10,12 +10,12 @@ class Index extends React.Component {
 
     this.state = {
       data: {
-        fat: '',
+        fat: 0,
         name: '',
-        calorie: '',
-        protein: '',
+        calorie: 0,
+        protein: 0,
         category: [],
-        carbohydrate: ''
+        carbohydrate: 0
       },
       categories: [],
       alert: {

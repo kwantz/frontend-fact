@@ -81,7 +81,7 @@ class Index extends React.Component {
     table.pages = json.results.pages
     table.loading = false
 
-    this.setState({ data, table, total })
+    this.setState({ data, table, total, search: (typeof name === "undefined") ? "" : name })
   }
 
   onChangeAdd (event) {

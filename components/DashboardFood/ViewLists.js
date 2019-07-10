@@ -93,7 +93,7 @@ class Index extends React.Component {
 
     console.log("JSON", json.results)
 
-    this.setState({ data, table, total, categories })
+    this.setState({ data, table, total, categories, search: (typeof name === "undefined") ? "" : name })
   }
 
   async queryName (event) {
