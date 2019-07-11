@@ -23,6 +23,7 @@ export default class Index extends React.Component {
         category: 0,
         category_intake: 1
       },
+      recent: [],
       foods: [],
       add: {
         name: '',
@@ -30,7 +31,7 @@ export default class Index extends React.Component {
         calorie: 0,
         protein: 0,
         carbohydrate: 0,
-        category: -1
+        category: 1
       },
       categories: [],
       alert: {
@@ -50,6 +51,37 @@ export default class Index extends React.Component {
     this.onSelected = this.onSelected.bind(this)
     this.onAddSubmit = this.onAddSubmit.bind(this)
     this.onAddChange = this.onAddChange.bind(this)
+    this.onSearchFocusIn = this.onSearchFocusIn.bind(this)
+    this.onSearchFocusOut = this.onSearchFocusOut.bind(this)
+    this.testing = this.testing.bind(this)
+  }
+
+  async testing(id) {
+    const headers = {"Authorization": 'Bearer ' + window.localStorage.getItem("token")}
+    const response = await fetch(`http://103.252.100.230/fact/member/food?name=all&category=0`, {headers})
+    const json = await response.json()
+
+    let {data, foods} = this.state
+    data.category = 0
+    foods = json.results.foods
+
+    this.setState({ data, foods })
+
+    window.$('#search').select2()
+    window.$('#search').val(id).trigger('change');  
+    var val = window.$('#search').val()
+
+    for (let i = 0, l = json.results.foods.length; i < l; i++)
+      if (json.results.foods[i].id === id)
+        this.onSelected(i)
+  }
+
+  onSearchFocusIn() {
+    this.setState({ show: 'show' })
+  }
+
+  onSearchFocusOut() {
+    this.setState({ show: '', foods: [] })
   }
 
   onChangeFood (event) {
@@ -66,38 +98,34 @@ export default class Index extends React.Component {
 
     if (json.message === "Success") {
       if (back === true) return window.location.href = "/dashboard/user/diary"
-      let data = {
-        id: -1,
-        name: '',
-        fat: 0,
-        qty: 0,
-        calorie: 0,
-        protein: 0,
-        carbohydrate: 0,
-        category: 0,
-        category_intake: 1
-      }
-
-      this.setState({data})
+      window.alert("Saved")
     }
   }
 
-  async onSearch () {
-    if (this.state.data.name !== '') {
-      const headers = {"Authorization": 'Bearer ' + window.localStorage.getItem("token")}
-      const response = await fetch(`http://103.252.100.230/fact/member/food?name=${this.state.data.name}&category=${this.state.data.category}`, {headers})
-      const json = await response.json()
+  async onSearch (event) {
+    const {data} = this.state
+    data[event.target.name] = event.target.value
+    this.setState({ data })
 
-      let {show, foods} = this.state
-      show = (json.results.foods.length) ? 'show' : ''
-      foods = json.results.foods
+    const headers = {"Authorization": 'Bearer ' + window.localStorage.getItem("token")}
+    const response = await fetch(`http://103.252.100.230/fact/member/food?name=all&category=${event.target.value}`, {headers})
+    const json = await response.json()
 
-      this.setState({ show, foods })
-    }
+    let {foods} = this.state
+    foods = json.results.foods
+
+    this.setState({ foods })
+
+    window.$('#search').select2()
+    var val = window.$('#search').val()
+
+    for (let i = 0, l = json.results.foods.length; i < l; i++)
+      if (parseInt(json.results.foods[i].id) === parseInt(val))
+        this.onSelected(i)
   }
 
   onSelected (idx) {
-    let {data, foods, show} = this.state
+    let {data, foods} = this.state
 
     data.id = foods[idx].id
     data.name = foods[idx].name
@@ -106,20 +134,50 @@ export default class Index extends React.Component {
     data.calorie = foods[idx].calorie
     data.protein = foods[idx].protein
     data.carbohydrate = foods[idx].carbohydrate
-    show = ''
 
-    this.setState({data, show})
+    this.setState({data})
   }
 
   async onRefresh () {
-    const response = await fetch(`http://103.252.100.230/fact/food-category?name=all`)
-    const json = await response.json()
+    let response = await fetch(`http://103.252.100.230/fact/food-category?name=all`)
+    let json = await response.json()
 
     const categories = json.results.categories
 
     const data = this.state.add
     data.category = categories[0].id
     this.setState({ categories, add: data })
+
+    const headers = {"Authorization": 'Bearer ' + window.localStorage.getItem("token")}
+    response = await fetch(`http://103.252.100.230/fact/member/food?name=all&category=${this.state.data.category}`, {headers})
+    json = await response.json()
+
+    let {foods} = this.state
+    foods = json.results.foods
+
+    this.setState({ foods })
+
+    response = await fetch(`http://103.252.100.230/fact/member/recent`, {headers})
+    json = await response.json()
+
+    let recent = []
+    let haveRecent = []
+    for (let i = 0, l = json.results.dates.length; i < l; i++) {
+      if (recent.length === 5) break;
+      for (let j = 0, k = json.results.foods[json.results.dates[i]].length; j < k; j++) {
+        if (recent.length === 5) break;
+        if (json.results.foods[json.results.dates[i]][j].type !== 'food') continue;
+        if (haveRecent.indexOf(json.results.foods[json.results.dates[i]][j].id) >= 0) continue;
+        recent.push(json.results.foods[json.results.dates[i]][j])
+        haveRecent.push(json.results.foods[json.results.dates[i]][j].id)
+      }
+    }
+    this.setState({ recent })
+
+    var val = window.$('#search').val()
+    for (let i = 0, l = this.state.foods.length; i < l; i++)
+      if (parseInt(this.state.foods[i].id) === parseInt(val))
+        this.onSelected(i)
   }
 
   async onAddSubmit () {
@@ -143,7 +201,7 @@ export default class Index extends React.Component {
         calorie: 0,
         protein: 0,
         carbohydrate: 0,
-        category: this.state.categories[0].id
+        category: 1
       }
 
       await this.setState({add, alert})
@@ -159,6 +217,16 @@ export default class Index extends React.Component {
 
   componentDidMount () {
     this.onRefresh()
+    let self = this
+    window.$(document).ready(function() {
+      window.$('#search').select2();
+      window.$('#search').on('select2:select', function (e) {
+        var data = window.$('#search').val();
+        for (let i = 0, l = self.state.foods.length; i < l; i++)
+          if (parseInt(self.state.foods[i].id) === parseInt(data))
+            self.onSelected(i)
+      });
+    });
   }
 
   render() {
@@ -184,9 +252,14 @@ export default class Index extends React.Component {
 
     const dropdownFoods = []
     for (let i = 0, l = this.state.foods.length; i < l; i++) {
-      dropdownFoods.push(
-        <span class="dropdown-item" onClick={() => this.onSelected(i)}>
-          {this.state.foods[i].name}
+      dropdownFoods.push(<option value={this.state.foods[i].id}>{this.state.foods[i].name}</option>)
+    }
+
+    let recents = []
+    for (let i = 0, l = this.state.recent.length; i < l; i++) {
+      recents.push(
+        <span>
+          <button class="btn btn-info badge" onClick={() => this.testing(this.state.recent[i].id)}>{this.state.recent[i].name}</button> &nbsp;
         </span>
       )
     }
@@ -224,41 +297,27 @@ export default class Index extends React.Component {
                   <div className="form-group row">
                     <label class="col-form-label col-sm-2">Food Category:</label>
                     <div class="col-sm-4">
-                      <select class="form-control" name="category" onChange={this.onChangeFood} value={this.state.data.category}>
+                      <select class="form-control" name="category" onChange={this.onSearch} value={this.state.data.category}>
                         <option value="0">All Category</option>
                         {options}
                       </select>
                     </div>
                   </div>
 
-                  <div className="form-group row">
-                    <div class="col-sm-6">
-                      <div className="input-group">
-                        <div className="input-group-prepend">
-                          <span className="input-group-text">
-                            <i className="fa fa-search"/>
-                          </span>
-                        </div>
-                        <input autocomplete="off" type="text" className="form-control bl-0" placeholder="Search by food name here..." name="name" onChange={this.onChangeFood} value={this.state.data.name}/>
-                        <div className="input-group-append">
-                          <button type="button" className="btn btn-info" onClick={this.onSearch}>Submit</button>
-                        </div>
-                        <div class={`dropdown-menu col-md-12 elevation-2 ${this.state.show}`}>
-                          {dropdownFoods}
-                        </div>
-                      </div>
+                  <form className="form-group row" onSubmit={this.onSearch}>
+                    <label class="col-form-label col-sm-2">Food:</label>
+                    <div class="col-sm-4">
+                      <select className="form-control bl-0" id="search">
+                        {dropdownFoods}
+                      </select>
                     </div>
-                  </div>
+                  </form>
                 </div>
 
                 <div class="col-sm-6">
                   <div class="form-group">
                     <label>Recent:</label>
-                    <p class="form-control">
-                      <button class="btn btn-info badge">Fried Noodles</button> &nbsp;
-                      <button class="btn btn-info badge">White Rice</button> &nbsp;
-                      <button class="btn btn-info badge">Bread</button> &nbsp;
-                    </p>
+                    <p class="form-control">{recents}</p>
                   </div>
 
                   <div class="form-group col-sm-4 pl-0 bb-2 mb-0 pb-3 pr-0">
@@ -318,15 +377,6 @@ export default class Index extends React.Component {
                 <div class="col-sm-9">
                   <input autocomplete="off" type="text" class="form-control" placeholder="Enter food" required name="name" value={this.state.add.name} onChange={this.onAddChange}/>
                   <small class="form-text text-muted text-right">*required</small>
-                </div>
-              </div>
-
-              <div class="form-group row">
-                <label class="col-sm-3 col-form-label">Category</label>
-                <div class="col-sm-9">
-                  <select class="form-control" name="category" value={this.state.add.category} onChange={this.onAddChange}>
-                    {options}
-                  </select>
                 </div>
               </div>
 

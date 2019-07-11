@@ -16,26 +16,67 @@ export default class Index extends React.Component {
       name: '',
       foods: [],
       meals: [],
+      recent: [],
       category_intake: 1
     }
 
-    this.onSearch = this.onSearch.bind(this)
+    this.onRefresh = this.onRefresh.bind(this)
     this.onSelected = this.onSelected.bind(this)
     this.onIntakeMeal = this.onIntakeMeal.bind(this)
+    this.testing = this.testing.bind(this)
   }
 
-  async onSearch () {
-    if (this.state.name !== '') {
-      const headers = {"Authorization": 'Bearer ' + window.localStorage.getItem("token")}
-      const response = await fetch(`http://103.252.100.230/fact/member/meal?name=${this.state.name}`, {headers})
-      const json = await response.json()
+  async testing(id) {
+    const headers = {"Authorization": 'Bearer ' + window.localStorage.getItem("token")}
+    const response = await fetch(`http://103.252.100.230/fact/member/meal?name=all`, {headers})
+    const json = await response.json()
 
-      let {show, meals} = this.state
-      show = (json.results.meals.length) ? 'show' : ''
-      meals = json.results.meals
+    let {meals} = this.state
+    meals = json.results.meals
 
-      this.setState({ show, meals })
+    this.setState({ meals })
+
+    window.$('#search').select2()
+    window.$('#search').val(id).trigger('change');  
+    var val = window.$('#search').val()
+
+    for (let i = 0, l = json.results.meals.length; i < l; i++)
+      if (json.results.meals[i].id === id)
+        this.onSelected(i)
+  }
+
+  async onRefresh () {
+    const headers = {"Authorization": 'Bearer ' + window.localStorage.getItem("token")}
+    let response = await fetch(`http://103.252.100.230/fact/member/meal?name=all`, {headers})
+    let json = await response.json()
+
+    let {show, meals} = this.state
+    show = (json.results.meals.length) ? 'show' : ''
+    meals = json.results.meals
+
+    this.setState({ show, meals })
+
+    response = await fetch(`http://103.252.100.230/fact/member/recent`, {headers})
+    json = await response.json()
+
+    let recent = []
+    let haveRecent = []
+    for (let i = 0, l = json.results.dates.length; i < l; i++) {
+      if (recent.length === 5) break;
+      for (let j = 0, k = json.results.foods[json.results.dates[i]].length; j < k; j++) {
+        if (recent.length === 5) break;
+        if (json.results.foods[json.results.dates[i]][j].type !== 'meal') continue;
+        if (haveRecent.indexOf(json.results.foods[json.results.dates[i]][j].id) >= 0) continue;
+        recent.push(json.results.foods[json.results.dates[i]][j])
+        haveRecent.push(json.results.foods[json.results.dates[i]][j].id)
+      }
     }
+    this.setState({ recent })
+
+    var val = window.$('#search').val()
+    for (let i = 0, l = this.state.meals.length; i < l; i++)
+      if (parseInt(this.state.meals[i].id) === parseInt(val))
+        this.onSelected(i)
   }
 
   onSelected (idx) {
@@ -60,13 +101,22 @@ export default class Index extends React.Component {
 
     if (json.message === "Success") {
       if (back === true) return window.location.href = "/dashboard/user/diary"
-      let id = ''
-      let name = ''
-      let foods = []
-      let meals = []
-      let category_intake = 1
-      this.setState({id, name, foods, meals, category_intake})
+      window.alert("Saved")
     }
+  }
+
+  componentDidMount() {
+    this.onRefresh()
+    let self = this
+    window.$(document).ready(function() {
+      window.$('#search').select2();
+      window.$('#search').on('select2:select', function (e) {
+        var data = window.$('#search').val();
+        for (let i = 0, l = self.state.meals.length; i < l; i++)
+          if (parseInt(self.state.meals[i].id) === parseInt(data))
+            self.onSelected(i)
+      });
+    });
   }
 
   render() {
@@ -101,9 +151,14 @@ export default class Index extends React.Component {
 
     const dropdownFoods = []
     for (let i = 0, l = this.state.meals.length; i < l; i++) {
-      dropdownFoods.push(
-        <span class="dropdown-item" onClick={() => this.onSelected(i)}>
-          {this.state.meals[i].name}
+      dropdownFoods.push(<option value={this.state.meals[i].id}>{this.state.meals[i].name}</option>)
+    }
+    
+    let recents = []
+    for (let i = 0, l = this.state.recent.length; i < l; i++) {
+      recents.push(
+        <span>
+          <button class="btn btn-info badge" onClick={() => this.testing(this.state.recent[i].id)}>{this.state.recent[i].name}</button> &nbsp;
         </span>
       )
     }
@@ -118,7 +173,7 @@ export default class Index extends React.Component {
                 <div class="custom-control custom-radio custom-control-inline">
                   <input autocomplete="off" class="custom-control-input" type="radio" name="gridRadios" id="gridRadios1" value="option1"/>
                   <label class="custom-control-label" for="gridRadios1">
-                    <Link href="/dashboard/user/intake?status=meal">
+                    <Link href="/dashboard/user/intake?status=food">
                       <a class="text-dark">Food</a>
                     </Link>
                   </label>
@@ -140,21 +195,11 @@ export default class Index extends React.Component {
               <div className="card-body row">
                 <div className="col-md-12">
                   <div className="form-group row">
-                    <div class="col-sm-6">
-                      <div className="input-group">
-                        <div className="input-group-prepend">
-                          <span className="input-group-text">
-                            <i className="fa fa-search"/>
-                          </span>
-                        </div>
-                        <input autocomplete="off" type="text" className="form-control bl-0" placeholder="Search by food name here..." onChange={(event) => this.setState({name: event.target.value})} value={this.state.name}/>
-                        <div className="input-group-append">
-                          <button type="button" className="btn btn-info" onClick={this.onSearch}>Submit</button>
-                        </div>
-                        <div class={`dropdown-menu col-md-12 elevation-2 ${this.state.show}`}>
-                          {dropdownFoods}
-                        </div>
-                      </div>
+                    <label class="col-form-label col-sm-2">Meal:</label>
+                    <div class="col-sm-4">
+                      <select className="form-control bl-0" id="search">
+                        {dropdownFoods}
+                      </select>
                     </div>
                   </div>
                 </div>
@@ -162,9 +207,7 @@ export default class Index extends React.Component {
                 <div class="col-sm-6">
                   <div class="form-group">
                     <label>Recent:</label>
-                    <p class="form-control">
-                      <button class="btn btn-info badge">Nasi Kotak</button> &nbsp;
-                    </p>
+                    <p class="form-control">{recents}</p>
                   </div>
 
                   <div class="form-group col-sm-12 pl-0 mb-0 pb-3 pr-0">
