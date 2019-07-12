@@ -18,7 +18,9 @@ export default class Index extends React.Component {
     this.onRefresh = this.onRefresh.bind(this)
   }
 
-  async onSubmit () {
+  async onSubmit (event) {
+    event.preventDefault()
+
     const body = JSON.stringify(this.state.data)
     const response = await fetch(`http://103.252.100.230/fact/login`, {method: 'POST', body})
     const json = await response.json()
@@ -110,7 +112,7 @@ export default class Index extends React.Component {
             </div>
           </div>
 
-          <div class="col-md-6 my-auto">
+          <form class="col-md-6 my-auto" onSubmit={this.onSubmit}>
             <div class="login-box">
               <div class="login-logo">
                 <b>LOGIN</b>
@@ -118,13 +120,13 @@ export default class Index extends React.Component {
               <div class="card">
                 <div class="card-body login-card-body">
                   <div class="input-group mb-3">
-                    <input autocomplete="off" name="email" type="email" class="form-control" placeholder="Email" value={this.state.email} onChange={this.onChange}/>
+                    <input autocomplete="off" name="email" type="email" class="form-control" placeholder="Email" value={this.state.email} onChange={this.onChange} required/>
                     <div class="input-group-append">
                       <span class="fa fa-envelope input-group-text" style={{fontWeight: "900"}}/>
                     </div>
                   </div>
                   <div class="input-group mb-3">
-                    <input autocomplete="off" name="password" type="password" class="form-control" placeholder="Password" value={this.state.password} onChange={this.onChange}/>
+                    <input autocomplete="off" name="password" type="password" class="form-control" placeholder="Password" value={this.state.password} onChange={this.onChange} required/>
                     <div class="input-group-append">
                       <span class="fas fa-key input-group-text" style={{fontWeight: "900"}}/>
                     </div>
@@ -136,7 +138,7 @@ export default class Index extends React.Component {
                   </p>
                   <div class="row">
                     <div class="col-md-12">
-                      <button type="button" class="btn btn-info btn-block btn-flat" onClick={this.onSubmit}>LOGIN</button>
+                      <button type="submit" class="btn btn-info btn-block btn-flat">LOGIN</button>
                     </div>
                   </div>
                   <p class="mb-0 mt-3 ">
@@ -149,7 +151,7 @@ export default class Index extends React.Component {
                 </div>
               </div>
             </div>
-          </div>
+          </form>
         </div>
 
         <div id="carouArticle" class="carousel slide" data-ride="carousel">
