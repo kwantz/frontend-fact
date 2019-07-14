@@ -11,13 +11,21 @@ export default class Index extends React.Component {
       activities: [],
       activity: '',
       filename: 'Choose file',
+      // algorithm: {
+      //   elm: {correct: 0, incorrect: 0, accuracy: 0, training: 0, testing: 0},
+      //   kelm: {correct: 0, incorrect: 0, accuracy: 0, training: 0, testing: 0},
+      //   rkelm: {correct: 0, incorrect: 0, accuracy: 0, training: 0, testing: 0},
+      //   rf: {correct: 0, incorrect: 0, accuracy: 0, training: 0, testing: 0},
+      //   svm: {correct: 0, incorrect: 0, accuracy: 0, training: 0, testing: 0},
+      //   knn: {correct: 0, incorrect: 0, accuracy: 0, training: 0, testing: 0},
+      // },
       algorithm: {
-        elm: {correct: 0, incorrect: 0, accuracy: 0, training: 0, testing: 0},
-        kelm: {correct: 0, incorrect: 0, accuracy: 0, training: 0, testing: 0},
-        rkelm: {correct: 0, incorrect: 0, accuracy: 0, training: 0, testing: 0},
-        rf: {correct: 0, incorrect: 0, accuracy: 0, training: 0, testing: 0},
-        svm: {correct: 0, incorrect: 0, accuracy: 0, training: 0, testing: 0},
-        knn: {correct: 0, incorrect: 0, accuracy: 0, training: 0, testing: 0},
+        elm: [],
+        kelm: [],
+        rkelm: [],
+        rf: [],
+        svm: [],
+        knn: []
       }
     }
 
@@ -28,12 +36,14 @@ export default class Index extends React.Component {
   }
 
   onSubmit () {
-    this.doClasification('elm')
-    this.doClasification('kelm')
-    this.doClasification('rkelm')
-    this.doClasification('rf')
-    this.doClasification('svm')
-    this.doClasification('knn')
+    for (let i = 0; i < 10; i++) {
+      this.doClasification('elm')
+      this.doClasification('kelm')
+      this.doClasification('rkelm')
+      this.doClasification('rf')
+      this.doClasification('svm')
+      this.doClasification('knn')
+    }
   }
 
   async onChangeFile () {
@@ -62,11 +72,13 @@ export default class Index extends React.Component {
     const {algorithm} = this.state
     const {correct, incorrect} = json.results.classification
 
-    algorithm[algo].correct = correct
-    algorithm[algo].incorrect = incorrect
-    algorithm[algo].training = json.results.training_time.toFixed(3)
-    algorithm[algo].testing = json.results.testing_time.toFixed(3)
-    algorithm[algo].accuracy = ((correct * 100) / (correct + incorrect)).toFixed(1)
+    algorithm[algo].push({
+      correct: correct,
+      incorrect: incorrect,
+      training: json.results.training_time.toFixed(3),
+      testing: json.results.testing_time.toFixed(3),
+      accuracy: ((correct * 100) / (correct + incorrect)).toFixed(1)
+    })
 
     this.setState({ algorithm })
   }
@@ -94,13 +106,34 @@ export default class Index extends React.Component {
   }
 
   render() {
-    const algochartdata = (algo) => ({
-      labels: ['Correct', 'Incorrect'],
-      datasets: [{
-        data: [algo.correct, algo.incorrect],
-        backgroundColor: ['#28a745', '#dc3545'],
-      }]
-    })
+    const algochartdata = (algo) => {
+      let correct = algo.reduce((total, num) => total += num.correct, 0)
+      let incorrect = algo.reduce((total, num) => total += num.incorrect, 0)
+      return {
+        labels: ['Correct', 'Incorrect'],
+        datasets: [{
+          data: [correct / algo.length, incorrect / algo.length],
+          backgroundColor: ['#28a745', '#dc3545'],
+        }]
+      }
+    }
+
+    const tbody = (algo) => {
+      let results = []
+      for (let i = 0, l = algo.length; i < l; i++) {
+        const activity = algo[i];
+        results.push(
+          <tr key={activity.id}>
+            <td>{i + 1}</td>
+            <td>{activity.accuracy}%</td>
+            <td>{activity.training}ms</td>
+            <td>{activity.testing}ms</td>
+          </tr>
+        )
+      }
+
+      return results
+    }
 
     const options = []
     for (let i = 0, l = this.state.activities.length; i < l; i++) {
@@ -116,20 +149,7 @@ export default class Index extends React.Component {
 
         <div className="card">
           <div className="card-body row">
-            <div className="col-md-4">
-              <label>Activity</label>
-              <select className="form-control" value={this.state.activity} onChange={this.onChangeActivity}>
-                {options}
-              </select>
-            </div>
-            <div className="col-md-8">
-              <label>File</label>
-              <div className="custom-file">
-                <input autocomplete="off" type="file" onChange={this.onChangeFile} className="custom-file-input" id="customFile" accept=".csv"/>
-                <label className="custom-file-label text-left" for="customFile">{this.state.filename}</label>
-              </div>
-            </div>
-            <div className="col-md-12 mt-3">
+            <div className="col-md-12">
               <button type="button" className="btn btn-info" onClick={this.onSubmit}>Submit</button>
             </div>
           </div>
@@ -138,39 +158,99 @@ export default class Index extends React.Component {
         <div className="row">
           <Card size="col-md-4" title="Extreme Learning Machine">
             <Pie data={algochartdata(this.state.algorithm.elm)} options={{legend: {position: 'right'}}}/>
-            <p className="mt-3 mb-0 text-center">Accuracy: {this.state.algorithm.elm.accuracy}%</p>
-            <p className="mb-0 text-center">Training: {this.state.algorithm.elm.training}ms</p>
-            <p className="mb-0 text-center">Testing: {this.state.algorithm.elm.testing}ms</p>
+            <div className="row mt-3">
+              <table className="table row">
+                <tbody>
+                  <tr>
+                    <th>#</th>
+                    <th>Accuracy</th>
+                    <th>Training</th>
+                    <th>Testing</th>
+                  </tr>
+                  {tbody(this.state.algorithm.elm)}
+                </tbody>
+              </table>
+            </div>
           </Card>
           <Card size="col-md-4" title="Kernel Extreme Learning Machine">
             <Pie data={algochartdata(this.state.algorithm.kelm)} options={{legend: {position: 'right'}}}/>
-            <p className="mt-3 mb-0 text-center">Accuracy: {this.state.algorithm.kelm.accuracy}%</p>
-            <p className="mb-0 text-center">Training: {this.state.algorithm.kelm.training}ms</p>
-            <p className="mb-0 text-center">Testing: {this.state.algorithm.kelm.testing}ms</p>
+            <div className="row mt-3">
+              <table className="table row">
+                <tbody>
+                  <tr>
+                    <th>#</th>
+                    <th>Accuracy</th>
+                    <th>Training</th>
+                    <th>Testing</th>
+                  </tr>
+                  {tbody(this.state.algorithm.kelm)}
+                </tbody>
+              </table>
+            </div>
           </Card>
           <Card size="col-md-4" title="Reduced Kernel Extreme Learning Machine">
             <Pie data={algochartdata(this.state.algorithm.rkelm)} options={{legend: {position: 'right'}}}/>
-            <p className="mt-3 mb-0 text-center">Accuracy: {this.state.algorithm.rkelm.accuracy}%</p>
-            <p className="mb-0 text-center">Training: {this.state.algorithm.rkelm.training}ms</p>
-            <p className="mb-0 text-center">Testing: {this.state.algorithm.rkelm.testing}ms</p>
+            <div className="row mt-3">
+              <table className="table row">
+                <tbody>
+                  <tr>
+                    <th>#</th>
+                    <th>Accuracy</th>
+                    <th>Training</th>
+                    <th>Testing</th>
+                  </tr>
+                  {tbody(this.state.algorithm.rkelm)}
+                </tbody>
+              </table>
+            </div>
           </Card>
           <Card size="col-md-4" title="Random Forest">
             <Pie data={algochartdata(this.state.algorithm.rf)} options={{legend: {position: 'right'}}}/>
-            <p className="mt-3 mb-0 text-center">Accuracy: {this.state.algorithm.rf.accuracy}%</p>
-            <p className="mb-0 text-center">Training: {this.state.algorithm.rf.training}ms</p>
-            <p className="mb-0 text-center">Testing: {this.state.algorithm.rf.testing}ms</p>
+            <div className="row mt-3">
+              <table className="table row">
+                <tbody>
+                  <tr>
+                    <th>#</th>
+                    <th>Accuracy</th>
+                    <th>Training</th>
+                    <th>Testing</th>
+                  </tr>
+                  {tbody(this.state.algorithm.rf)}
+                </tbody>
+              </table>
+            </div>
           </Card>
           <Card size="col-md-4" title="Support Vector Machine">
             <Pie data={algochartdata(this.state.algorithm.svm)} options={{legend: {position: 'right'}}}/>
-            <p className="mt-3 mb-0 text-center">Accuracy: {this.state.algorithm.svm.accuracy}%</p>
-            <p className="mb-0 text-center">Training: {this.state.algorithm.svm.training}ms</p>
-            <p className="mb-0 text-center">Testing: {this.state.algorithm.svm.testing}ms</p>
+            <div className="row mt-3">
+              <table className="table row">
+                <tbody>
+                  <tr>
+                    <th>#</th>
+                    <th>Accuracy</th>
+                    <th>Training</th>
+                    <th>Testing</th>
+                  </tr>
+                  {tbody(this.state.algorithm.svm)}
+                </tbody>
+              </table>
+            </div>
           </Card>
           <Card size="col-md-4" title="K-Nearest Neighbor">
             <Pie data={algochartdata(this.state.algorithm.knn)} options={{legend: {position: 'right'}}}/>
-            <p className="mt-3 mb-0 text-center">Accuracy: {this.state.algorithm.knn.accuracy}%</p>
-            <p className="mb-0 text-center">Training: {this.state.algorithm.knn.training}ms</p>
-            <p className="mb-0 text-center">Testing: {this.state.algorithm.knn.testing}ms</p>
+            <div className="row mt-3">
+              <table className="table row">
+                <tbody>
+                  <tr>
+                    <th>#</th>
+                    <th>Accuracy</th>
+                    <th>Training</th>
+                    <th>Testing</th>
+                  </tr>
+                  {tbody(this.state.algorithm.knn)}
+                </tbody>
+              </table>
+            </div>
           </Card>
         </div>
       </AdminLayoutHoc>

@@ -24,10 +24,12 @@ String.prototype.invalidpass = function() {
   return !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,16}$/.test(this.valueOf())
 }
 
-Number.prototype.display = function() {
+Number.prototype.display = function(option = "") {
+  if (option === "table") return (Math.round(this.valueOf() * 100) / 100).toFixed(2)
   return Math.round(this.valueOf() * 100) / 100
 }
 
-Number.prototype.qty = function(qty) {
+Number.prototype.qty = function(qty, option = "") {
+  if (option === "table") return (Math.round(this.valueOf() * parseFloat(qty) * 100) / 100).toFixed(2)
   return Math.round(this.valueOf() * parseFloat(qty) * 100) / 100
 }

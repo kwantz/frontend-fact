@@ -1,0 +1,11 @@
+1. Apa alasan untuk tetap menampilkan "Add Food" pada user?
+
+2. Kami tidak bisa membedakan aktivitas duduk diam santai dengan duduk diam tetapi otaknya terus bekerja. Apakah dengan mengatakan "Kami hanya bisa me-tracking aktivitas yang aktif, bukan pasif" itu sudah cukup?
+
+3. Bagaimana format penulisan untuk Pengujian Algorithma?
+
+4. Apakah ELM dan KELM perlu diperlihatkan untuk perbandingan? ELM memiliki Hidden Node yang nilainya bersifat random, ada kemungkinan apa yang tertulis di pengujian algoritma tidak akan sama saat pengujian di sidang.
+
+5. Apa yang sebaiknya kita focus terlebih dahulu? Karena saya merasa "stuck"
+
+6. (Curhat) Ada cara untuk tidak merasa jenuh?

@@ -83,7 +83,7 @@ export default class Index extends React.Component {
     const algochartdata = {
       labels: ['Correct', 'Incorrect'],
       datasets: [{
-        data: [incorrect, correct],
+        data: [correct, incorrect],
         backgroundColor: ['#28a745', '#dc3545'],
       }]
     }

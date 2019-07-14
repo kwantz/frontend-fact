@@ -203,7 +203,7 @@ export default class Index extends React.Component {
               <b>{intake[idx][i].name}</b> <br/>
               <span>{intake[idx][i].qty} serving</span>
             </div>
-            <div className="col-md-3 my-auto text-right">{ parseFloat(intake[idx][i].calorie).qty(intake[idx][i].qty) } KCAL</div>
+            <div className="col-md-3 my-auto text-right">{ parseFloat(intake[idx][i].calorie).qty(intake[idx][i].qty, "table") } KCAL</div>
           </div>
         )
       }
@@ -256,7 +256,7 @@ export default class Index extends React.Component {
             <b>{this.state.burnt[i].label}</b> <br/>
             <span>{convertTimeActivity(this.state.burnt[i].duration)}</span>
           </div>
-          <div className="col-md-3 my-auto text-right">{parseFloat(this.state.burnt[i].calorie).display()} KCAL</div>
+          <div className="col-md-3 my-auto text-right">{parseFloat(this.state.burnt[i].calorie).display("table")} KCAL</div>
         </div>
       )
     }
