@@ -36,14 +36,12 @@ export default class Index extends React.Component {
   }
 
   onSubmit () {
-    for (let i = 0; i < 10; i++) {
-      this.doClasification('elm')
-      this.doClasification('kelm')
-      this.doClasification('rkelm')
-      this.doClasification('rf')
-      this.doClasification('svm')
-      this.doClasification('knn')
-    }
+    this.doClasification('elm')
+    this.doClasification('kelm')
+    this.doClasification('rkelm')
+    this.doClasification('rf')
+    this.doClasification('svm')
+    this.doClasification('knn')
   }
 
   async onChangeFile () {
@@ -70,15 +68,16 @@ export default class Index extends React.Component {
     const json = await response.json()
 
     const {algorithm} = this.state
-    const {correct, incorrect} = json.results.classification
-
-    algorithm[algo].push({
-      correct: correct,
-      incorrect: incorrect,
-      training: json.results.training_time.toFixed(3),
-      testing: json.results.testing_time.toFixed(3),
-      accuracy: ((correct * 100) / (correct + incorrect)).toFixed(1)
-    })
+    for (let i = 0; i < 10; i++) {
+      const {correct, incorrect} = json.results[i].classification
+      algorithm[algo].push({
+        correct: correct,
+        incorrect: incorrect,
+        training: json.results[i].training_time.toFixed(3),
+        testing: json.results[i].testing_time.toFixed(3),
+        accuracy: ((correct * 100) / (correct + incorrect)).toFixed(1)
+      })
+    }
 
     this.setState({ algorithm })
   }
@@ -107,12 +106,11 @@ export default class Index extends React.Component {
 
   render() {
     const algochartdata = (algo) => {
-      let correct = algo.reduce((total, num) => total += num.correct, 0)
-      let incorrect = algo.reduce((total, num) => total += num.incorrect, 0)
+      let acc = algo.reduce((total, num) => total += parseFloat(num.accuracy), 0)
       return {
         labels: ['Correct', 'Incorrect'],
         datasets: [{
-          data: [correct / algo.length, incorrect / algo.length],
+          data: [Math.round((acc / algo.length) * 100) / 100, Math.round((100 - acc / algo.length) * 100) / 100],
           backgroundColor: ['#28a745', '#dc3545'],
         }]
       }
