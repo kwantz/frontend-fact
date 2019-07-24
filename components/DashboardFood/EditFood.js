@@ -36,9 +36,9 @@ class Index extends React.Component {
 
     data.name = data.name.trim()
     data.calorie = Math.min(Math.max(data.calorie, 0), 5000)
-    data.fat = Math.min(Math.max(data.fat, 0), 1000)
-    data.protein = Math.min(Math.max(data.protein, 0), 1000)
-    data.carbohydrate = Math.min(Math.max(data.carbohydrate, 0), 1000)
+    data.fat = Math.min(Math.max(data.fat, 0), 100)
+    data.protein = Math.min(Math.max(data.protein, 0), 100)
+    data.carbohydrate = Math.min(Math.max(data.carbohydrate, 0), 100)
 
     const body = JSON.stringify(data)
     const headers = {"Authorization": 'Bearer ' + window.localStorage.getItem("token")}
@@ -129,7 +129,7 @@ class Index extends React.Component {
             <div className="form-group row">
               <label className="col-sm-3 col-form-label">Food Name</label>
               <div className="col-sm-9">
-                <input autocomplete="off" name="name" value={this.state.data.name} type="text" className="form-control" placeholder="Enter Food Name" onChange={this.onChange} required/>
+                <input autocomplete="off" name="name" value={this.state.data.name} type="text" className="form-control" placeholder="Enter Food Name" onChange={this.onChange} required maxLength={30}/>
               </div>
             </div>
             <div className="form-group row">
@@ -149,19 +149,19 @@ class Index extends React.Component {
             <div className="form-group row">
               <label className="col-sm-3 col-form-label">Total Carbohydrate (in g)</label>
               <div className="col-sm-9">
-                <input autocomplete="off" name="carbohydrate" value={this.state.data.carbohydrate} type="number" min="0" max="1000" className="form-control" placeholder="Enter Amount of Carbohydrate" onChange={this.onChange} required/>
+                <input autocomplete="off" name="carbohydrate" value={this.state.data.carbohydrate} type="number" min="0" max="100" className="form-control" placeholder="Enter Amount of Carbohydrate" onChange={this.onChange} required/>
               </div>
             </div>
             <div className="form-group row">
               <label className="col-sm-3 col-form-label">Total Protein (in g)</label>
               <div className="col-sm-9">
-                <input autocomplete="off" name="protein" value={this.state.data.protein} type="number" min="0" max="1000" className="form-control" placeholder="Enter Amount of Protein" onChange={this.onChange} required/>
+                <input autocomplete="off" name="protein" value={this.state.data.protein} type="number" min="0" max="100" className="form-control" placeholder="Enter Amount of Protein" onChange={this.onChange} required/>
               </div>
             </div>
             <div className="form-group row">
               <label className="col-sm-3 col-form-label">Total Fat (in g)</label>
               <div className="col-sm-9">
-                <input autocomplete="off" name="fat" value={this.state.data.fat} type="number" min="0" max="1000" className="form-control" placeholder="Enter Amount of Fat" onChange={this.onChange} required/>
+                <input autocomplete="off" name="fat" value={this.state.data.fat} type="number" min="0" max="100" className="form-control" placeholder="Enter Amount of Fat" onChange={this.onChange} required/>
               </div>
             </div>
             <div className="row mt-5">

@@ -21,7 +21,13 @@ class Index extends React.Component {
     this.onChange = this.onChange.bind(this)
   }
 
-  async onSubmit() {
+  async onSubmit(event) {
+    event.preventDefault();
+
+    if (this.state.data.password.invalidpass()) {
+      return window.alert("Password minimum 8 and maximum 16 characters, at least 1 uppercase letter, 1 lowercase letter, and 1 number.")
+    }
+
     const body = JSON.stringify(this.state.data)
     const headers = {"Authorization": 'Bearer ' + window.localStorage.getItem("token")}
     const response = await fetch(`http://103.252.100.230/fact/member/user`, {method: 'PUT', body, headers})
@@ -45,7 +51,7 @@ class Index extends React.Component {
 
     return (
       <UserLayoutHoc navbarInfo={navbarInfo}>
-        <div class="row pt-5">
+        <form class="row pt-5" onSubmit={this.onSubmit}>
           <div className="card offset-md-3 col-md-6 pt-3">
             <div class="form-group">
               <label for="exampleInputEmail1">Current Password</label>
@@ -64,14 +70,14 @@ class Index extends React.Component {
 
             <div class="row mb-3">
               <div class="col-md-6">
-                <button type="submit" class="btn btn-block btn-info" onClick={this.onSubmit}>SAVE</button>
+                <button type="submit" class="btn btn-block btn-info">SAVE</button>
               </div>
               <div class="col-md-6">
-                <button type="submit" class="btn btn-block btn-secondary" onClick={() => Router.back()}>CANCEL</button>
+                <button type="button" class="btn btn-block btn-secondary" onClick={() => Router.back()}>CANCEL</button>
               </div>
             </div>
           </div>
-        </div>
+        </form>
       </UserLayoutHoc>
     )
   }

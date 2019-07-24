@@ -23,6 +23,10 @@ export default class Index extends React.Component {
       return window.location.href = "/"
     }
 
+    if (this.state.data.password.invalidpass()) {
+      return window.alert("Password minimum 8 and maximum 16 characters, at least 1 uppercase letter, 1 lowercase letter, and 1 number.")
+    }
+
     const body = JSON.stringify(this.state.data)
     let response = await fetch(`http://103.252.100.230/fact/reset-password/${this.props.url.query.key}`, {method: 'POST', body})
     let json = await response.json()

@@ -21,7 +21,14 @@ export default class Index extends React.Component {
     this.onChange = this.onChange.bind(this)
   }
 
-  async onSubmit () {
+  async onSubmit (event) {
+    event.preventDefault();
+
+    let d = new Date()
+    if (d.getFullYear() - this.state.data.birth_year < 20 || d.getFullYear() - this.state.data.birth_year > 70) {
+      return alert('Age must be in range 20-70 y.o')
+    }
+
     const body = JSON.stringify(this.state.data)
     const headers = {"Authorization": 'Bearer ' + window.localStorage.getItem("token")}
     let response = await fetch(`http://103.252.100.230/fact/member/user`, {method: 'PUT', body, headers})
@@ -63,7 +70,7 @@ export default class Index extends React.Component {
     return (
       <GuessLayoutHoc registerbox="false">
         <div className="row mt-4">
-          <div className="col-md-10 offset-md-1">
+          <form className="col-md-10 offset-md-1" onSubmit={this.onSubmit}>
             <h4>Let us know you more...</h4>
 
             <div class="card">
@@ -75,10 +82,10 @@ export default class Index extends React.Component {
 
             <div class="row">
               <div class="col-md-4 offset-md-4">
-                <button type="button" class="btn btn-info btn-block" onClick={this.onSubmit}>DONE</button>
+                <button type="submit" class="btn btn-info btn-block">DONE</button>
               </div>
             </div>
-          </div>
+          </form>
         </div>
       </GuessLayoutHoc>
     )

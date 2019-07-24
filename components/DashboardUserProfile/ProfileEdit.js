@@ -30,7 +30,9 @@ class Index extends React.Component {
     this.setState({ data })
   }
 
-  async onSubmit () {
+  async onSubmit (event) {
+    event.preventDefault();
+
     const body = JSON.stringify(this.state.data)
     const headers = {"Authorization": 'Bearer ' + window.localStorage.getItem("token")}
     let response = await fetch(`http://103.252.100.230/fact/member/user`, {method: 'PUT', body, headers})
@@ -69,13 +71,13 @@ class Index extends React.Component {
 
     return (
       <UserLayoutHoc navbarInfo={navbarInfo}>
-        <div class="row pt-5">
+        <form class="row pt-5" onSubmit={this.onSubmit}>
           <div className="card offset-md-2 col-md-8 pt-3">
             <div class="row">
             <div class="col-md-6">
               <div class="form-group">
                 <label for="exampleInputEmail1">Name</label>
-                <input autocomplete="off" type="email" class="form-control" value={this.state.data.name} name="name" onChange={this.onChange}/>
+                <input autocomplete="off" type="email" class="form-control" value={this.state.data.name} name="name" onChange={this.onChange} required maxLength={30}/>
               </div>
             </div>
             <div class="col-md-6">
@@ -128,7 +130,7 @@ class Index extends React.Component {
               <div class="form-group">
                 <label>Weight</label>
                 <div class="input-group">
-                  <input autocomplete="off" type="number" class="form-control br-0" placeholder="Enter weight" value={this.state.data.weight} name="weight" onChange={this.onChange}/>
+                  <input autocomplete="off" type="number" class="form-control br-0" placeholder="Enter weight" min="30" max="200" value={this.state.data.weight} name="weight" onChange={this.onChange}/>
                   <div class="input-group-prepend">
                     <div class="input-group-text right">kg</div>
                   </div>
@@ -140,7 +142,7 @@ class Index extends React.Component {
               <div class="form-group">
                 <label>Height</label>
                 <div class="input-group">
-                  <input autocomplete="off" type="number" class="form-control br-0" placeholder="Enter weight" value={this.state.data.height} name="height" onChange={this.onChange}/>
+                  <input autocomplete="off" type="number" class="form-control br-0" placeholder="Enter weight" min="100" max="270" value={this.state.data.height} name="height" onChange={this.onChange}/>
                   <div class="input-group-prepend">
                     <div class="input-group-text right">cm</div>
                   </div>
@@ -150,14 +152,14 @@ class Index extends React.Component {
           </div>
             <div class="row mb-3">
               <div class="col-md-6">
-                <button type="button" class="btn btn-block btn-info" onClick={this.onSubmit}>SAVE</button>
+                <button type="button" class="btn btn-block btn-info">SAVE</button>
               </div>
               <div class="col-md-6">
                 <button type="button" class="btn btn-block btn-secondary" onClick={() => Router.back()}>CANCEL</button>
               </div>
             </div>
           </div>
-        </div>
+        </form>
       </UserLayoutHoc>
     )
   }

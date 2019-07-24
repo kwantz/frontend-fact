@@ -22,6 +22,7 @@ class Index extends React.Component {
     this.onRefresh = this.onRefresh.bind(this)
     this.onSubmit = this.onSubmit.bind(this)
     this.onChangeFile = this.onChangeFile.bind(this)
+    this.onChange = this.onChange.bind(this)
   }
 
   async onSubmit (event) {
@@ -126,7 +127,7 @@ class Index extends React.Component {
               <label className="col-sm-3 col-form-label">Image</label>
               <div className="col-sm-9">
                 <div className="custom-file">
-                  <input autocomplete="off" type="file" onChange={this.onChangeFile} className="custom-file-input" id="customFile" accept="image/*" required/>
+                  <input autocomplete="off" type="file" onChange={this.onChangeFile} className="custom-file-input" id="customFile" accept="image/*"/>
                   <label className="custom-file-label" for="customFile">{(this.state.data.image === '') ? 'Choose file' : this.state.data.image}</label>
                 </div>
                 <img className="mt-3" src={`http://103.252.100.230/fact/image/${this.state.data.image}`}/>

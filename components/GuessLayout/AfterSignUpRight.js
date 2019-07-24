@@ -8,7 +8,7 @@ class GuessLayoutHoc extends React.Component {
           <label>Which activity level are you in?</label>
 
           <div class="form-check custom-control custom-radio">
-            <input autocomplete="off" class="form-check-input custom-control-input" type="radio" name="activity_level" id="low" value="Low" onChange={self.onChange}/>
+            <input autocomplete="off" class="form-check-input custom-control-input" type="radio" name="activity_level" id="low" value="Low" onChange={self.onChange} required/>
             <label class="form-check-label custom-control-label" for="low">
               <span>Low Activity (Sedentary)</span>
               <div className="clearfix">
@@ -25,7 +25,7 @@ class GuessLayoutHoc extends React.Component {
           </div>
 
           <div class="form-check custom-control custom-radio mt-3">
-            <input autocomplete="off" class="form-check-input custom-control-input" type="radio" name="activity_level" id="medium" value="Medium" onChange={self.onChange}/>
+            <input autocomplete="off" class="form-check-input custom-control-input" type="radio" name="activity_level" id="medium" value="Medium" onChange={self.onChange} required/>
             <label class="form-check-label custom-control-label" for="medium">
               <span>Medium Activity</span>
               <div className="clearfix">
@@ -42,7 +42,7 @@ class GuessLayoutHoc extends React.Component {
           </div>
 
           <div class="form-check custom-control custom-radio mt-3">
-            <input autocomplete="off" class="form-check-input custom-control-input" type="radio" name="activity_level" id="high" value="High" onChange={self.onChange}/>
+            <input autocomplete="off" class="form-check-input custom-control-input" type="radio" name="activity_level" id="high" value="High" onChange={self.onChange} required/>
             <label class="form-check-label custom-control-label" for="high">
               <span>High Activity</span>
               <div className="clearfix">

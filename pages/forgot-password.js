@@ -36,7 +36,7 @@ export default class Index extends React.Component {
       <GuessLayoutHoc registerbox="true" title="FORGET PASSWORD">
         <div class="form-group">
           <label>Please write down your email address below!</label>
-          <input autocomplete="off" type="email" class="form-control" placeholder="Email address" />
+          <input autocomplete="off" type="email" class="form-control" placeholder="Email address" required/>
         </div>
 
         <Link href="/reset-password">

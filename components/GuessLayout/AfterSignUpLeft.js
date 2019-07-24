@@ -12,7 +12,7 @@ class GuessLayoutHoc extends React.Component {
                 <i class="far fa-calendar-alt"/>
               </div>
             </div>
-            <input autocomplete="off" type="number" class="form-control bl-0" placeholder="_ _ _ _" name="birth_year" value={self.state.birth_year} onChange={self.onChange}/>
+            <input autocomplete="off" type="number" class="form-control bl-0" placeholder="_ _ _ _" name="birth_year" value={self.state.birth_year} onChange={self.onChange} required/>
           </div>
         </div>
 
@@ -25,7 +25,7 @@ class GuessLayoutHoc extends React.Component {
                 <i class="fas fa-male" style={{fontSize: '35px'}}/>
               </label>
               <br/>
-              <input autocomplete="off" class="form-check-input custom-control-input" type="radio" name="gender" id="male" value="1" onChange={self.onChange}/>
+              <input autocomplete="off" class="form-check-input custom-control-input" type="radio" name="gender" id="male" value="1" onChange={self.onChange} required/>
               <label class="form-check-label custom-control-label" for="male">Male</label>
             </div>
 
@@ -34,7 +34,7 @@ class GuessLayoutHoc extends React.Component {
                 <i class="fas fa-female" style={{fontSize: '35px'}}/>
               </label>
               <br/>
-              <input autocomplete="off" class="form-check-input custom-control-input" type="radio" name="gender" id="female" value="2" onChange={self.onChange}/>
+              <input autocomplete="off" class="form-check-input custom-control-input" type="radio" name="gender" id="female" value="2" onChange={self.onChange} required/>
               <label class="form-check-label custom-control-label" for="female">Female</label>
             </div>
           </div>
@@ -43,7 +43,7 @@ class GuessLayoutHoc extends React.Component {
         <div class="form-group">
           <label>Weight</label>
           <div class="input-group">
-            <input autocomplete="off" type="number" class="form-control br-0" placeholder="Enter weight" min="0" name="weight" value={self.state.weight} onChange={self.onChange}/>
+            <input autocomplete="off" type="number" class="form-control br-0" placeholder="Enter weight" min="30" max="200" name="weight" value={self.state.weight} onChange={self.onChange} required/>
             <div class="input-group-prepend">
               <div class="input-group-text right">kg</div>
             </div>
@@ -53,7 +53,7 @@ class GuessLayoutHoc extends React.Component {
         <div class="form-group">
           <label>Height</label>
           <div class="input-group">
-            <input autocomplete="off" type="number" class="form-control br-0" placeholder="Enter height" min="0" name="height" value={self.state.height} onChange={self.onChange}/>
+            <input autocomplete="off" type="number" class="form-control br-0" placeholder="Enter height" min="100" max="270" name="height" value={self.state.height} onChange={self.onChange} required/>
             <div class="input-group-prepend">
               <div class="input-group-text right">cm</div>
             </div>

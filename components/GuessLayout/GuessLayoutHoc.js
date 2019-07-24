@@ -25,12 +25,17 @@ class GuessLayoutHoc extends React.Component {
       zIndex: "999",
     }
 
+    let role = window.localStorage.getItem("role")
+    let href = '/'
+    if (role === '1') href = '/dashboard/admin'
+    else if (role === '2') href = '/dashboard/user/diary'
+
     return (
       <div class="register-page pb-3" style={{minHeight: '100vh'}}>
         <nav className="navbar navbar-expand bg-info navbar-light border-bottom row mr-0 ml-0" style={styles}>
           <ul className="navbar-nav col-md-3">
             <li className="nav-item d-sm-inline-block">
-              <Link href="/">
+              <Link href={href}>
                 <a className="nav-link font-weight-bold" style={{fontSize:'1.5rem'}}>FACT</a>
               </Link>
             </li>

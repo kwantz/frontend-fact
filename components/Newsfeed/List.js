@@ -1,5 +1,6 @@
 import GuessLayoutHoc from '../GuessLayout/GuessLayoutHoc'
 import Link from 'next/link';
+import '../../libraries'
 
 export default class Index extends React.Component {
   constructor (props) {
@@ -63,32 +64,32 @@ export default class Index extends React.Component {
           </div>
         </div>
       )
+    }
 
-      if (i % 3 == 2) {
-        const idx = Math.floor(Math.random() * this.state.quote.length)
-        newsfeed.push(
-          <div class="col-md-12">
-            <div class="card">
-              <div class="card-body row">
-                <div class="col-md-8 offset-md-2">
-                  <h1 class="mb-3">QOTD</h1>
-                  <h6>
-                    "{this.state.quote[idx].desc}"
-                  </h6>
-                  <p class="text-right">
-                    --{this.state.quote[idx].author}
-                  </p>
-                </div>
+    let qotd = (this.state.quote.length > 0)
+      ? (
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-body row">
+              <div class="col-md-8 offset-md-2">
+                <h1 class="mb-3">QOTD</h1>
+                <h6>
+                  "{this.state.quote[this.state.quote.length - 1].desc}"
+                </h6>
+                <p class="text-right">
+                  --{this.state.quote[this.state.quote.length - 1].author}
+                </p>
               </div>
             </div>
           </div>
-        )
-      }
-    }
+        </div>
+      )
+      : <div/>
 
     return (
       <GuessLayoutHoc navbarTitle="NEWSFEED" fixed="true">
         <div class="row" style={{paddingTop: "5rem"}}>
+          {qotd}
           {newsfeed}
         </div>
       </GuessLayoutHoc>

@@ -123,7 +123,7 @@ class Index extends React.Component {
       }
       return
     }
-    
+
     edit[event.target.name] = event.target.value
     this.setState({ edit })
   }
@@ -238,7 +238,7 @@ class Index extends React.Component {
             <div className="modal-body">
               <div className="form-group">
                 <label>Category Name</label>
-                <input autocomplete="off" type="text" className="form-control" placeholder="Enter Category Name" value={this.state.add} onChange={this.onChangeAdd} required/>
+                <input autocomplete="off" type="text" className="form-control" placeholder="Enter Category Name" value={this.state.add} onChange={this.onChangeAdd} required maxLength={30}/>
               </div>
             </div>
             <div className="modal-footer">
@@ -259,7 +259,7 @@ class Index extends React.Component {
             <div className="modal-body">
               <div className="form-group">
                 <label>Category Name</label>
-                <input autocomplete="off" type="text" name="name" className="form-control" placeholder="Enter Category Name" value={this.state.edit.name} onChange={this.onChangeEdit} required/>
+                <input autocomplete="off" type="text" name="name" className="form-control" placeholder="Enter Category Name" value={this.state.edit.name} onChange={this.onChangeEdit} required maxLength={30}/>
               </div>
             </div>
             <div className="modal-footer">

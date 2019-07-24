@@ -1,5 +1,6 @@
 import UserLayoutHoc from '../../../components/UserLayout/UserLayoutHoc'
 import Card from '../../../components/Card'
+import Modal from '../../../components/Modal'
 import Chart from 'chart.js'
 import { Doughnut } from 'react-chartjs-2';
 import '../../../libraries'
@@ -64,8 +65,13 @@ export default class Index extends React.Component {
   }
 
   checkedAll(idx) {
-    const data_delete = this.state.intake[idx].map((data) => data.id)
-    this.setState({ data_delete })
+    if (this.state.intake[idx].length === this.state.data_delete.length) {
+      this.setState({ data_delete: [] })
+    }
+    else {
+      const data_delete = this.state.intake[idx].map((data) => data.id)
+      this.setState({ data_delete })
+    }
   }
 
   toggleChecked(val) {
@@ -125,10 +131,12 @@ export default class Index extends React.Component {
 
           //Draw text in center
           ctx.font = "30px " + "Arial";
-          ctx.fillText(chart.config.options.elements.calorie.text, centerX, centerY - 10);
+          ctx.fillText(Math.abs(parseInt(chart.config.options.elements.calorie.text)), centerX, centerY - 10);
+
+          let status = (parseInt(chart.config.options.elements.calorie.text) < 0) ? "OVER" : "LEFT"
 
           ctx.font = "15px " + "Arial";
-          ctx.fillText('KCAL LEFT', centerX, centerY + 20);
+          ctx.fillText(`KCAL ${status}`, centerX, centerY + 20);
         }
 
         if (chart.config.options.elements.nutrient) {
@@ -261,6 +269,7 @@ export default class Index extends React.Component {
       )
     }
 
+    let isDisabled = (this.state.data_delete.length > 0) ? false : true
 
     return (
       <UserLayoutHoc navbarInfo={navbarInfo}>
@@ -334,7 +343,7 @@ export default class Index extends React.Component {
                     <button className="btn btn-light btn-block" type="button" onClick={() => this.onDeleteStatus('')}>CANCEL</button>
                   </div>
                   <div className="col-md-6">
-                    <button className="btn btn-danger btn-block" type="button" onClick={() => this.onDelete(1)}>DELETE</button>
+                    <button className="btn btn-danger btn-block" type="button"  data-toggle="modal" data-target="#delete-breakfast" disabled={isDisabled}>DELETE</button>
                   </div>
                 </div>
               </div>
@@ -368,7 +377,7 @@ export default class Index extends React.Component {
                     <button className="btn btn-light btn-block" type="button" onClick={() => this.onDeleteStatus('')}>CANCEL</button>
                   </div>
                   <div className="col-md-6">
-                    <button className="btn btn-danger btn-block" type="button" onClick={() => this.onDelete(2)}>DELETE</button>
+                    <button className="btn btn-danger btn-block" type="button"  data-toggle="modal" data-target="#delete-lunch" disabled={isDisabled}>DELETE</button>
                   </div>
                 </div>
               </div>
@@ -402,7 +411,7 @@ export default class Index extends React.Component {
                     <button className="btn btn-light btn-block" type="button" onClick={() => this.onDeleteStatus('')}>CANCEL</button>
                   </div>
                   <div className="col-md-6">
-                    <button className="btn btn-danger btn-block" type="button" onClick={() => this.onDelete(3)}>DELETE</button>
+                    <button className="btn btn-danger btn-block" type="button"  data-toggle="modal" data-target="#delete-dinner" disabled={isDisabled}>DELETE</button>
                   </div>
                 </div>
               </div>
@@ -436,7 +445,7 @@ export default class Index extends React.Component {
                     <button className="btn btn-light btn-block" type="button" onClick={() => this.onDeleteStatus('')}>CANCEL</button>
                   </div>
                   <div className="col-md-6">
-                    <button className="btn btn-danger btn-block" type="button" onClick={() => this.onDelete(4)}>DELETE</button>
+                    <button className="btn btn-danger btn-block" type="button"  data-toggle="modal" data-target="#delete-snack" disabled={isDisabled}>DELETE</button>
                   </div>
                 </div>
               </div>
@@ -484,6 +493,62 @@ export default class Index extends React.Component {
               </span>
             </div>
           </div>
+
+          <Modal id="delete-breakfast" title="Delete Food">
+            <div className="modal-body">
+              <span>Are you sure you want to delete food in <b>Breakfast</b>?</span>
+            </div>
+            <div className="modal-footer">
+              <div className="col-md-6">
+                <button type="button" className="btn btn-light btn-block" data-dismiss="modal">No</button>
+              </div>
+              <div className="col-md-6">
+                <button type="button" className="btn btn-danger btn-block"  onClick={() => this.onDelete(1)} data-dismiss="modal">Yes</button>
+              </div>
+            </div>
+          </Modal>
+
+          <Modal id="delete-lunch" title="Delete Food">
+            <div className="modal-body">
+              <span>Are you sure you want to delete food in <b>Lunch</b>?</span>
+            </div>
+            <div className="modal-footer">
+              <div className="col-md-6">
+                <button type="button" className="btn btn-light btn-block" data-dismiss="modal">No</button>
+              </div>
+              <div className="col-md-6">
+                <button type="button" className="btn btn-danger btn-block"  onClick={() => this.onDelete(2)} data-dismiss="modal">Yes</button>
+              </div>
+            </div>
+          </Modal>
+
+          <Modal id="delete-dinner" title="Delete Food">
+            <div className="modal-body">
+              <span>Are you sure you want to delete food in <b>Dinner</b>?</span>
+            </div>
+            <div className="modal-footer">
+              <div className="col-md-6">
+                <button type="button" className="btn btn-light btn-block" data-dismiss="modal">No</button>
+              </div>
+              <div className="col-md-6">
+                <button type="button" className="btn btn-danger btn-block"  onClick={() => this.onDelete(3)} data-dismiss="modal">Yes</button>
+              </div>
+            </div>
+          </Modal>
+
+          <Modal id="delete-snack" title="Delete Food">
+            <div className="modal-body">
+              <span>Are you sure you want to delete food in <b>Snack</b>?</span>
+            </div>
+            <div className="modal-footer">
+              <div className="col-md-6">
+                <button type="button" className="btn btn-light btn-block" data-dismiss="modal">No</button>
+              </div>
+              <div className="col-md-6">
+                <button type="button" className="btn btn-danger btn-block"  onClick={() => this.onDelete(4)} data-dismiss="modal">Yes</button>
+              </div>
+            </div>
+          </Modal>
         </div>
       </UserLayoutHoc>
     )

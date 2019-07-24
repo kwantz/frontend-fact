@@ -52,7 +52,7 @@ export default class Index extends React.Component {
         <form onSubmit={this.onSubmit}>
           <div class="form-group">
             <label>Name</label>
-            <input autocomplete="off" type="text" class="form-control" placeholder="Enter your name" name="name" value={this.state.name} onChange={this.onChange} required/>
+            <input autocomplete="off" type="text" class="form-control" placeholder="Enter your name" name="name" value={this.state.name} onChange={this.onChange} required maxLength={30}/>
           </div>
 
           <div class="form-group">

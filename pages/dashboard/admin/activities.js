@@ -271,7 +271,7 @@ class Index extends React.Component {
             <div className="modal-body">
               <div className="form-group">
                 <label>Activity Name</label>
-                <input autocomplete="off" type="text" name="name" value={this.state.add.name} onChange={this.onChangeAdd} className="form-control" placeholder="Enter Activity Name" required/>
+                <input autocomplete="off" type="text" name="name" value={this.state.add.name} onChange={this.onChangeAdd} className="form-control" placeholder="Enter Activity Name" required maxLength={30}/>
               </div>
               <div className="form-group">
                 <label>Calorie Burnt (in kcal/kg hour)</label>
