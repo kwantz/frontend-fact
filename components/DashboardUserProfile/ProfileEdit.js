@@ -11,11 +11,11 @@ class Index extends React.Component {
     this.state = {
       data: {
         name: '',
-        email: '',
-        birth_year: 1997,
+        password: '',
+        re_password: '',
+        old_password: '',
         weight: 0,
         height: 0,
-        gender: '',
       }
     }
 
@@ -50,11 +50,8 @@ class Index extends React.Component {
 
     const data = {
       name: json.results.name,
-      email: json.results.email,
-      birth_year: json.results.birth_year,
       weight: json.results.weight,
       height: json.results.height,
-      gender: json.results.gender,
     }
 
     this.setState({ data })
@@ -82,47 +79,22 @@ class Index extends React.Component {
             </div>
             <div class="col-md-6">
               <div class="form-group">
-                <label for="exampleInputEmail1">Email Address</label>
-                <input autocomplete="off" type="email" class="form-control" value={this.state.data.email} name="email" onChange={this.onChange}/>
+                <label for="exampleInputEmail1">Current Password</label>
+                <input autocomplete="off" type="password" class="form-control"  placeholder="Enter Current Password" value={this.state.old_password} name="old_password" onChange={this.onChange}/>
               </div>
             </div>
 
             <div class="col-md-6">
               <div class="form-group">
-                <label>Gender</label>
-                <div class="input-group">
-                  <div class="form-check custom-control custom-radio text-center">
-                    <label for="male">
-                      <i class="fas fa-male" style={{fontSize: '35px'}}/>
-                    </label>
-                    <br/>
-                    <input autocomplete="off" class="form-check-input custom-control-input" type="radio" name="gender" id="male" value="1" checked={parseInt(this.state.data.gender) === 1} name="gender" onChange={this.onChange}/>
-                    <label class="form-check-label custom-control-label" for="male">Male</label>
-                  </div>
-
-                  <div class="form-check custom-control custom-radio text-center ml-5">
-                    <label for="female">
-                      <i class="fas fa-female" style={{fontSize: '35px'}}/>
-                    </label>
-                    <br/>
-                    <input autocomplete="off" class="form-check-input custom-control-input" type="radio" name="gender" id="female" value="2" checked={parseInt(this.state.data.gender) === 2} name="gender" onChange={this.onChange}/>
-                    <label class="form-check-label custom-control-label" for="female">Female</label>
-                  </div>
-                </div>
+                <label for="exampleInputEmail1">New Password</label>
+                <input autocomplete="off" type="password" class="form-control"  placeholder="Enter New Password" value={this.state.password} name="password" onChange={this.onChange}/>
               </div>
             </div>
 
             <div class="col-md-6">
               <div class="form-group">
-                <label>Birth Year</label>
-                <div class="input-group">
-                  <div class="input-group-prepend">
-                    <div class="input-group-text">
-                      <i class="far fa-calendar-alt"/>
-                    </div>
-                  </div>
-                  <input autocomplete="off" type="number" class="form-control bl-0" placeholder="_ _ _ _" value={this.state.data.birth_year} name="birth_year" onChange={this.onChange}/>
-                </div>
+                <label for="exampleInputEmail1">Confirm New Password</label>
+                <input autocomplete="off" type="password" class="form-control"  placeholder="Confirm New Password" value={this.state.re_password} name="re_password" onChange={this.onChange}/>
               </div>
             </div>
 

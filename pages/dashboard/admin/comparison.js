@@ -26,7 +26,15 @@ export default class Index extends React.Component {
         rf: [],
         svm: [],
         knn: []
-      }
+      },
+      temp: {
+        "accuracy": [],
+        "precision": [],
+        "recall": [],
+        "fscore": [],
+        "training": [],
+        "testing": []
+      },
     }
 
     this.onSubmit = this.onSubmit.bind(this)
@@ -37,11 +45,6 @@ export default class Index extends React.Component {
 
   onSubmit () {
     this.doClasification('elm')
-    this.doClasification('kelm')
-    this.doClasification('rkelm')
-    this.doClasification('rf')
-    this.doClasification('svm')
-    this.doClasification('knn')
   }
 
   async onChangeFile () {
@@ -67,19 +70,35 @@ export default class Index extends React.Component {
     const response = await fetch('http://103.252.100.230/fact/comparison', {method: 'POST', body, headers})
     const json = await response.json()
 
-    const {algorithm} = this.state
-    for (let i = 0; i < 10; i++) {
-      const {correct, incorrect} = json.results[i].classification
-      algorithm[algo].push({
-        correct: correct,
-        incorrect: incorrect,
-        training: json.results[i].training_time.toFixed(3),
-        testing: json.results[i].testing_time.toFixed(3),
-        accuracy: ((correct * 100) / (correct + incorrect)).toFixed(1)
-      })
-    }
+    console.log(json.results)
 
-    this.setState({ algorithm })
+    // const {algorithm} = this.state
+    // for (let i = 0; i < 10; i++) {
+    //   const {correct, incorrect} = json.results[i].classification
+    //   algorithm[algo].push({
+    //     correct: correct,
+    //     incorrect: incorrect,
+    //     training: json.results[i].training_time.toFixed(3),
+    //     testing: json.results[i].testing_time.toFixed(3),
+    //     accuracy: ((correct * 100) / (correct + incorrect)).toFixed(1)
+    //   })
+    // }
+    // if (algo === 'rf') {
+    //   window.my_result = json.pengujian.dataset
+    //   console.log("Siap")
+    //   // copy(console.table(json.pengujian.dataset[0]))
+    //   // console.table(json.pengujian.dataset[1])
+    //   // console.table(json.pengujian.dataset[2])
+    //   // console.table(json.pengujian.dataset[3])
+    //   // console.table(json.pengujian.dataset[4])
+    //   // console.table(json.pengujian.dataset[5])
+    //   // console.table(json.pengujian.dataset[6])
+    //   // console.table(json.pengujian.dataset[7])
+    //   // console.table(json.pengujian.dataset[8])
+    //   // console.table(json.pengujian.dataset[9])
+    // }
+    // this.setState({ algorithm })
+    this.setState({ temp: json.results })
   }
 
   async onRefresh () {
@@ -105,38 +124,40 @@ export default class Index extends React.Component {
   }
 
   render() {
-    const algochartdata = (algo) => {
-      let acc = algo.reduce((total, num) => total += parseFloat(num.accuracy), 0)
-      return {
-        labels: ['Correct', 'Incorrect'],
-        datasets: [{
-          data: [Math.round((acc / algo.length) * 100) / 100, Math.round((100 - acc / algo.length) * 100) / 100],
-          backgroundColor: ['#28a745', '#dc3545'],
-        }]
-      }
-    }
+    const tbody = (status, unit) => {
+      let base = (unit === '%') ? 100 : 10000
 
-    const tbody = (algo) => {
       let results = []
-      for (let i = 0, l = algo.length; i < l; i++) {
-        const activity = algo[i];
+      let elm = 0, kelm = 0, rkelm = 0, rf = 0, svm = 0, knn = 0
+      for (let i = 0, l = this.state.temp[status].length; i < l; i++) {
+        elm += (Math.round(parseFloat(this.state.temp[status][i].elm) * base) / base)
+        kelm += (Math.round(parseFloat(this.state.temp[status][i].kelm) * base) / base)
+        rkelm += (Math.round(parseFloat(this.state.temp[status][i].rkelm) * base) / base)
+        rf += (Math.round(parseFloat(this.state.temp[status][i].rf) * base) / base)
+        svm += (Math.round(parseFloat(this.state.temp[status][i].svm) * base) / base)
+        knn += (Math.round(parseFloat(this.state.temp[status][i].knn) * base) / base)
         results.push(
-          <tr key={activity.id}>
-            <td>{i + 1}</td>
-            <td>{activity.accuracy}%</td>
-            <td>{activity.training}ms</td>
-            <td>{activity.testing}ms</td>
+          <tr key={i}>
+            <td>{Math.round(parseFloat(this.state.temp[status][i].elm) * base) / base}{unit}</td>
+            <td>{Math.round(parseFloat(this.state.temp[status][i].kelm) * base) / base}{unit}</td>
+            <td>{Math.round(parseFloat(this.state.temp[status][i].rkelm) * base) / base}{unit}</td>
+            <td>{Math.round(parseFloat(this.state.temp[status][i].rf) * base) / base}{unit}</td>
+            <td>{Math.round(parseFloat(this.state.temp[status][i].svm) * base) / base}{unit}</td>
+            <td>{Math.round(parseFloat(this.state.temp[status][i].knn) * base) / base}{unit}</td>
           </tr>
         )
       }
-
+      results.push(
+        <tr key={0} class="bg-warning text-light">
+          <td>{Math.round(parseFloat(elm / 10) * base) / base}{unit}</td>
+          <td>{Math.round(parseFloat(kelm / 10) * base) / base}{unit}</td>
+          <td>{Math.round(parseFloat(rkelm / 10) * base) / base}{unit}</td>
+          <td>{Math.round(parseFloat(rf / 10) * base) / base}{unit}</td>
+          <td>{Math.round(parseFloat(svm / 10) * base) / base}{unit}</td>
+          <td>{Math.round(parseFloat(knn / 10) * base) / base}{unit}</td>
+        </tr>
+      )
       return results
-    }
-
-    const options = []
-    for (let i = 0, l = this.state.activities.length; i < l; i++) {
-      const activity = this.state.activities[i].name
-      options.push(<option value={activity}>{activity}</option>)
     }
 
     return (
@@ -154,101 +175,95 @@ export default class Index extends React.Component {
         </div>
 
         <div className="row">
-          <Card size="col-md-4" title="Extreme Learning Machine">
-            <Pie data={algochartdata(this.state.algorithm.elm)} options={{legend: {position: 'right'}}}/>
-            <div className="row mt-3">
-              <table className="table row">
-                <tbody>
-                  <tr>
-                    <th>#</th>
-                    <th>Accuracy</th>
-                    <th>Training</th>
-                    <th>Testing</th>
-                  </tr>
-                  {tbody(this.state.algorithm.elm)}
-                </tbody>
-              </table>
-            </div>
+          <Card size="col-md-6" title="Accuracy">
+            <table className="table row">
+              <tbody>
+                <tr>
+                  <th>ELM</th>
+                  <th>KELM</th>
+                  <th>RKELM</th>
+                  <th>RF</th>
+                  <th>SVM</th>
+                  <th>KNN</th>
+                </tr>
+                {tbody("accuracy", "%")}
+              </tbody>
+            </table>
           </Card>
-          <Card size="col-md-4" title="Kernel Extreme Learning Machine">
-            <Pie data={algochartdata(this.state.algorithm.kelm)} options={{legend: {position: 'right'}}}/>
-            <div className="row mt-3">
-              <table className="table row">
-                <tbody>
-                  <tr>
-                    <th>#</th>
-                    <th>Accuracy</th>
-                    <th>Training</th>
-                    <th>Testing</th>
-                  </tr>
-                  {tbody(this.state.algorithm.kelm)}
-                </tbody>
-              </table>
-            </div>
+          <Card size="col-md-6" title="Presicion">
+            <table className="table row">
+              <tbody>
+                <tr>
+                  <th>ELM</th>
+                  <th>KELM</th>
+                  <th>RKELM</th>
+                  <th>RF</th>
+                  <th>SVM</th>
+                  <th>KNN</th>
+                </tr>
+                {tbody("precision", "%")}
+              </tbody>
+            </table>
           </Card>
-          <Card size="col-md-4" title="Reduced Kernel Extreme Learning Machine">
-            <Pie data={algochartdata(this.state.algorithm.rkelm)} options={{legend: {position: 'right'}}}/>
-            <div className="row mt-3">
-              <table className="table row">
-                <tbody>
-                  <tr>
-                    <th>#</th>
-                    <th>Accuracy</th>
-                    <th>Training</th>
-                    <th>Testing</th>
-                  </tr>
-                  {tbody(this.state.algorithm.rkelm)}
-                </tbody>
-              </table>
-            </div>
+          <Card size="col-md-6" title="Recall">
+            <table className="table row">
+              <tbody>
+                <tr>
+                  <th>ELM</th>
+                  <th>KELM</th>
+                  <th>RKELM</th>
+                  <th>RF</th>
+                  <th>SVM</th>
+                  <th>KNN</th>
+                </tr>
+                {tbody("recall", "%")}
+              </tbody>
+            </table>
           </Card>
-          <Card size="col-md-4" title="Random Forest">
-            <Pie data={algochartdata(this.state.algorithm.rf)} options={{legend: {position: 'right'}}}/>
-            <div className="row mt-3">
-              <table className="table row">
-                <tbody>
-                  <tr>
-                    <th>#</th>
-                    <th>Accuracy</th>
-                    <th>Training</th>
-                    <th>Testing</th>
-                  </tr>
-                  {tbody(this.state.algorithm.rf)}
-                </tbody>
-              </table>
-            </div>
+          <Card size="col-md-6" title="F1 Score">
+            <table className="table row">
+              <tbody>
+                <tr>
+                  <th>ELM</th>
+                  <th>KELM</th>
+                  <th>RKELM</th>
+                  <th>RF</th>
+                  <th>SVM</th>
+                  <th>KNN</th>
+                </tr>
+                {tbody("fscore", "%")}
+              </tbody>
+            </table>
           </Card>
-          <Card size="col-md-4" title="Support Vector Machine">
-            <Pie data={algochartdata(this.state.algorithm.svm)} options={{legend: {position: 'right'}}}/>
-            <div className="row mt-3">
-              <table className="table row">
-                <tbody>
-                  <tr>
-                    <th>#</th>
-                    <th>Accuracy</th>
-                    <th>Training</th>
-                    <th>Testing</th>
-                  </tr>
-                  {tbody(this.state.algorithm.svm)}
-                </tbody>
-              </table>
-            </div>
+          <Card size="col-md-6" title="Training Time">
+            <table className="table row">
+              <tbody>
+                <tr>
+                  <th>ELM</th>
+                  <th>KELM</th>
+                  <th>RKELM</th>
+                  <th>RF</th>
+                  <th>SVM</th>
+                  <th>KNN</th>
+                </tr>
+                {tbody("training", "s")}
+              </tbody>
+            </table>
           </Card>
-          <Card size="col-md-4" title="K-Nearest Neighbor">
-            <Pie data={algochartdata(this.state.algorithm.knn)} options={{legend: {position: 'right'}}}/>
-            <div className="row mt-3">
-              <table className="table row">
-                <tbody>
-                  <tr>
-                    <th>#</th>
-                    <th>Accuracy</th>
-                    <th>Training</th>
-                    <th>Testing</th>
-                  </tr>
-                  {tbody(this.state.algorithm.knn)}
-                </tbody>
-              </table>
-            </div>
+          <Card size="col-md-6" title="Testing Time">
+            <table className="table row">
+              <tbody>
+                <tr>
+                  <th>ELM</th>
+                  <th>KELM</th>
+                  <th>RKELM</th>
+                  <th>RF</th>
+                  <th>SVM</th>
+                  <th>KNN</th>
+                </tr>
+                {tbody("testing", "s")}
+              </tbody>
+            </table>
           </Card>
         </div>
       </AdminLayoutHoc>

@@ -46,7 +46,7 @@ export default class Index extends React.Component {
                 <div class="clearfix">
                   <p class="mb-3 float-left">By: {this.state.articles[i].author}</p>
                   <p class="mb-3 float-right">
-                    <i class="far fa-clock" /> {(new Date(this.state.articles[i].published_on)).dateformat('date')}
+                    {/* <i class="far fa-clock" /> {(new Date(this.state.articles[i].published_on)).dateformat('date')} */}
                   </p>
                 </div>
                 <img src={`http://103.252.100.230/fact/image/${this.state.articles[i].image}`}/>

@@ -62,13 +62,6 @@ export default class Index extends React.Component {
     const carouselIntroIndicator = []
     for (let i = 0; i < 3; i++) {
       const active = (i == 0) ? ' active' : ''
-      carouselIntro.push(
-        <div class={`carousel-item bg-info ${active}`}>
-          <div class="d-flex align-items-center justify-content-center min-vh-100 bg-info">
-            <h1 class="display-1">Carol {i + 1}</h1>
-          </div>
-        </div>
-      )
       carouselIntroIndicator.push(
         <li data-target="#carouIntro" data-slide-to={i} class={`bg-secondary ${active}`}/>
       )
@@ -102,7 +95,47 @@ export default class Index extends React.Component {
           <div class="col-md-6">
             <div id="carouIntro" class="carousel slide" data-ride="carousel">
               <ol class="carousel-indicators">{carouselIntroIndicator}</ol>
-              <div class="carousel-inner">{carouselIntro}</div>
+              <div class="carousel-inner">
+                <div class={`carousel-item bg-info active`}>
+                  <div class="d-flex align-items-center justify-content-center min-vh-100 bg-info">
+                    <div>
+                      <div class="text-center mb-3"><img src="/static/3.png" height="250" /></div>
+                      <h5 class="display-5">For all your goals</h5>
+                      <h6 class="display-6">A personalized app to help you lose, <br/>maintain or gain weight with monthly evaluation.</h6>
+                    </div>
+                  </div>
+                </div>
+
+                <div class={`carousel-item bg-info`}>
+                  <div class="d-flex align-items-center justify-content-center min-vh-100 bg-info">
+                    <div>
+                      <div class="text-center mb-3"><img src="/static/2.png" height="250" /></div>
+                      <h5 class="display-5">Knowing is half the battle</h5>
+                      <h6 class="display-6">Help to calculate your daily calories needed <br/> and provide with weekly & monthly statistics.</h6>
+                    </div>
+                  </div>
+                </div>
+
+                <div class={`carousel-item bg-info`}>
+                  <div class="d-flex align-items-center justify-content-center min-vh-100 bg-info">
+                    <div>
+                      <div class="text-center mb-3"><img src="/static/1.png" height="250" /></div>
+                      <h5 class="display-5">Know what you eat</h5>
+                      <h6 class="display-6">Easily track your calorie and nutrient intake <br/>based on our provided food database.</h6>
+                    </div>
+                  </div>
+                </div>
+
+                <div class={`carousel-item bg-info`}>
+                  <div class="d-flex align-items-center justify-content-center min-vh-100 bg-info">
+                    <div>
+                      <div class="text-center mb-3"><img src="/static/4.png" height="250" /></div>
+                      <h5 class="display-5">Also know what you do</h5>
+                      <h6 class="display-6">Lastly, help to track your activity and the calories burnt <br/>based on Human Activity Recognition.</h6>
+                    </div>
+                  </div>
+                </div>
+              </div>
               <a class="carousel-control-prev" href="#carouIntro" role="button" data-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"/>
               </a>
@@ -185,13 +218,15 @@ export default class Index extends React.Component {
           <div class="col-md-12 pt-3 pr-5 pl-5 pb-3">
             <h1 class="text-center">ABOUT US</h1>
             <p>
-              Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-              It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).
+              About the app — Food and Calorie Activity Tracker (aka FACT) is an application designed and build for those who have problem in managing their body weight. Either they are underweight, overweight or obese. Well, the root cause of these problems is people don't know how to count the calories they consumed and burnt daily. This leads to the inability of balancing both of them. FACT will help those people solve their problems. The mobile version of FACT will also have the ability to track activities you've done. For example, walking, running and going on stairs. Still not interested? No problem, you can still read articles from our website. Go join us if you are interested.
+            </p>
+            <p>
+              About the developer — This application is designed and developed by a team called Zro2iro, consists of 3 persons who share the same goals and work together for it.
             </p>
           </div>
           <div class="col-md-3 offset-md-2">
             <p class="mb-0">Contact Person</p>
-            <a>hello@gmail.com</a>
+            <a>erickkwantantz123@gmail.com</a>
           </div>
           <div class="col-md-3 offset-md-2 text-right">
             <img src="https://play.google.com/intl/en_us/badges/images/badge_new.png"/>

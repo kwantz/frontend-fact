@@ -106,7 +106,7 @@ class Index extends React.Component {
 
   render() {
     return (
-      <AdminLayoutHoc contentTitle={'View Article'} contentBreadcrumb={["Home", "Newsfeed", "Articles", "View"]}>
+      <AdminLayoutHoc contentTitle={'Edit Article'} contentBreadcrumb={["Home", "Newsfeed", "Articles", "Edit"]}>
         <Alert type="danger" component={this} attribute="edit_danger"/>
         <Alert type="success" component={this} attribute="edit_success"/>
         <form className="card" onSubmit={this.onSubmit}>
