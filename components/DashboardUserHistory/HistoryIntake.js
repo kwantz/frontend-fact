@@ -21,6 +21,15 @@ export default class HistoryActivity extends React.Component {
           ideal: 0,
           over: 0,
         }
+      },
+
+      activity: {
+        week: [],
+        month: {
+          below: 0,
+          ideal: 0,
+          over: 0,
+        }
       }
     }
 
@@ -46,7 +55,12 @@ export default class HistoryActivity extends React.Component {
 
     response = await fetch(`http://103.252.100.230/fact/member/history/burnt?year=${date.getFullYear()}&month=${date.getMonth() + 1}&day=${date.getDate()}`, {headers})
     json = await response.json()
-    console.log("Burnt", json)
+
+    const activity = {
+      week: json.results.week,
+      month: json.results.month
+    }
+    this.setState({ activity })
   }
 
   async componentDidMount () {
@@ -94,25 +108,18 @@ export default class HistoryActivity extends React.Component {
           backgroundColor: '#22747c'
         }, {
           label: 'Calorie Burnt',
-          data: [Math.random() + 100, Math.random() + 200, Math.random() + 300, Math.random() + 400, Math.random() + 500, Math.random() + 300, Math.random() + 600],
+          data: this.state.activity.week,
           backgroundColor: '#d65640'
         }],
         options: {
           legend: { display: true },
-          tooltips: { enabled: false },
-          // responsive: true,
-          // scales: {
-          //   barThickness: 0.1,
-          //   xAxes: [{stacked: true}],
-          //   yAxes: [{stacked: true}]
-          // }
+          tooltips: { enabled: false }
         }
       },
       month_intake: {
         labels: ['Below', 'Ideal', 'Over'],
         datasets: [{
-          data: [1, 2, 3],
-          // data: [this.state.data.month.below, this.state.data.month.ideal, this.state.data.month.over],
+          data: [this.state.data.month.below, this.state.data.month.ideal, this.state.data.month.over],
           backgroundColor: ['#17a2b8', '#ffc107', '#dc3545']
         }],
         options: {
@@ -126,8 +133,7 @@ export default class HistoryActivity extends React.Component {
       month_burnt: {
         labels: ['Below', 'Ideal', 'Over'],
         datasets: [{
-          data: [3, 2, 1],
-          // data: [this.state.data.month.below, this.state.data.month.ideal, this.state.data.month.over],
+          data: [this.state.activity.month.below, this.state.activity.month.ideal, this.state.activity.month.over],
           backgroundColor: ['#17a2b8', '#ffc107', '#dc3545']
         }],
         options: {

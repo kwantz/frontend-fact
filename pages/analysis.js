@@ -23,6 +23,30 @@ export default class Index extends React.Component {
     this.setState({ user })
   }
 
+  renderText = (status) => {
+    status = status.toLowerCase()
+    if (status == "underweight")
+      return "You are lighter than you should be. Let's gain more weight! Fulfill your calories intake goal and burn not more than the burnt goal."
+    else if (status == "normal")
+      return "You have normal body weight. Good!! Let's maintain your body weight! Balance your calories intake and burnt."
+    else if (status == "overweight")
+      return "You are heavier than you should be. Let's lose some weight! Fulfill not more than your calories intake goal and burn according to the burnt goal."
+    else
+      return "You are in the obese state. Let's work harder to become normal and healthy. You should never fulfill more than your calories intake goal and burn less than the burnt goal. You also need to watch about the food you eat."
+  }
+
+  renderIconName = (status) => {
+    status = status.toLowerCase()
+    if (status == "underweight")
+      return "😢"
+    else if (status == "normal")
+      return "😊"
+    else if (status == "overweight")
+      return "😐"
+    else
+      return "😱"
+  }
+
   render() {
     return (
       <GuessLayoutHoc registerbox="false">
@@ -30,18 +54,9 @@ export default class Index extends React.Component {
           <h3>From the data analysis, we can conclude that you are</h3>
 
           <h1 className="mb-4">"{this.state.user.status}"</h1>
-
-          <img className="mb-2" width="100" height="100" src="https://www.ikea.cn/cn/en/images/products/ribba-frame-black__0638328_PE698852_S4.JPG" />
-
+          <h1>{this.renderIconName(this.state.user.status)}</h1>
           <p class="col-md-6 text-justify">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-            Ut tempus sollicitudin metus quis aliquam.
-            Quisque mattis erat a consectetur dignissim. Fusce congue
-            justo suscipit eros porttitor elementum volutpat eget odio.
-            Nullam eleifend metus at justo fermentum pulvinar. Maecenas
-            ultricies pharetra ante sed interdum. Fusce pretium quis
-            dui in dapibus. Pellentesque consectetur venenatis metus,
-            vel eleifend orci eleifend vel.
+            {this.renderText(this.state.user.status)}
           </p>
 
           <button type="button" class="col-md-2 btn btn-info btn-block mt-3">START</button>

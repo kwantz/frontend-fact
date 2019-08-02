@@ -37,7 +37,7 @@ export default class Index extends React.Component {
     this.setState({ meals })
 
     window.$('#search').select2()
-    window.$('#search').val(id).trigger('change');  
+    window.$('#search').val(id).trigger('change');
     var val = window.$('#search').val()
 
     for (let i = 0, l = json.results.meals.length; i < l; i++)
@@ -91,17 +91,24 @@ export default class Index extends React.Component {
   }
 
   async onIntakeMeal (back = false) {
-    const body = JSON.stringify({
-      id: this.state.id,
-      category_intake: this.state.category_intake
-    })
-    const headers = {"Authorization": 'Bearer ' + window.localStorage.getItem("token")}
-    let response = await fetch(`http://103.252.100.230/fact/member/intake/meal`, {method: 'POST', body, headers})
-    let json = await response.json()
+    if (this.state.id !== '') {
+      let date = new Date()
 
-    if (json.message === "Success") {
-      if (back === true) return window.location.href = "/dashboard/user/diary"
-      window.alert("Saved")
+      const body = JSON.stringify({
+        id: this.state.id,
+        year: date.getFullYear(),
+        month: date.getMonth() + 1,
+        day: date.getDate(),
+        category_intake: this.state.category_intake
+      })
+      const headers = {"Authorization": 'Bearer ' + window.localStorage.getItem("token")}
+      let response = await fetch(`http://103.252.100.230/fact/member/intake/meal`, {method: 'POST', body, headers})
+      let json = await response.json()
+
+      if (json.message === "Success") {
+        if (back === true) return window.location.href = "/dashboard/user/diary"
+        window.alert("Saved")
+      }
     }
   }
 
@@ -122,7 +129,7 @@ export default class Index extends React.Component {
   render() {
     const navbarInfo = (
       <div class="form-group row my-auto">
-        <label class="offset-sm-3 col-sm-2 col-form-label">Category:</label>
+        <label class="offset-sm-3 col-sm-2 col-form-label">Eat Time:</label>
         <div class="col-sm-4">
           <select class="form-control" name="category_intake" onChange={(event) => this.setState({category_intake: event.target.value})} value={this.state.category_intake}>
             <option value="1">Breakfast</option>
@@ -153,7 +160,7 @@ export default class Index extends React.Component {
     for (let i = 0, l = this.state.meals.length; i < l; i++) {
       dropdownFoods.push(<option value={this.state.meals[i].id}>{this.state.meals[i].name}</option>)
     }
-    
+
     let recents = []
     for (let i = 0, l = this.state.recent.length; i < l; i++) {
       recents.push(

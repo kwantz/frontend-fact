@@ -7,49 +7,52 @@ import { Pie, Bar } from 'react-chartjs-2';
 import Link from 'next/link';
 
 export default class HistoryActivity extends React.Component {
+  constructor(props) {
+    super(props)
 
-  componentDidMount () {
+    this.state = {
+      date: '',
+      activity: {
+        activity_level: [],
+        most_active: [],
+        level: '',
+      }
+    }
+  }
+
+  async onRefresh() {
+    let date = new Date(this.state.date)
+    const headers = {"Authorization": 'Bearer ' + window.localStorage.getItem("token")}
+    let response = await fetch(`http://103.252.100.230/fact/member/history/burnt?year=${date.getFullYear()}&month=${date.getMonth() + 1}&day=${date.getDate()}`, {headers})
+    let json = await response.json()
+
+    console.log(json)
+
+    const activity = {
+      week: json.results.week,
+      month: json.results.month
+    }
+    this.setState({ activity })
+  }
+
+  async componentDidMount () {
+    const self = this
+    const date = new Date()
+    const datestr = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
     window.$('#datetimepicker1').datetimepicker({
-      format: 'L'
-    });
-    window.$('#datetimepicker2').datetimepicker({
-      format: 'L'
-    });
+      defaultDate: datestr,
+      format: 'D MMM YYYY',
+    })
+    window.$('#datetimepicker1').on("change.datetimepicker", function(event) {
+      self.setState({ date: event.target.value })
+      self.onRefresh()
+    })
+
+    await this.setState({ date: datestr })
+    await this.onRefresh()
   }
 
   render() {
-    // Chart.pluginService.register({
-    //   beforeDraw: function (chart) {
-    //     //Get ctx from string
-    //     var ctx = chart.chart.ctx;
-
-    //     //Set font settings to draw it correctly.
-    //     ctx.textAlign = 'center';
-    //     ctx.textBaseline = 'middle';
-    //     var centerX = ((chart.chartArea.left + chart.chartArea.right) / 2);
-    //     var centerY = ((chart.chartArea.top + chart.chartArea.bottom) / 2);
-
-    //     if (chart.config.options.elements.calorie) {
-    //       ctx.fillStyle = chart.config.options.elements.calorie.color;
-
-    //       //Draw text in center
-    //       ctx.font = "30px " + "Arial";
-    //       ctx.fillText(chart.config.options.elements.calorie.text, centerX, centerY - 10);
-
-    //       ctx.font = "15px " + "Arial";
-    //       ctx.fillText('KCAL LEFT', centerX, centerY + 20);
-    //     }
-
-    //     if (chart.config.options.elements.nutrient) {
-    //       // ctx.height = "500px";
-    //       ctx.fillStyle = chart.config.options.elements.nutrient.color;
-
-    //       //Draw text in center
-    //       ctx.font = "15px " + "Arial";
-    //       ctx.fillText(chart.config.options.elements.nutrient.text, centerX, centerY);
-    //     }
-    //   }
-    // });
 
     const chart = {
       week: {

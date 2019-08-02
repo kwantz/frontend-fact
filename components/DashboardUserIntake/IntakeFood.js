@@ -5,6 +5,7 @@ import Modal from '../Modal'
 import Chart from 'chart.js'
 import { Doughnut } from 'react-chartjs-2';
 import Link from 'next/link';
+import '../../libraries'
 
 export default class Index extends React.Component {
   constructor (props) {
@@ -68,7 +69,7 @@ export default class Index extends React.Component {
     this.setState({ data, foods })
 
     window.$('#search').select2()
-    window.$('#search').val(id).trigger('change');  
+    window.$('#search').val(id).trigger('change');
     var val = window.$('#search').val()
 
     for (let i = 0, l = json.results.foods.length; i < l; i++)
@@ -91,7 +92,14 @@ export default class Index extends React.Component {
   }
 
   async onSubmitIntake (back = false) {
-    const body = JSON.stringify(this.state.data)
+    let data = this.state.data
+    let date = new Date()
+
+    data.year = date.getFullYear()
+    data.month = date.getMonth() + 1
+    data.day = date.getDate()
+
+    const body = JSON.stringify(data)
     const headers = {"Authorization": 'Bearer ' + window.localStorage.getItem("token")}
     const response = await fetch('http://103.252.100.230/fact/member/intake/food', {method: 'POST', body, headers})
     const json = await response.json()
@@ -211,6 +219,14 @@ export default class Index extends React.Component {
 
   onAddChange (event) {
     const data = this.state.add
+    if (event.target.name === 'name') {
+      if (event.target.value.validate()) {
+        data[event.target.name] = event.target.value
+        this.setState({ add: data })
+      }
+      return
+    }
+
     data[event.target.name] = event.target.value
     this.setState({ add: data })
   }
@@ -232,7 +248,7 @@ export default class Index extends React.Component {
   render() {
     const navbarInfo = (
       <div class="form-group row my-auto">
-        <label class="offset-sm-3 col-sm-2 col-form-label">Category:</label>
+        <label class="offset-sm-3 col-sm-2 col-form-label">Eat Time:</label>
         <div class="col-sm-4">
           <select class="form-control" name="category_intake" onChange={this.onChangeFood} value={this.state.data.category_intake}>
             <option value="1">Breakfast</option>
@@ -375,7 +391,7 @@ export default class Index extends React.Component {
               <div class="form-group row">
                 <label class="col-sm-3 col-form-label">Food Name</label>
                 <div class="col-sm-9">
-                  <input autocomplete="off" type="text" class="form-control" placeholder="Enter food" required name="name" value={this.state.add.name} onChange={this.onAddChange}/>
+                  <input autocomplete="off" type="text" class="form-control" placeholder="Enter food" required name="name" value={this.state.add.name} onChange={this.onAddChange} maxLength={40}/>
                   <small class="form-text text-muted text-right">*required</small>
                 </div>
               </div>
@@ -383,7 +399,7 @@ export default class Index extends React.Component {
               <div class="form-group row">
                 <label class="col-sm-3 col-form-label">Calories</label>
                 <div class="col-sm-5">
-                  <input autocomplete="off" type="number" class="form-control" placeholder="Enter calories" min="0" name="calorie" value={this.state.add.calorie} onChange={this.onAddChange}/>
+                  <input autocomplete="off" type="number" class="form-control" placeholder="Enter calories" min="0" max="2000" name="calorie" value={this.state.add.calorie} onChange={this.onAddChange}/>
                   <small class="form-text text-muted text-right">*required</small>
                 </div>
                 <span class="col-sm-4 col-form-label">
@@ -394,7 +410,7 @@ export default class Index extends React.Component {
               <div class="form-group row">
                 <label class="col-sm-3 col-form-label">Carbohydrate</label>
                 <div class="col-sm-5">
-                  <input autocomplete="off" type="number" class="form-control" placeholder="Enter carbohydrate" min="0" name="carbohydrate" value={this.state.add.carbohydrate} onChange={this.onAddChange}/>
+                  <input autocomplete="off" type="number" class="form-control" placeholder="Enter carbohydrate" min="0" max="100" name="carbohydrate" value={this.state.add.carbohydrate} onChange={this.onAddChange}/>
                 </div>
                 <span class="col-sm-4 col-form-label">
                   (g per serving)
@@ -404,7 +420,7 @@ export default class Index extends React.Component {
               <div class="form-group row">
                 <label class="col-sm-3 col-form-label">Protein</label>
                 <div class="col-sm-5">
-                  <input autocomplete="off" type="number" class="form-control" placeholder="Enter protein" min="0" name="protein" value={this.state.add.protein} onChange={this.onAddChange}/>
+                  <input autocomplete="off" type="number" class="form-control" placeholder="Enter protein" min="0" max="100" name="protein" value={this.state.add.protein} onChange={this.onAddChange}/>
                 </div>
                 <span class="col-sm-4 col-form-label">
                   (g per serving)
@@ -414,7 +430,7 @@ export default class Index extends React.Component {
               <div class="form-group row">
                 <label class="col-sm-3 col-form-label">Fat</label>
                 <div class="col-sm-5">
-                  <input autocomplete="off" type="number" class="form-control" placeholder="Enter fat" min="0" name="fat" value={this.state.add.fat} onChange={this.onAddChange}/>
+                  <input autocomplete="off" type="number" class="form-control" placeholder="Enter fat" min="0" max="100" name="fat" value={this.state.add.fat} onChange={this.onAddChange}/>
                 </div>
                 <span class="col-sm-4 col-form-label">
                   (g per serving)

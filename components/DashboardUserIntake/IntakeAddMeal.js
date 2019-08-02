@@ -23,6 +23,7 @@ export default class Index extends React.Component {
         carbohydrate: 0
       },
       foods: [],
+      recent: [],
       meal_foods: [],
       alert: {
         add_danger: '',
@@ -39,6 +40,7 @@ export default class Index extends React.Component {
     this.onAddFood = this.onAddFood.bind(this)
     this.onSelected = this.onSelected.bind(this)
     this.onSubmitMeal = this.onSubmitMeal.bind(this)
+    this.onRefresh = this.onRefresh.bind(this)
   }
 
   onChangeFood (event) {
@@ -94,35 +96,90 @@ export default class Index extends React.Component {
   }
 
   async onSubmitMeal () {
-    let {alert} = this.state
-    const body = JSON.stringify({
-      name: this.state.name,
-      food: this.state.meal_foods
-    })
-    const headers = {"Authorization": 'Bearer ' + window.localStorage.getItem("token")}
-    let response = await fetch(`http://103.252.100.230/fact/member/meal`, {method: 'POST', body, headers})
-    let json = await response.json()
+    if (this.state.name !== '' && this.state.meal_foods.length) {
+      let {alert} = this.state
+      const body = JSON.stringify({
+        name: this.state.name,
+        food: this.state.meal_foods
+      })
+      const headers = {"Authorization": 'Bearer ' + window.localStorage.getItem("token")}
+      let response = await fetch(`http://103.252.100.230/fact/member/meal`, {method: 'POST', body, headers})
+      let json = await response.json()
 
-    if (typeof json.message === 'undefined' || json.message !== 'Success') {
-      window.scrollTo(0, 0)
-      alert.add_danger = json.message
-      await this.setState({alert})
+      if (typeof json.message === 'undefined' || json.message !== 'Success') {
+        window.scrollTo(0, 0)
+        alert.add_danger = json.message
+        await this.setState({alert})
+      }
+      else {
+        window.scrollTo(0, 0)
+        alert.add_success = "Add Meal, " + this.state.name + " — Success"
+        const name = ''
+        const data = {
+          id: -1,
+          name: '',
+          fat: 0,
+          qty: 0,
+          calorie: 0,
+          protein: 0,
+          carbohydrate: 0
+        }
+        await this.setState({name, data, alert})
+      }
+    }
+    else if (this.state.meal_foods.length === 0) {
+      window.alert("Foods need to be added")
     }
     else {
-      window.scrollTo(0, 0)
-      alert.add_success = "Add Meal, " + this.state.name + " — Success"
-      const name = ''
-      const data = {
-        id: -1,
-        name: '',
-        fat: 0,
-        qty: 0,
-        calorie: 0,
-        protein: 0,
-        carbohydrate: 0
-      }
-      await this.setState({name, data, alert})
+      window.alert("Required fields can’t be empty")
     }
+  }
+
+  async onRefresh () {
+    const headers = {"Authorization": 'Bearer ' + window.localStorage.getItem("token")}
+    let response = await fetch(`http://103.252.100.230/fact/member/food?name=all&category=0`, {headers})
+    let json = await response.json()
+
+    let {foods} = this.state
+    foods = json.results.foods
+
+    this.setState({ foods })
+
+    response = await fetch(`http://103.252.100.230/fact/member/recent`, {headers})
+    json = await response.json()
+
+    let recent = []
+    let haveRecent = []
+    for (let i = 0, l = json.results.dates.length; i < l; i++) {
+      if (recent.length === 5) break;
+      for (let j = 0, k = json.results.foods[json.results.dates[i]].length; j < k; j++) {
+        if (recent.length === 5) break;
+        if (json.results.foods[json.results.dates[i]][j].type !== 'food') continue;
+        if (haveRecent.indexOf(json.results.foods[json.results.dates[i]][j].id) >= 0) continue;
+        recent.push(json.results.foods[json.results.dates[i]][j])
+        haveRecent.push(json.results.foods[json.results.dates[i]][j].id)
+      }
+    }
+    this.setState({ recent })
+
+    var val = window.$('#search').val()
+    for (let i = 0, l = this.state.foods.length; i < l; i++)
+      if (parseInt(this.state.foods[i].id) === parseInt(val))
+        this.onSelected(i)
+  }
+
+  componentDidMount() {
+    this.onRefresh()
+    let self = this
+    window.$(document).ready(function() {
+      window.$('#search').select2();
+      window.$('#search').on('select2:select', function (e) {
+        var data = window.$('#search').val();
+        for (let i = 0, l = self.state.foods.length; i < l; i++)
+          if (parseInt(self.state.foods[i].id) === parseInt(data))
+            self.onSelected(i)
+      });
+    });
   }
 
   render() {
@@ -147,9 +204,14 @@ export default class Index extends React.Component {
 
     const dropdownFoods = []
     for (let i = 0, l = this.state.foods.length; i < l; i++) {
-      dropdownFoods.push(
-        <span class="dropdown-item" onClick={() => this.onSelected(i)}>
-          {this.state.foods[i].name}
+      dropdownFoods.push(<option value={this.state.foods[i].id}>{this.state.foods[i].name}</option>)
+    }
+
+    let recents = []
+    for (let i = 0, l = this.state.recent.length; i < l; i++) {
+      recents.push(
+        <span>
+          <button class="btn btn-info badge" onClick={() => this.testing(this.state.recent[i].id)}>{this.state.recent[i].name}</button> &nbsp;
         </span>
       )
     }
@@ -166,7 +228,7 @@ export default class Index extends React.Component {
                   <div className="form-group row">
                     <label class="col-form-label col-sm-2">Meal Name:</label>
                     <div class="col-sm-4">
-                      <input autocomplete="off" type="text" className="form-control" placeholder="Enter meal name" required onChange={(event) => this.setState({name: event.target.value})} value={this.state.name}/>
+                      <input autocomplete="off" type="text" className="form-control" placeholder="Enter meal name" maxLength={40} required onChange={(event) => !event.target.value.validate() || this.setState({name: event.target.value})} value={this.state.name}/>
                       <small class="form-text text-muted text-right">*required</small>
                     </div>
                   </div>
@@ -214,37 +276,23 @@ export default class Index extends React.Component {
             </div>
           </div>
 
-          <Modal id="add" title="Add Custom Food" size="modal-xl">
+          <Modal id="add" title="Add Food to Meal" size="modal-xl">
             <div className="modal-body row">
               <div className="col-md-12">
-                <div className="form-group row">
-                  <div class="col-sm-6">
-                    <div className="input-group">
-                      <div className="input-group-prepend">
-                        <span className="input-group-text">
-                          <i className="fa fa-search"/>
-                        </span>
-                      </div>
-                      <input autocomplete="off" type="text" className="form-control bl-0" placeholder="Search by food name here..." name="name" onChange={this.onChangeFood} value={this.state.data.name}/>
-                      <div className="input-group-append">
-                        <button type="button" className="btn btn-info" onClick={this.onSearch}>Submit</button>
-                      </div>
-                      <div class={`dropdown-menu col-md-12 elevation-2 ${this.state.show}`}>
-                        {dropdownFoods}
-                      </div>
-                    </div>
+                <form className="form-group row" onSubmit={this.onSearch}>
+                  <label class="col-form-label col-md-2">Food:</label>
+                  <div class="col-md-4">
+                    <select className="form-control bl-0" id="search">
+                      {dropdownFoods}
+                    </select>
                   </div>
-                </div>
+                </form>
               </div>
 
               <div class="col-sm-12">
                 <div class="form-group col-sm-6 pl-0">
                   <label>Recent:</label>
-                  <p class="form-control">
-                    <button class="btn btn-info badge">Fried Noodles</button> &nbsp;
-                    <button class="btn btn-info badge">White Rice</button> &nbsp;
-                    <button class="btn btn-info badge">Bread</button> &nbsp;
-                  </p>
+                  <p class="form-control">{recents}</p>
                 </div>
               </div>
 
